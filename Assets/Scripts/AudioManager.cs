@@ -115,7 +115,7 @@ public class AudioManager : MonoBehaviour
     {
         if(playlist == null || playlist.Count == 0)
         {
-            Debug.LogError("Playlist empty!");
+            Debug.LogWarning("Playlist empty!");
             return;
         }
 

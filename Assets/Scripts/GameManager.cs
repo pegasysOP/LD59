@@ -43,11 +43,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (escapeAction.triggered)
+        /*if (escapeAction.triggered)
         {
             //TODO: Implement Pause Menu
-            //hudController.pauseMenu.Toggle();
-        }
+            hudController.pauseMenu.Toggle();
+        }*/
     }
 
     public void DestroySelf()
