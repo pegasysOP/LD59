@@ -183,7 +183,7 @@ public class AudioManager : MonoBehaviour
 
     public void Update()
     {
-        if (!musicSource.isPlaying)
+        if (!musicSource.isPlaying && playlist.Count > 0)
         {
             AdvanceSong();
         }
