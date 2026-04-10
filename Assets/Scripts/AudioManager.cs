@@ -116,6 +116,7 @@ public class AudioManager : MonoBehaviour
         if(playlist == null || playlist.Count == 0)
         {
             Debug.LogError("Playlist empty!");
+            return;
         }
 
         PlayMusic(playlist[playlistIndex], FadeType.FadeIn, 1f);
