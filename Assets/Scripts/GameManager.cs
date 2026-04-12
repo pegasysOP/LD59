@@ -41,11 +41,26 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        /*if (escapeAction.triggered)
+        if (escapeAction != null && escapeAction.triggered)
         {
-            //TODO: Implement Pause Menu
-            hudController.pauseMenu.Toggle();
-        }*/
+            TogglePauseMenu();
+        }
+    }
+
+    private void TogglePauseMenu()
+    {
+        if (hudController == null || hudController.pauseMenu == null)
+        {
+            Debug.LogWarning("HudController or PauseMenu is not assigned!");
+            return;
+        }
+
+        bool isPausing = !hudController.pauseMenu.isActiveAndEnabled;
+
+        SetLocked(isPausing);
+        Time.timeScale = isPausing ? 0f : 1f;
+
+        hudController.pauseMenu.Toggle();
     }
 
     public void DestroySelf()

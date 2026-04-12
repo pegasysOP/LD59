@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3495226096972403366}
+  - component: {fileID: 3417993747806781097}
   - component: {fileID: 2984233949344323267}
   - component: {fileID: 82750988433288501}
   - component: {fileID: 2194665435721939925}
-  - component: {fileID: 3417993747806781097}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -35,6 +35,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3417993747806781097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539915893872810304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7118e4d63d73479448856fcf94106963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  audioManager: {fileID: 2984233949344323267}
+  playerController: {fileID: 0}
+  cameraController: {fileID: 0}
+  hudController: {fileID: 0}
+  LOCKED: 0
 --- !u!114 &2984233949344323267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,20 +271,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3417993747806781097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 539915893872810304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7118e4d63d73479448856fcf94106963, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  audioManager: {fileID: 2984233949344323267}
-  playerController: {fileID: 0}
-  cameraController: {fileID: 0}
-  hudController: {fileID: 0}
-  LOCKED: 0
