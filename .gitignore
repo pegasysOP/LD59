@@ -34,6 +34,19 @@
 # Visual Studio cache directory
 .vs/
 
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# JetBrains Rider settings
+.idea/
+
+# Unity Plastic SCM/Version Control
+.plastic/
+
+# Mac OS system files
+.DS_Store
+
 # Gradle cache directory
 .gradle/
 
@@ -43,6 +56,7 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
 *.tmp
 *.user

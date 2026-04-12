@@ -19,10 +19,6 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
-        if (GameManager.Instance.cameraController)
-            Debug.LogError("WARNING: Duplicate camera controller instances in scene");
-
-        GameManager.Instance.cameraController = this;
         lookAction = InputSystem.actions.FindAction("Look");
     }
 

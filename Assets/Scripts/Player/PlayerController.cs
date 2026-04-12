@@ -29,10 +29,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        if (GameManager.Instance.playerController)
-            Debug.LogError("WARNING: Duplicate player controller instances in scene");
-
-        GameManager.Instance.playerController = this;
         jumpAction = InputSystem.actions.FindAction("Jump");
         moveAction = InputSystem.actions.FindAction("Move");
     }
@@ -84,11 +80,11 @@ public class PlayerController : MonoBehaviour
                 //AudioManager.Instance.PlaySfxWithPitchShifting(AudioManager.Instance.walkingClips);
                 movementTimer = movementDelay;
             }
-            animator.SetBool("isMoving", true);
+            //animator.SetBool("isMoving", true);
         }
         else
         {
-            animator.SetBool("isMoving", false);
+            //animator.SetBool("isMoving", false);
         }
 
         float currentAcceleration = groundDetector.IsGrounded ? moveAcceleration : airAcceleration;

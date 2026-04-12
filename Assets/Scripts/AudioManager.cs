@@ -31,7 +31,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip gameLostClip;
 
     [Header("Playlist")]
-    private List<AudioClip> playlist;
+    private List<AudioClip> playlist = new List<AudioClip>(){};
     private int playlistIndex = 0;
 
     public static AudioManager Instance;
