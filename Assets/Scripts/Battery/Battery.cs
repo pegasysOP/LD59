@@ -1,3 +1,4 @@
+using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +15,7 @@ public class Battery : MonoBehaviour, IInteractable
     [SerializeField]
     private float holdDistance = 2f;
 
-    private bool isHeld = false;
+    public bool isHeld = false;
 
     public bool isInCorrectSlot = false;
 
@@ -56,7 +57,6 @@ public class Battery : MonoBehaviour, IInteractable
 
     public bool IsInteractable()
     {
-        //TODO: If the battery is in the correct slot then disable interaction.
         return !isInCorrectSlot;
     }
 

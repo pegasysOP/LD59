@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BatterySlot : MonoBehaviour, IInteractable
@@ -5,15 +6,22 @@ public class BatterySlot : MonoBehaviour, IInteractable
     [SerializeField]
     private Battery.BatteryColour slotColour;
 
+    private Battery battery;
+
     public void Interact()
-    { 
+    {
         //TODO: Maybe play a sound when trying to place nothing in the slot?
         //Set the light to green when the correct battery is placed in the slot?
-        return;
+
+        battery.transform.parent = this.transform.parent;
+        battery.isHeld = false;
+
+        StartCoroutine(RotateBattery(battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
     }
 
     public bool IsInteractable()
     {
+        //TODO: Maybe it should only be interactable if the player is holding a battery?
         return true;
     }
 
@@ -29,21 +37,38 @@ public class BatterySlot : MonoBehaviour, IInteractable
         
     }
 
+    private IEnumerator RotateBattery(Transform target, Quaternion targetRotation, float duration)
+    {
+        Quaternion startRotation = target.rotation;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            float t = time / duration;
+            target.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        target.rotation = targetRotation;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        Battery battery = other.GetComponent<Battery>();
+        battery = other.GetComponent<Battery>();
         if (battery != null)
         {
             Debug.Log("Battery placed in a slot!");
             Interact();
+
+            //TODO: If picking up the battery again then set battery to null
 
             if(battery.colour == slotColour)
             {
                 //TODO: Set the batterys position to be in the middle of the slot and make it so it can't be picked up again.
                 Debug.Log("Battery placed in correct slot!");
                 battery.isInCorrectSlot = true;
-
-                
             }
 
         }
