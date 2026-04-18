@@ -183,6 +183,7 @@ public class RepeatMinigame : MonoBehaviour
             {
                 b.isInteractable = false;
             }
+            StateTracker.Instance?.CompleteTask(TaskType.SimonSays);
         }
     }
 }
