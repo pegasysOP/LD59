@@ -17,10 +17,12 @@ public class Minigame : MonoBehaviour
     [Header("Waveform")]
     public RectTransform waveformContainer;
     public RectTransform peakParent;
-    public Image peakTemplate;
+    public WaveformGraphic waveform;
     public Image tickPrefab;
     public Image crossPrefab;
     public RectTransform seeker;
+    public float peakHeight = 80f;
+    public float peakHalfWidthSec = 0.08f;
 
     [Header("Audio")]
     public AudioClip clickClip;
@@ -200,45 +202,49 @@ public class Minigame : MonoBehaviour
     {
         float minT = 0.2f;
         float maxT = Mathf.Max(minT + 0.1f, duration - 0.2f);
-        float minGap = Mathf.Min(0.2f, (maxT - minT) / Mathf.Max(1, count));
-
-        for (int attempt = 0; attempt < 20; attempt++)
-        {
-            List<float> times = new List<float>();
-            for (int i = 0; i < count; i++)
-                times.Add(UnityEngine.Random.Range(minT, maxT));
-            times.Sort();
-
-            bool ok = true;
-            for (int i = 1; i < times.Count; i++)
-                if (times[i] - times[i - 1] < minGap) { ok = false; break; }
-
-            if (ok) return times;
-        }
-
-        List<float> even = new List<float>();
         float span = maxT - minT;
-        for (int i = 0; i < count; i++)
+        float minGap = Mathf.Min(0.15f, span / (count + 1));
+        float flex = span - minGap * (count - 1);
+
+        float[] weights = new float[count + 1];
+        float total = 0f;
+        for (int i = 0; i < weights.Length; i++)
         {
-            float f = count == 1 ? 0.5f : (float)i / (count - 1);
-            even.Add(minT + span * f);
+            weights[i] = UnityEngine.Random.value + 0.1f;
+            total += weights[i];
         }
-        return even;
+
+        List<float> times = new List<float>(count);
+        float cursor = minT + weights[0] / total * flex;
+        times.Add(cursor);
+        for (int i = 1; i < count; i++)
+        {
+            cursor += minGap + weights[i] / total * flex;
+            times.Add(cursor);
+        }
+        return times;
     }
 
     private void BuildPeaks(List<float> times)
     {
         float width = waveformContainer.rect.width;
+        float halfSpikePx = (peakHalfWidthSec / currentDuration) * width;
+
+        List<Vector2> pts = new List<Vector2>();
+        pts.Add(new Vector2(0f, 0f));
+
         foreach (float time in times)
         {
-            Image img = Instantiate(peakTemplate, peakParent);
-            img.gameObject.SetActive(true);
-            RectTransform rt = img.rectTransform;
-            rt.anchoredPosition = new Vector2(TimeToX(time, width), rt.anchoredPosition.y);
+            float x = TimeToX(time, width);
+            pts.Add(new Vector2(x - halfSpikePx, 0f));
+            pts.Add(new Vector2(x, peakHeight));
+            pts.Add(new Vector2(x + halfSpikePx, 0f));
 
             peaks.Add(new Peak { time = time });
-            spawned.Add(img.gameObject);
         }
+
+        pts.Add(new Vector2(width, 0f));
+        waveform.SetPoints(pts);
     }
 
     private void SpawnMarker(Image prefab, float atTime)
@@ -261,6 +267,7 @@ public class Minigame : MonoBehaviour
             if (go != null) Destroy(go);
         spawned.Clear();
         peaks.Clear();
+        waveform.Clear();
     }
 
     private void ResetSeeker()

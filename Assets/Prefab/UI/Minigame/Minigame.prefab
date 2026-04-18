@@ -200,10 +200,12 @@ MonoBehaviour:
   failCounterText: {fileID: 5162479902815714509}
   waveformContainer: {fileID: 5856232208799207363}
   peakParent: {fileID: 7838538399170722056}
-  peakTemplate: {fileID: 7241396487154116206, guid: 7c4f35e2af9267241a27a5ba12f54b99, type: 3}
+  waveform: {fileID: 821494862310660741}
   tickPrefab: {fileID: 2459120110016312584, guid: bfd64157c952e5d44826e77eff0131e1, type: 3}
   crossPrefab: {fileID: 7567228534655058096, guid: 4f8aee49c82667a4a8460ddbbd7d952e, type: 3}
   seeker: {fileID: 8071015865640186890}
+  peakHeight: 100
+  peakHalfWidthSec: 0.02
   clickClip: {fileID: 8300000, guid: ddeceb9949b925d4782b820b0ce16d12, type: 3}
   audioManager: {fileID: 0}
   hitTolerance: 0.18
@@ -226,7 +228,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968097806900145997}
   m_Enabled: 1
-  m_Alpha: 0.02
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -265,8 +267,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 50}
-  m_SizeDelta: {x: 700, y: 160}
+  m_AnchoredPosition: {x: 0, y: 266}
+  m_SizeDelta: {x: 1429.66, y: 160}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &3813477196748889140
 GameObject:
@@ -277,8 +279,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7838538399170722056}
+  - component: {fileID: 4791163100892929150}
+  - component: {fileID: 821494862310660741}
   m_Layer: 5
-  m_Name: Peak Parent
+  m_Name: Waveform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -300,9 +304,38 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 80}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
+--- !u!222 &4791163100892929150
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3813477196748889140}
+  m_CullTransparentMesh: 1
+--- !u!114 &821494862310660741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3813477196748889140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e0f6daad1535c4da9414011ccb9540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaveformGraphic
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.41568628, g: 0.6509804, b: 0.30980393, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  thickness: 3
 --- !u!1 &4151082211482567064
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +353,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7445890237494532343
 RectTransform:
   m_ObjectHideFlags: 0
@@ -335,11 +368,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5856232208799207363}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 2}
-  m_Pivot: {x: 0.5, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8632811554314745726
 CanvasRenderer:
   m_ObjectHideFlags: 0
