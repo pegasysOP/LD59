@@ -3,9 +3,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteractions : MonoBehaviour
 {
-    //TODO: Implement raycasting and calling objects interact methods, such as picking up batteries, interacting with doors, etc.
+    //TODO: Replace with Actions
     public Keyboard keyboard = Keyboard.current;
     public Mouse mouse = Mouse.current;
+
+    [SerializeField]
+    private float interactDistance = 3f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,17 +21,12 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (keyboard.eKey.wasPressedThisFrame)
         {
-            //TODO: Shoot ray and check if it hit anything with an IInteractable
-            //If so call it's interact method 
              Ray ray = Camera.main.ScreenPointToRay(mouse.position.ReadValue());
-             if (Physics.Raycast(ray, out RaycastHit hit, 3f))
+             if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
              {
-                Debug.Log("Shot ray and hit: " + hit.collider.name);
                 IInteractable interactable = hit.collider.GetComponent<IInteractable>();
-                 if (interactable != null && interactable.IsInteractable())
-                 {
-                     interactable.Interact();
-                 }
+                if (interactable != null && interactable.IsInteractable())
+                    interactable.Interact();
             }
         }
     }
