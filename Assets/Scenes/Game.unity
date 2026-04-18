@@ -257,6 +257,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f0ac04e7b7c9f45b1cd26e4e0fc711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HudController
+--- !u!114 &468647772 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6374639003791134708, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
+  m_PrefabInstance: {fileID: 1403677656}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a3c5b2e6b2ea0a45ab4cad7984718a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraController
+--- !u!114 &468647773 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2189392033409192641, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
+  m_PrefabInstance: {fileID: 1403677656}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3302878c10d45a479d33493a7bdb3aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &920823204
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,15 +502,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8535457319218612281, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.57
+      value: -6.84
       objectReference: {fileID: 0}
     - target: {fileID: 8535457319218612281, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: -1.55
       objectReference: {fileID: 0}
     - target: {fileID: 8535457319218612281, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17.7
+      value: 6.63
       objectReference: {fileID: 0}
     - target: {fileID: 8535457319218612281, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -544,6 +566,14 @@ PrefabInstance:
       propertyPath: hudController
       value: 
       objectReference: {fileID: 133640701}
+    - target: {fileID: 3417993747806781097, guid: 406c72c65ab6f184297b92700957bb52, type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 468647772}
+    - target: {fileID: 3417993747806781097, guid: 406c72c65ab6f184297b92700957bb52, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 468647773}
     - target: {fileID: 3495226096972403366, guid: 406c72c65ab6f184297b92700957bb52, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

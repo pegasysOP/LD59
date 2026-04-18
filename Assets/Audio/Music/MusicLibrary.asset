@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846646cf8bf444cd4a4cc6b97e4a55da, type: 3}
+  m_Name: MusicLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::MusicLibrary
+  mainMenu: {fileID: 0}
+  normalStation: {fileID: 0}
+  damagedStationLowAnxiety: {fileID: 8300000, guid: f8c5f9f7b3d5f43c0b5747792e9be360, type: 3}
+  monsterAround: {fileID: 0}
+  monsterNear: {fileID: 0}
+  gotAway: {fileID: 0}
+  pointOfInterest: {fileID: 0}
+  victory: {fileID: 0}
+  credits: {fileID: 0}
+  gameOver: {fileID: 0}

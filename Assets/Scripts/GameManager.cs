@@ -16,35 +16,39 @@ public class GameManager : MonoBehaviour
     private int currentBatteries = 0;
 
     public bool LOCKED = false;
+    public bool MinigameActive = false;
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-
-        DontDestroyOnLoad(this);
+        Instance = this;
     }
 
     public void CollectBattery()
     {
         currentBatteries++;
 
+        AudioManager.Instance?.batterySounds?.GetPowerUpFor(currentBatteries)?.Play();
+
         if(currentBatteries == totalBatteries)
         {
             Debug.Log("All batteries collected");
 
-            //TODO: Implement logic for triggering some event after all batteries. 
-            //e.g. powering up other rooms, opening doors etc. 
+            StateTracker.Instance?.CompleteTask(TaskType.Batteries);
+
+            //TODO: Implement logic for triggering some event after all batteries.
+            //e.g. powering up other rooms, opening doors etc.
         }
     }
 
     private void Start()
     {
-        escapeAction = InputSystem.actions.FindAction("Escape");
         audioManager.Init();
-        
+
+        if (hudController == null)
+            return;
+
+        escapeAction = InputSystem.actions.FindAction("Escape");
+
         UpdateUI();
 
         SetLocked(false);
@@ -57,6 +61,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (hudController == null)
+            return;
+
         if (escapeAction != null && escapeAction.triggered)
         {
             TogglePauseMenu();
@@ -65,18 +72,13 @@ public class GameManager : MonoBehaviour
 
     private void TogglePauseMenu()
     {
-        if (hudController == null || hudController.pauseMenu == null)
-        {
-            Debug.LogWarning("HudController or PauseMenu is not assigned!");
-            return;
-        }
+        SetPaused(!hudController.pauseMenu.IsOpen);
+    }
 
-        bool isPausing = !hudController.pauseMenu.isActiveAndEnabled;
-
-        SetLocked(isPausing);
-        Time.timeScale = isPausing ? 0f : 1f;
-
-        hudController.pauseMenu.Toggle();
+    public void SetPaused(bool paused)
+    {
+        SetLocked(paused);
+        hudController.pauseMenu.SetOpen(paused);
     }
 
     public void DestroySelf()

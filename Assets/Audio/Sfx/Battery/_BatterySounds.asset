@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2236f1fd7c534596b577fd2b882aef7, type: 3}
+  m_Name: _BatterySounds
+  m_EditorClassIdentifier: Assembly-CSharp::BatterySounds
+  pickup:
+    clips:
+    - _clip: {fileID: 8300000, guid: 8dc159c8c128241599f158b202756713, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 0.97
+    pitchMax: 1.03
+    gain: 1
+    volumeExponent: 2
+    volumeJitter: 0
+  drop:
+    clips:
+    - _clip: {fileID: 8300000, guid: 7b9fa44208b9c445c9139b4de3666128, type: 3}
+      _volume: 0.7
+      _delay: 0.2
+    pitchMin: 0.95
+    pitchMax: 1.05
+    gain: 1
+    volumeExponent: 2
+    volumeJitter: 0
+  placeClunk:
+    clips:
+    - _clip: {fileID: 8300000, guid: 84fbd5cab04d14c8fbae06b2944b4eaa, type: 3}
+      _volume: 0.7
+      _delay: 0
+    pitchMin: 0.95
+    pitchMax: 1.05
+    gain: 1
+    volumeExponent: 2
+    volumeJitter: 0
+  acceptFeedback:
+    clips:
+    - _clip: {fileID: 8300000, guid: 5becac01f61af4f209c1e714310dd150, type: 3}
+      _volume: 0.9
+      _delay: 0.2
+    pitchMin: 1
+    pitchMax: 1
+    gain: 1
+    volumeExponent: 2
+    volumeJitter: 0
+  rejectFeedback:
+    clips:
+    - _clip: {fileID: 8300000, guid: 2157a8e4d40e1434eaacde890491a3f7, type: 3}
+      _volume: 0.9
+      _delay: 0.2
+    pitchMin: 1
+    pitchMax: 1
+    gain: 1
+    volumeExponent: 2
+    volumeJitter: 0
+  rejectStaticZap:
+    clips:
+    - _clip: {fileID: 8300000, guid: 20f8212d2b0c64b3c97fa11f3b0ccb73, type: 3}
+      _volume: 0.9
+      _delay: 0.35
+    pitchMin: 0.98
+    pitchMax: 1.02
+    gain: 1
+    volumeExponent: 2
+    volumeJitter: 0
+  powerUpFirst:
+    clips:
+    - _clip: {fileID: 8300000, guid: 3429aeb318445425eb325caacf01b14a, type: 3}
+      _volume: 1
+      _delay: 0.2
+    pitchMin: 1
+    pitchMax: 1
+    gain: 1
+    volumeExponent: 2
+    volumeJitter: 0
+  powerUpSecond:
+    clips:
+    - _clip: {fileID: 8300000, guid: 95f5112bf67804cdab1bda612b2a3698, type: 3}
+      _volume: 1
+      _delay: 0.2
+    pitchMin: 1
+    pitchMax: 1
+    gain: 1
+    volumeExponent: 2
+    volumeJitter: 0
+  powerUpThird:
+    clips:
+    - _clip: {fileID: 8300000, guid: dda09e26c86e1475f91eef962383c932, type: 3}
+      _volume: 1
+      _delay: 0.2
+    pitchMin: 1
+    pitchMax: 1
+    gain: 1
+    volumeExponent: 2
+    volumeJitter: 0

@@ -45,5 +45,7 @@ public class Door : MonoBehaviour, IInteractable
         }
 
         t.localPosition = target;
+
+        StateTracker.Instance?.NotifyStartingDoorOpened();
     }
 }

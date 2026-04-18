@@ -8,19 +8,17 @@ public class PauseMenu : MonoBehaviour
     public Slider volumeSlider;
     public Button quitButton;
 
-    private void Awake()
-    {
-        sensitivitySlider.value = SettingsUtils.GetSensitivity();
-        volumeSlider.value = SettingsUtils.GetMasterVolume();
-    }
+    public bool IsOpen => gameObject.activeSelf;
 
     private void OnEnable()
     {
+        sensitivitySlider.SetValueWithoutNotify(SettingsUtils.GetSensitivity());
+        volumeSlider.SetValueWithoutNotify(SettingsUtils.GetMasterVolume());
+
         resumeButton.onClick.AddListener(OnResumeButtonClick);
         sensitivitySlider.onValueChanged.AddListener(OnSensitivityValueChanged);
         volumeSlider.onValueChanged.AddListener(OnVolumeValueChanged);
         quitButton.onClick.AddListener(OnQuitButtonClick);
-        //AudioManager.Instance.PauseMenuOpenClip();
     }
 
     private void OnDisable()
@@ -29,46 +27,28 @@ public class PauseMenu : MonoBehaviour
         sensitivitySlider.onValueChanged.RemoveListener(OnSensitivityValueChanged);
         volumeSlider.onValueChanged.RemoveListener(OnVolumeValueChanged);
         quitButton.onClick.RemoveListener(OnQuitButtonClick);
-        //AudioManager.Instance.PauseMenuClosedClip();
     }
 
-    public void Toggle()
+    public void SetOpen(bool open)
     {
-        bool pausing = !isActiveAndEnabled;
-
-        //Cursor.visible = pausing;
-        //Cursor.lockState = pausing ? CursorLockMode.None : CursorLockMode.Locked;
-
-        gameObject.SetActive(pausing);
+        gameObject.SetActive(open);
     }
 
     private void OnSensitivityValueChanged(float newValue)
     {
-        SaveNewSensitivity(newValue);
-    }
-
-    private void SaveNewSensitivity(float newValue)
-    {
         SettingsUtils.SetSensitivity(newValue);
-
-        GameManager.Instance?.cameraController?.UpdateSensitivity(newValue);
+        GameManager.Instance.cameraController.UpdateSensitivity(newValue);
     }
 
     private void OnVolumeValueChanged(float newValue)
     {
-        SaveNewVolume(newValue);
-
-        GameManager.Instance?.audioManager?.UpdateVolume(newValue);
-    }
-
-    private void SaveNewVolume(float newValue)
-    {
         SettingsUtils.SetMasterVolume(newValue);
+        AudioManager.Instance.UpdateVolume(newValue);
     }
 
     private void OnResumeButtonClick()
     {
-        Toggle();
+        GameManager.Instance.SetPaused(false);
     }
 
     private void OnQuitButtonClick()
