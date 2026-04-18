@@ -16,7 +16,7 @@ public class RepeatMinigame : MonoBehaviour
     [Header("Timing")]
     public float fastTime = 0.3f;
     public float slowTime = 1.0f;
-    public float gapTime = 0.15f;
+    public float gapTime = 0.25f;
 
     public event Action<bool> OnMinigameEnded;
 
@@ -150,7 +150,6 @@ public class RepeatMinigame : MonoBehaviour
 
     private IEnumerator FlashButton(RepeatButton button, float duration)
     {
-        // use the button's Flash implementation so it works for MeshRenderer, SpriteRenderer or UI Image
         button.Flash(duration);
         yield return new WaitForSeconds(duration);
     }
