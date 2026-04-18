@@ -355,11 +355,12 @@ public class AudioManager : MonoBehaviour
     float originalVolume = SettingsUtils.GetMasterVolume() / 3;
     float duckVolume = originalVolume * duckVolumePercent;
 
-    // Fade down
+    float duckStartVolume = source.volume;
+    // Fade down (perceived-space lerp so the duck sounds like a smooth loudness drop).
     for (float t = 0; t < fadeTime; t += Time.deltaTime)
     {
         float normalized = t / fadeTime;
-        source.volume = Mathf.Lerp(source.volume, duckVolume, normalized);
+        source.volume = AudioVolume.LerpAmplitudePerceived(duckStartVolume, duckVolume, normalized);
         yield return null;
     }
 
@@ -376,7 +377,7 @@ public class AudioManager : MonoBehaviour
     for (float t = 0; t < fadeTime; t += Time.deltaTime)
     {
         float normalized = t / fadeTime;
-        source.volume = Mathf.Lerp(duckVolume, originalVolume, normalized);
+        source.volume = AudioVolume.LerpAmplitudePerceived(duckVolume, originalVolume, normalized);
         yield return null;
     }
 
@@ -409,11 +410,10 @@ public class AudioManager : MonoBehaviour
 
         for (float t = 0; t < fadeDuration; t += Time.deltaTime)
         {
-            source.volume = Mathf.Lerp(0f, initialVolume, t / fadeDuration);
+            source.volume = AudioVolume.LerpAmplitudePerceived(0f, initialVolume, t / fadeDuration);
             yield return null;
         }
         source.volume = initialVolume;
-        //source.volume = Mathf.Lerp(0, SettingsUtils.GetMasterVolume(), fadeDuration);
     }
 
     private void StartFadeOut(AudioSource source, float duration)
@@ -427,9 +427,10 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator FadeOut(AudioSource source, float fadeOutDuration)
     {
-        for(float t = 0; t < fadeOutDuration; t+= Time.deltaTime)
+        float fadeStartVolume = SettingsUtils.GetMasterVolume() / 3f;
+        for (float t = 0; t < fadeOutDuration; t += Time.deltaTime)
         {
-            source.volume = Mathf.Lerp(SettingsUtils.GetMasterVolume() / 3, 0f, t / fadeOutDuration);
+            source.volume = AudioVolume.LerpAmplitudePerceived(fadeStartVolume, 0f, t / fadeOutDuration);
             yield return null;
         }
 
@@ -478,8 +479,8 @@ public class AudioManager : MonoBehaviour
             t += Time.deltaTime;
             float normalized = Mathf.Clamp01(t / fadeDuration);
 
-            fromSource.volume = Mathf.Lerp(fromStartVolume, 0f, normalized);
-            toSource.volume = Mathf.Lerp(0f, toTargetVolume, normalized);
+            fromSource.volume = AudioVolume.LerpAmplitudePerceived(fromStartVolume, 0f, normalized);
+            toSource.volume = AudioVolume.LerpAmplitudePerceived(0f, toTargetVolume, normalized);
 
             yield return null;
         }

@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c62867670cb147619e265a557d4df59, type: 3}
+  m_Name: HeartbeatSoundConfig
+  m_EditorClassIdentifier: Assembly-CSharp::HeartbeatSoundConfig
+  calm:
+    clips:
+      clips:
+      - _clip: {fileID: 8300000, guid: a394786814c744f399dafdec70009bae, type: 3}
+        _volume: 0.7
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: 2ec15500f3e5e4e4e9a58cb8f8d3cfad, type: 3}
+        _volume: 0.7
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: 028ebc2bc249c4645b85c9d514b502d0, type: 3}
+        _volume: 0.7
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: 8121d544cc22343c7bfc6b0279f6c3ff, type: 3}
+        _volume: 0.7
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: 36c7712c320e949278ba9f23ca5a78f9, type: 3}
+        _volume: 0.7
+        _delay: 0
+      pitchMin: 0.97
+      pitchMax: 1.03
+    secondsBetweenBeats: 1.1
+  elevated:
+    clips:
+      clips:
+      - _clip: {fileID: 8300000, guid: 19301abe56b19498eb2f5cb6328784cc, type: 3}
+        _volume: 0.8
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: f377e6c9661df44da8c6c543ca8f0188, type: 3}
+        _volume: 0.8
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: c6d0ebee0f4004c86acccea0b5b3268c, type: 3}
+        _volume: 0.8
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: dd0d584b869944e349b737468998e21c, type: 3}
+        _volume: 0.8
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: d87e0943c59d046dda389b47bf535b90, type: 3}
+        _volume: 0.8
+        _delay: 0
+      pitchMin: 0.97
+      pitchMax: 1.03
+    secondsBetweenBeats: 0.75
+  intense:
+    clips:
+      clips:
+      - _clip: {fileID: 8300000, guid: 1a81c1d069861436b87fed3481561ff3, type: 3}
+        _volume: 0.9
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: b223580afb83d4d188b043963d4e7b6d, type: 3}
+        _volume: 0.9
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: d3434666de8eb4bad9c0118d9f1c252f, type: 3}
+        _volume: 0.9
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: 8af56d4c47a4545a498fa1429814344c, type: 3}
+        _volume: 0.9
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: 7e6cb91fedd774ae0a721af3ab24984c, type: 3}
+        _volume: 0.9
+        _delay: 0
+      pitchMin: 0.97
+      pitchMax: 1.03
+    secondsBetweenBeats: 0.55
+  overload:
+    clips:
+      clips:
+      - _clip: {fileID: 8300000, guid: be180157da1694c16a66d41bb1253183, type: 3}
+        _volume: 1
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: e6c6950009baa4bd895ada21b51d9741, type: 3}
+        _volume: 1
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: 74969b4b21ddd40449f0f030d0ebc401, type: 3}
+        _volume: 1
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: a1d60bcc0d5e54baf8750c2d36ec3c7a, type: 3}
+        _volume: 1
+        _delay: 0
+      - _clip: {fileID: 8300000, guid: 6a94cfd7385a444edbed6a5f43be51ca, type: 3}
+        _volume: 1
+        _delay: 0
+      pitchMin: 0.97
+      pitchMax: 1.03
+    secondsBetweenBeats: 0.4
+  rampUpDuration: 0.35
+  peakHoldDuration: 4
+  decayDuration: 8
+  peakVolumeMultiplier: 1
+  subtleVolumeMultiplier: 0.5
