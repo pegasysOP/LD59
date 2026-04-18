@@ -66,13 +66,13 @@ public class BatterySlot : MonoBehaviour, IInteractable
 
         //Battery is not null here
 
-        yield return StartCoroutine(PostRotationCheck());
+        yield return PostRotationCheck();
     }
 
     private IEnumerator PostRotationCheck()
     {
         Debug.Log("Post Rotation check started. Battery = " + battery);
-        //yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.05f);
 
         //Battery is null here
         if (battery == null)
@@ -103,13 +103,16 @@ public class BatterySlot : MonoBehaviour, IInteractable
         Vector3 ejectDir = (battery.transform.position - transform.position).normalized + Vector3.up * 0.5f;
 
         rb.AddForce(ejectDir * 5f, ForceMode.Impulse);
+        battery = null;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        battery = other.GetComponent<Battery>();
-        if (battery != null)
+        Battery otherBattery = other.GetComponent<Battery>();
+        if (otherBattery != null)
         {
+            battery = otherBattery;
+
             Debug.Log("Battery placed in a slot!");
             Interact();
 
