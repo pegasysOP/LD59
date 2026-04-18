@@ -6,23 +6,30 @@ public class BatterySlot : MonoBehaviour, IInteractable
     [SerializeField]
     private Battery.BatteryColour slotColour;
 
+    [SerializeField]
+    private Transform slotPosition;
+
     private Battery battery;
 
     public void Interact()
     {
         //TODO: Maybe play a sound when trying to place nothing in the slot?
         //Set the light to green when the correct battery is placed in the slot?
+        if(battery != null)
+        {
+            battery.isHeld = false;
 
-        battery.transform.parent = this.transform.parent;
-        battery.isHeld = false;
+            //TODO: Set the batterys position to be in the middle of the slot
+            battery.transform.parent = this.transform.parent;
 
-        StartCoroutine(RotateBattery(battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
+            StartCoroutine(RotateBattery(battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
+        }
     }
 
     public bool IsInteractable()
     {
         //TODO: Maybe it should only be interactable if the player is holding a battery?
-        return true;
+        return battery != null;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -52,6 +59,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
         }
 
         target.rotation = targetRotation;
+        battery = null;
     }
 
     private void OnTriggerEnter(Collider other)

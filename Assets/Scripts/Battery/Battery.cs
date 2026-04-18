@@ -29,18 +29,23 @@ public class Battery : MonoBehaviour, IInteractable
     [SerializeField]
     public BatteryColour colour;
 
+    public void ReleaseBattery()
+    {
+        this.transform.parent = null;
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        isHeld = false;
+    }
     public void Interact()
     {
         if (isHeld)
         {
-            this.transform.parent = null;
-            rb.useGravity = true;
-            rb.isKinematic = false;
-            isHeld = false;
+            ReleaseBattery();
             return;
         }
 
         isHeld = true;
+        this.transform.parent = playerController.transform;
 
         Debug.Log("Interacted with battery.");
         if (playerController == null)
@@ -52,7 +57,7 @@ public class Battery : MonoBehaviour, IInteractable
         rb.useGravity = false;
         rb.isKinematic = true;
 
-        this.transform.parent = playerController.transform;
+        FollowMouse();
     }
 
     public bool IsInteractable()
@@ -69,7 +74,7 @@ public class Battery : MonoBehaviour, IInteractable
     // Update is called once per frame
     void Update()
     {
-        if (transform.parent == playerController.transform)
+        if (isHeld)
         {
             FollowMouse();
         }
