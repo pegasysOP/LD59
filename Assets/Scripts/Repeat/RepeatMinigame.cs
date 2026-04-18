@@ -112,13 +112,14 @@ public class RepeatMinigame : MonoBehaviour
     private float GetSpeed()
     {
         // SOS: fast, slow, fast
-        if (round == 1) return slowTime;
+        if (round == 1)
+            return slowTime;
         return fastTime;
     }
 
     private IEnumerator WaitForPlayerInput()
     {
-        while (playerIndex >= 0 && playerIndex < sequence.Count)
+        while (playerIndex < sequence.Count)
         {
             yield return null;
         }
@@ -126,7 +127,8 @@ public class RepeatMinigame : MonoBehaviour
 
     private void HandleInput(RepeatButton.Colour colour)
     {
-        if (state != State.PlayerInput) return;
+        if (state != State.PlayerInput) 
+            return;
 
         if (sequence[playerIndex] == colour)
         {
@@ -134,8 +136,23 @@ public class RepeatMinigame : MonoBehaviour
         }
         else
         {
-            playerIndex = -1; // fail
+            playerIndex = 0; // reset progress for this round and replay the sequence
+            StartCoroutine(ReplaySequence());
         }
+    }
+
+    private bool isReplaying = false;
+
+    private IEnumerator ReplaySequence()
+    {
+        if (isReplaying) yield break;
+        isReplaying = true;
+
+        state = State.ShowingSequence;
+        yield return ShowSequence();
+        state = State.PlayerInput;
+
+        isReplaying = false;
     }
 
     private RepeatButton GetButtonByColour(RepeatButton.Colour colour)
