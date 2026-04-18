@@ -1,14 +1,31 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Battery : MonoBehaviour, IInteractable
 {
-    PlayerController playerController;
+    [SerializeField]
+    private PlayerController playerController;
+    [SerializeField]
+    private Rigidbody rb;
+
+    private Mouse mouse = Mouse.current;
+
+    [SerializeField]
+    private float holdDistance = 2f;
 
     public void Interact()
     {
-        //TODO: Set player to parent of battery so it moves with the player. 
         Debug.Log("Interacted with battery.");
-        Debug.LogWarning("Battery interact not yet implemented");
+        if (playerController == null)
+        {
+            Debug.LogError("PlayerController reference is not set on Battery.");
+        }
+
+        //Disable physics 
+        rb.useGravity = false;
+        rb.isKinematic = true;
+
+        this.transform.parent = playerController.transform;
     }
 
     public bool IsInteractable()
@@ -26,6 +43,17 @@ public class Battery : MonoBehaviour, IInteractable
     // Update is called once per frame
     void Update()
     {
-        
+        if (transform.parent == playerController.transform)
+        {
+            FollowMouse();
+        }
+    }
+
+    void FollowMouse()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(mouse.position.ReadValue());
+        Vector3 targetPosition = ray.origin + ray.direction * holdDistance;
+
+        transform.position = targetPosition;
     }
 }
