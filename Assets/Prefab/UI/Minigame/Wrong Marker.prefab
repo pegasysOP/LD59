@@ -76,7 +76,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4279440377
-  m_fontColor: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
+  m_fontColor: {r: 0.9764706, g: 0.07450979, b: 0.07450979, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c366d8b9fe9f54aaa8ddc0f8c605ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HDRColorBoost
-  hdrColor: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
+  hdrColor: {r: 0.9764706, g: 0.07450979, b: 0.07450979, a: 1}
 --- !u!1 &8182069870661374428
 GameObject:
   m_ObjectHideFlags: 0
