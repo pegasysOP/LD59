@@ -304,7 +304,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room1Floor2
+      value: StartingRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -495,7 +495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor3 (5)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -610,7 +610,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor1 (4)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -750,7 +750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor2
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -957,7 +957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room1Floor3
+      value: StartingRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1027,7 +1027,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Corridor (3)
+      value: Corridor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1167,7 +1167,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor4
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1237,7 +1237,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor3
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1531,7 +1531,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor1 (3)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1601,7 +1601,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor3 (1)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1706,7 +1706,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room1Floor4
+      value: StartingRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1781,7 +1781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor1 (5)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1851,7 +1851,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor4 (1)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1921,7 +1921,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor3 (2)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2026,7 +2026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room3Floor
+      value: AlienRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2096,7 +2096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room3Floor
+      value: AlienRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2166,7 +2166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Corridor (2)
+      value: Corridor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2283,7 +2283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room3Floor
+      value: AlienRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2423,7 +2423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor1
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2493,7 +2493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Corridor (1)
+      value: Corridor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2563,7 +2563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor3 (4)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2965,7 +2965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Corridor (4)
+      value: Corridor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3035,7 +3035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor1 (1)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3105,7 +3105,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor3 (3)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3306,7 +3306,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor2 (1)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3446,7 +3446,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room2Floor1 (2)
+      value: CommsRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3516,7 +3516,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room3Floor
+      value: AlienRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3586,7 +3586,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303735056653295827, guid: 96ae1cb45404b95428536ea9b3fa160e, type: 3}
       propertyPath: m_Name
-      value: Room1Floor1
+      value: StartingRoomFloor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
