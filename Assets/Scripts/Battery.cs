@@ -13,8 +13,21 @@ public class Battery : MonoBehaviour, IInteractable
     [SerializeField]
     private float holdDistance = 2f;
 
+    private bool isHeld = false;
+
     public void Interact()
     {
+        if (isHeld)
+        {
+            this.transform.parent = null;
+            rb.useGravity = true;
+            rb.isKinematic = false;
+            isHeld = false;
+            return;
+        }
+
+        isHeld = true;
+
         Debug.Log("Interacted with battery.");
         if (playerController == null)
         {
