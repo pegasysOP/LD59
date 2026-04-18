@@ -16,7 +16,9 @@ public class Battery : MonoBehaviour, IInteractable
 
     private bool isHeld = false;
 
-    private enum BatteryColour
+    public bool isInCorrectSlot = false;
+
+    public enum BatteryColour
     {
         Yellow,
         Green,
@@ -24,7 +26,7 @@ public class Battery : MonoBehaviour, IInteractable
     }
 
     [SerializeField]
-    private BatteryColour colour;
+    public BatteryColour colour;
 
     public void Interact()
     {
@@ -54,8 +56,8 @@ public class Battery : MonoBehaviour, IInteractable
 
     public bool IsInteractable()
     {
-        //TODO: If the player is close enough to the battery, return true. Otherwise, return false.
-        return true;
+        //TODO: If the battery is in the correct slot then disable interaction.
+        return !isInCorrectSlot;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
