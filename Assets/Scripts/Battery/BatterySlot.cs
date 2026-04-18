@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class BatterySlot : MonoBehaviour, IInteractable
 {
@@ -24,7 +25,8 @@ public class BatterySlot : MonoBehaviour, IInteractable
             Vector3 positon = slotPosition.position;
             battery.transform.position = positon;
 
-            StartCoroutine(RotateBattery(battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
+            // capture and pass the specific battery so concurrent trigger events won't clobber the reference
+            StartCoroutine(RotateBattery(battery, battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
         }
     }
 
@@ -46,7 +48,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
         
     }
 
-    private IEnumerator RotateBattery(Transform target, Quaternion targetRotation, float duration)
+    private IEnumerator RotateBattery(Battery rotatingBattery, Transform target, Quaternion targetRotation, float duration)
     {
         Quaternion startRotation = target.rotation;
         float time = 0f;
@@ -61,7 +63,46 @@ public class BatterySlot : MonoBehaviour, IInteractable
         }
 
         target.rotation = targetRotation;
-        battery = null;
+
+        //Battery is not null here
+
+        yield return StartCoroutine(PostRotationCheck());
+    }
+
+    private IEnumerator PostRotationCheck()
+    {
+        Debug.Log("Post Rotation check started. Battery = " + battery);
+        //yield return new WaitForSeconds(0.05f);
+
+        //Battery is null here
+        if (battery == null)
+            yield break;
+
+        Debug.Log("Battery is not null");
+        if (!battery.isInCorrectSlot)
+        {
+            Debug.Log("Need to eject");
+            EjectBattery();
+        }
+        else
+        {
+            battery = null;
+        } 
+    }
+
+    private void EjectBattery()
+    {
+        Rigidbody rb = battery.GetComponent<Rigidbody>();
+
+        battery.isHeld = false;
+        battery.transform.parent = null;
+
+        rb.isKinematic = false;
+        rb.useGravity = true;
+
+        Vector3 ejectDir = (battery.transform.position - transform.position).normalized + Vector3.up * 0.5f;
+
+        rb.AddForce(ejectDir * 5f, ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
