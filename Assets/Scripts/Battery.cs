@@ -8,12 +8,23 @@ public class Battery : MonoBehaviour, IInteractable
     [SerializeField]
     private Rigidbody rb;
 
+    //TODO: Replace with Actions
     private Mouse mouse = Mouse.current;
 
     [SerializeField]
     private float holdDistance = 2f;
 
     private bool isHeld = false;
+
+    private enum BatteryColour
+    {
+        Yellow,
+        Green,
+        Blue
+    }
+
+    [SerializeField]
+    private BatteryColour colour;
 
     public void Interact()
     {

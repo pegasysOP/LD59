@@ -779,12 +779,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
+      propertyPath: colour
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 1060064900}
     - target: {fileID: 4718912905371244592, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_Name
-      value: Battery (1)
+      value: BatteryGreen
       objectReference: {fileID: 0}
     - target: {fileID: 9220625343451694253, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_LocalScale.x
@@ -1176,12 +1180,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
+      propertyPath: colour
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 1060064900}
     - target: {fileID: 4718912905371244592, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_Name
-      value: Battery (2)
+      value: BatteryBlue
       objectReference: {fileID: 0}
     - target: {fileID: 9220625343451694253, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_LocalScale.x
@@ -1554,7 +1562,7 @@ PrefabInstance:
       objectReference: {fileID: 1060064900}
     - target: {fileID: 4718912905371244592, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_Name
-      value: Battery
+      value: BatteryYellow
       objectReference: {fileID: 0}
     - target: {fileID: 9220625343451694253, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_LocalScale.x
