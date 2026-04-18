@@ -12,6 +12,9 @@ public class BatterySlot : MonoBehaviour, IInteractable
 
     private Battery battery;
 
+    [SerializeField]
+    private float ejectForce = 2.5f;
+
     public void Interact()
     {
         //TODO: Maybe play a sound when trying to place nothing in the slot?
@@ -36,18 +39,6 @@ public class BatterySlot : MonoBehaviour, IInteractable
         return battery != null;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private IEnumerator RotateBattery(Battery rotatingBattery, Transform target, Quaternion targetRotation, float duration)
     {
         Quaternion startRotation = target.rotation;
@@ -64,24 +55,19 @@ public class BatterySlot : MonoBehaviour, IInteractable
 
         target.rotation = targetRotation;
 
-        //Battery is not null here
-
         yield return PostRotationCheck();
     }
 
     private IEnumerator PostRotationCheck()
     {
-        Debug.Log("Post Rotation check started. Battery = " + battery);
         yield return new WaitForSeconds(0.05f);
 
         //Battery is null here
         if (battery == null)
             yield break;
 
-        Debug.Log("Battery is not null");
         if (!battery.isInCorrectSlot)
         {
-            Debug.Log("Need to eject");
             EjectBattery();
         }
         else
@@ -102,7 +88,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
 
         Vector3 ejectDir = (battery.transform.position - transform.position).normalized + Vector3.up * 0.5f;
 
-        rb.AddForce(ejectDir * 5f, ForceMode.Impulse);
+        rb.AddForce(ejectDir * ejectForce, ForceMode.Impulse);
         battery = null;
     }
 
@@ -116,11 +102,8 @@ public class BatterySlot : MonoBehaviour, IInteractable
             Debug.Log("Battery placed in a slot!");
             Interact();
 
-            //TODO: If picking up the battery again then set battery to null
-
             if(battery.colour == slotColour)
             {
-                //TODO: Set the batterys position to be in the middle of the slot and make it so it can't be picked up again.
                 Debug.Log("Battery placed in correct slot!");
                 battery.isInCorrectSlot = true;
             }
