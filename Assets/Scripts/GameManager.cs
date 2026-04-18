@@ -33,8 +33,10 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("All batteries collected");
 
-            //TODO: Implement logic for triggering some event after all batteries. 
-            //e.g. powering up other rooms, opening doors etc. 
+            StateTracker.Instance?.CompleteTask(TaskType.Batteries);
+
+            //TODO: Implement logic for triggering some event after all batteries.
+            //e.g. powering up other rooms, opening doors etc.
         }
     }
 
