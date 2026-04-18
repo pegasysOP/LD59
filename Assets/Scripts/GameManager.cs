@@ -19,12 +19,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-
-        DontDestroyOnLoad(this);
+        Instance = this;
     }
 
     public void CollectBattery()
@@ -42,9 +37,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        escapeAction = InputSystem.actions.FindAction("Escape");
         audioManager.Init();
-        
+
+        if (hudController == null)
+            return;
+
+        escapeAction = InputSystem.actions.FindAction("Escape");
+
         UpdateUI();
 
         SetLocked(false);
@@ -57,6 +56,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (hudController == null)
+            return;
+
         if (escapeAction != null && escapeAction.triggered)
         {
             TogglePauseMenu();
