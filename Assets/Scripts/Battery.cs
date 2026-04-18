@@ -7,13 +7,14 @@ public class Battery : MonoBehaviour, IInteractable
     public void Interact()
     {
         //TODO: Set player to parent of battery so it moves with the player. 
-        throw new System.NotImplementedException();
+        Debug.Log("Interacted with battery.");
+        Debug.LogWarning("Battery interact not yet implemented");
     }
 
     public bool IsInteractable()
     {
         //TODO: If the player is close enough to the battery, return true. Otherwise, return false.
-        throw new System.NotImplementedException();
+        return true;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
