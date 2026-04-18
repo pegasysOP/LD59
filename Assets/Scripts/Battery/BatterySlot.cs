@@ -6,9 +6,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
     private Battery.BatteryColour slotColour;
 
     public void Interact()
-    {
-        //TODO: Add a trigger and if within the trigger then automatically call this interact 
-
+    { 
         //TODO: Maybe play a sound when trying to place nothing in the slot?
         //Set the light to green when the correct battery is placed in the slot?
         return;
