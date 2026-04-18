@@ -10,13 +10,12 @@ public class RepeatMinigame : MonoBehaviour
     [SerializeField]
     private GameObject[] SOSCharacters;
 
-    //TODO: We may want these to be interactable or some other class 
     [SerializeField]
     private List<RepeatButton> buttons;
 
     [Header("Timing")]
-    public float fastTime = 0.25f;
-    public float slowTime = 0.6f;
+    public float fastTime = 0.3f;
+    public float slowTime = 1.0f;
     public float gapTime = 0.15f;
 
     public event Action<bool> OnMinigameEnded;
@@ -41,6 +40,7 @@ public class RepeatMinigame : MonoBehaviour
             button.OnPressed += HandleInput;
         }
 
+        //We probably want to start this from some trigger, pressing a button or entering the room. For testing purposes, we can start it immediately.
         StartMinigame();
     }
 
@@ -102,9 +102,9 @@ public class RepeatMinigame : MonoBehaviour
 
         foreach (var colour in sequence)
         {
-            RepeatButton btn = GetButtonByColour(colour);
+            RepeatButton button = GetButtonByColour(colour);
 
-            yield return FlashButton(btn, showTime);
+            yield return FlashButton(button, showTime);
             yield return new WaitForSeconds(gapTime);
         }
     }
@@ -150,16 +150,9 @@ public class RepeatMinigame : MonoBehaviour
 
     private IEnumerator FlashButton(RepeatButton button, float duration)
     {
-        // 👇 you can replace this with animation, emission, etc.
-        Renderer r = button.GetComponent<Renderer>();
-
-        if (r != null)
-            r.material.EnableKeyword("_EMISSION");
-
+        // use the button's Flash implementation so it works for MeshRenderer, SpriteRenderer or UI Image
+        button.Flash(duration);
         yield return new WaitForSeconds(duration);
-
-        if (r != null)
-            r.material.DisableKeyword("_EMISSION");
     }
 
     private void EndGame(bool won)
