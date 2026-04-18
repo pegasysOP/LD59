@@ -135,6 +135,7 @@ public class AudioManager : MonoBehaviour
     private void SpawnPositionalOneShot(AudioClip clip, float volume, float pitch, Vector3 worldPosition, float startTime)
     {
         GameObject go = new GameObject($"OneShot3D_{clip.name}");
+        go.transform.SetParent(transform, false);
         go.transform.position = worldPosition;
         AudioSource src = go.AddComponent<AudioSource>();
         src.clip = clip;

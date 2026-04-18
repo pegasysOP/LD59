@@ -115,9 +115,13 @@ public class MusicManager : MonoBehaviour
     /// <summary>
     /// Play <paramref name="clip"/> using the in-game envelope (crossfade in,
     /// hold at peak, then fade to the background multiplier). No-op when the
-    /// clip is already the actively-playing track.
+    /// clip is already the actively-playing track. Pass a positive
+    /// <paramref name="crossfadeOverride"/> to force a specific crossfade
+    /// length for this call (useful for panic stingers that need to swap
+    /// tracks near-instantly); leave it negative to use
+    /// <see cref="crossfadeDuration"/>.
     /// </summary>
-    public void PlayGameMusic(AudioClip clip)
+    public void PlayGameMusic(AudioClip clip, float crossfadeOverride = -1f)
     {
         if (clip == null) return;
         if (IsAlreadyPlaying(clip)) return;
@@ -125,7 +129,8 @@ public class MusicManager : MonoBehaviour
         StopRoutine();
         currentClipDebug = clip;
         currentModeDebug = Mode.Game;
-        routine = StartCoroutine(GameMusicRoutine(clip));
+        float fade = crossfadeOverride >= 0f ? crossfadeOverride : crossfadeDuration;
+        routine = StartCoroutine(GameMusicRoutine(clip, fade));
     }
 
     /// <summary>
@@ -214,7 +219,7 @@ public class MusicManager : MonoBehaviour
     }
 
     // Crossfade in to peak, hold, then decay to background.
-    private IEnumerator GameMusicRoutine(AudioClip clip)
+    private IEnumerator GameMusicRoutine(AudioClip clip, float crossfadeSeconds)
     {
         AudioSource from = activeSource;
         AudioSource to = OtherSource(from);
@@ -228,7 +233,7 @@ public class MusicManager : MonoBehaviour
 
         // Phase 1: crossfade (previous track fades out as new track rises to peak)
         phaseDebug = "Crossfade";
-        float fade = Mathf.Max(0.01f, crossfadeDuration);
+        float fade = Mathf.Max(0.01f, crossfadeSeconds);
         float t = 0f;
         while (t < fade)
         {

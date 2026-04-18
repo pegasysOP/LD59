@@ -366,6 +366,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 468647773}
     - target: {fileID: 4718912905371244592, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_Name
       value: Battery (1)
@@ -431,6 +435,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 468647773}
     - target: {fileID: 4718912905371244592, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_Name
       value: Battery (2)
@@ -834,6 +842,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 468647773}
     - target: {fileID: 4718912905371244592, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_Name
       value: Battery
