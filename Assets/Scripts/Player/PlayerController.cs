@@ -16,6 +16,11 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     public float airAcceleration;
 
+    [Header("Audio")]
+    public PlayerMovementSounds movementSounds;
+    [Tooltip("Suppress the landing sound for this many seconds after the player first touches the ground (prevents a spawn-landing thud).")]
+    public float landingSoundSuppressionAfterFirstGround = 1f;
+
     [Header("Animation")]
     public Animator animator;
 
@@ -24,18 +29,21 @@ public class PlayerController : MonoBehaviour
     public float speedDebug;
     public bool groundDebug;
 
-    private float movementTimer = 0.5f;
-    private float movementDelay = 0.5f;
+    private float footstepTimer;
+    private bool wasGrounded;
+    private float airTime;
+    private float firstGroundedTime = -1f;
 
     private void Start()
     {
         jumpAction = InputSystem.actions.FindAction("Jump");
         moveAction = InputSystem.actions.FindAction("Move");
+        footstepTimer = FootstepInterval;
+        wasGrounded = groundDetector != null && groundDetector.IsGrounded;
     }
 
     private void Update()
     {
-        movementTimer -= Time.deltaTime;
         if (GameManager.Instance.LOCKED)
         {
             inputDir = Vector3.zero;
@@ -51,6 +59,11 @@ public class PlayerController : MonoBehaviour
         if (jumpAction.triggered && groundDetector.IsGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            if (movementSounds != null)
+            {
+                movementSounds.jumpAir.Play();
+                movementSounds.jumpStep.Play();
+            }
             //animator.SetBool("isJumping", true);
         }
 
@@ -73,27 +86,53 @@ public class PlayerController : MonoBehaviour
         float velocityZ = Mathf.Clamp(moveDir.z * moveSpeed, -maxVelocity, maxVelocity);
         Vector3 targetVelocity = new Vector3(velocityX, rb.linearVelocity.y, velocityZ);
 
-        if (inputDir != Vector3.zero)
+        bool wantsMove = inputDir.sqrMagnitude > 0.01f;
+        bool grounded = groundDetector != null && groundDetector.IsGrounded;
+
+        if (!grounded)
+            airTime += Time.fixedDeltaTime;
+
+        if (grounded && firstGroundedTime < 0f)
+            firstGroundedTime = Time.time;
+
+        if (grounded && !wasGrounded)
         {
-            if (movementTimer <= 0)
+            bool withinSpawnSuppressionWindow = firstGroundedTime < 0f
+                || Time.time - firstGroundedTime < landingSoundSuppressionAfterFirstGround;
+            if (!withinSpawnSuppressionWindow
+                && movementSounds != null
+                && airTime >= movementSounds.minAirTimeForLanding)
+                movementSounds.landing.Play();
+            airTime = 0f;
+            footstepTimer = FootstepInterval;
+        }
+        wasGrounded = grounded;
+
+        if (wantsMove && grounded)
+        {
+            footstepTimer -= Time.fixedDeltaTime;
+            if (footstepTimer <= 0f)
             {
-                //AudioManager.Instance.PlaySfxWithPitchShifting(AudioManager.Instance.walkingClips);
-                movementTimer = movementDelay;
+                if (movementSounds != null)
+                    movementSounds.footsteps.Play();
+                footstepTimer = FootstepInterval;
             }
-            //animator.SetBool("isMoving", true);
         }
         else
         {
-            //animator.SetBool("isMoving", false);
+            footstepTimer = FootstepInterval;
         }
 
-        float currentAcceleration = groundDetector.IsGrounded ? moveAcceleration : airAcceleration;
+        float currentAcceleration = grounded ? moveAcceleration : airAcceleration;
         rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, currentAcceleration * Time.deltaTime);
 
-        Vector3 gravity = -groundDetector.GroundNormal * Physics.gravity.magnitude * rb.mass;
+        Vector3 groundNormal = groundDetector != null ? groundDetector.GroundNormal : Vector3.up;
+        Vector3 gravity = -groundNormal * Physics.gravity.magnitude * rb.mass;
         rb.AddForce(gravity, ForceMode.Acceleration);
 
         speedDebug = rb.linearVelocity.magnitude;
-        groundDebug = groundDetector.IsGrounded;
+        groundDebug = grounded;
     }
+
+    private float FootstepInterval => movementSounds != null ? movementSounds.footstepInterval : 0.45f;
 }

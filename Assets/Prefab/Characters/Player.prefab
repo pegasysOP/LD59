@@ -151,6 +151,7 @@ MonoBehaviour:
   groundDetector: {fileID: 4010273051556381836}
   jumpForce: 4
   airAcceleration: 1.2
+  movementSounds: {fileID: 11400000, guid: 08780e538295a4ef2ac1ab4d66187624, type: 2}
   animator: {fileID: 3874593533780176996}
   inputDir: {x: 0, y: 0, z: 0}
   speedDebug: 0

@@ -150,7 +150,23 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySfx(List<AudioClip> audioClips)
     {
-        PlaySfxWithPitchShifting(audioClips, 1.0f, 1.0f);
+        if (sfxSource == null || audioClips == null || audioClips.Count == 0)
+            Debug.LogError("ERROR: there are no sounds to play!");
+
+        int index = Random.Range(0, audioClips.Count);
+        sfxSource.PlayOneShot(audioClips[index], 1f);
+    }
+
+    public void PlaySfx(List<AudioClipVolume> clips)
+    {
+        if (sfxSource == null || clips == null || clips.Count == 0)
+            Debug.LogError("ERROR: there are no sounds to play!");
+
+        int index = Random.Range(0, clips.Count);
+        AudioClipVolume entry = clips[index];
+        if (entry == null || entry.Clip == null)
+            return;
+        PlayOneShotInternal(entry.Clip, entry.Volume, 1f, entry.Delay);
     }
 
     public void Play(AudioSource source, AudioClip clip, FadeType fadeType = FadeType.None, float fadeTime = 2f, bool isDucking = false)
@@ -226,8 +242,81 @@ public class AudioManager : MonoBehaviour
 
         int index = Random.Range(0, clips.Count);
         sfxSource.pitch = Random.Range(minPitch, maxPitch);
-        sfxSource.PlayOneShot(clips[index]);
+        sfxSource.PlayOneShot(clips[index], 1f);
         sfxSource.pitch = 1f;
+    }
+
+    public void PlaySfxWithPitchShifting(List<AudioClipVolume> clips, float minPitch = 0.8f, float maxPitch = 1.2f)
+    {
+        if (sfxSource == null || clips == null || clips.Count == 0)
+            Debug.LogError("ERROR: there are no sounds to pitch shift!");
+
+        int index = Random.Range(0, clips.Count);
+        AudioClipVolume entry = clips[index];
+        if (entry == null || entry.Clip == null)
+            return;
+        PlayOneShotInternal(entry.Clip, entry.Volume, Random.Range(minPitch, maxPitch), entry.Delay);
+    }
+
+    public void PlaySfxWithPitchShifting(AudioClipVolume clipVolume, float minPitch = 0.8f, float maxPitch = 1.2f)
+    {
+        if (sfxSource == null || clipVolume == null || clipVolume.Clip == null)
+            return;
+
+        PlayOneShotInternal(clipVolume.Clip, clipVolume.Volume, Random.Range(minPitch, maxPitch), clipVolume.Delay);
+    }
+
+    private void PlayOneShotInternal(AudioClip clip, float volume, float pitch, float delay)
+    {
+        if (sfxSource == null || clip == null)
+            return;
+
+        if (delay > 0f)
+        {
+            StartCoroutine(PlayOneShotAfterDelay(clip, volume, pitch, delay));
+        }
+        else if (delay < 0f)
+        {
+            float startTime = Mathf.Clamp(-delay, 0f, Mathf.Max(0f, clip.length - 0.01f));
+            PlayOneShotAtOffset(clip, volume, pitch, startTime);
+        }
+        else
+        {
+            sfxSource.pitch = pitch;
+            sfxSource.PlayOneShot(clip, volume);
+            sfxSource.pitch = 1f;
+        }
+    }
+
+    private IEnumerator PlayOneShotAfterDelay(AudioClip clip, float volume, float pitch, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (sfxSource == null || clip == null)
+            yield break;
+        sfxSource.pitch = pitch;
+        sfxSource.PlayOneShot(clip, volume);
+        sfxSource.pitch = 1f;
+    }
+
+    private void PlayOneShotAtOffset(AudioClip clip, float volume, float pitch, float startTime)
+    {
+        GameObject go = new GameObject($"OneShot_{clip.name}");
+        go.transform.SetParent(transform, false);
+        AudioSource src = go.AddComponent<AudioSource>();
+        src.clip = clip;
+        src.outputAudioMixerGroup = sfxSource.outputAudioMixerGroup;
+        src.volume = sfxSource.volume * Mathf.Clamp01(volume);
+        src.pitch = pitch;
+        src.spatialBlend = sfxSource.spatialBlend;
+        src.bypassEffects = sfxSource.bypassEffects;
+        src.bypassListenerEffects = sfxSource.bypassListenerEffects;
+        src.bypassReverbZones = sfxSource.bypassReverbZones;
+        src.playOnAwake = false;
+        src.time = startTime;
+        src.Play();
+
+        float remaining = (clip.length - startTime) / Mathf.Max(0.01f, Mathf.Abs(pitch));
+        Destroy(go, remaining + 0.1f);
     }
 
     //==================== Volume ====================
