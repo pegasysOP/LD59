@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8785877216829585750}
   - component: {fileID: 3019619376856323103}
   - component: {fileID: 7241396487154116206}
+  - component: {fileID: 4095674458339604679}
   m_Layer: 5
   m_Name: Peak Marker
   m_TagString: Untagged
@@ -58,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.41568628, g: 0.6509804, b: 0.30980393, a: 1}
+  m_Color: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -75,3 +76,16 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4095674458339604679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8182069870661374428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c366d8b9fe9f54aaa8ddc0f8c605ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HDRColorBoost
+  hdrColor: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4788854193493776244}
   - component: {fileID: 8816653989319070350}
   - component: {fileID: 6707127424514376122}
+  - component: {fileID: 379311904296852935}
   m_Layer: 5
   m_Name: GameObject
   m_TagString: Untagged
@@ -74,8 +75,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4289111631
-  m_fontColor: {r: 0.30980393, g: 0.6509804, b: 0.650026, a: 1}
+    rgba: 4279499102
+  m_fontColor: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -137,6 +138,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &379311904296852935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6337170774439403618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c366d8b9fe9f54aaa8ddc0f8c605ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HDRColorBoost
+  hdrColor: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
 --- !u!1 &8182069870661374428
 GameObject:
   m_ObjectHideFlags: 0
