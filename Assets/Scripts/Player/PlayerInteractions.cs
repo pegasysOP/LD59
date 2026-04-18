@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 public class PlayerInteractions : MonoBehaviour
 {
     //TODO: Replace with Actions
-    public Keyboard keyboard = Keyboard.current;
-    public Mouse mouse = Mouse.current;
+    private Keyboard keyboard = Keyboard.current;
+    private Mouse mouse = Mouse.current;
 
     [SerializeField]
     private float interactDistance = 3f;
