@@ -156,6 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 591a24bbd6c65f94098280bc39317349, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Battery
+  playerController: {fileID: 0}
+  rb: {fileID: 2964685304937606333}
 --- !u!1 &5671944621527548958
 GameObject:
   m_ObjectHideFlags: 0
