@@ -25,7 +25,14 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
         if (GameManager.Instance.LOCKED)
+        {
+            if (GameManager.Instance.MinigameActive)
+            {
+                pitch = 0f;
+                playerCamera.transform.localEulerAngles = Vector3.zero;
+            }
             return;
+        }
 
         Vector2 lookValue = lookAction.ReadValue<Vector2>() * 0.02f;
 

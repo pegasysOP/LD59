@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     private int currentBatteries = 0;
 
     public bool LOCKED = false;
+    public bool MinigameActive = false;
 
     private void Awake()
     {

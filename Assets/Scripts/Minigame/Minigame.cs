@@ -10,7 +10,7 @@ public class Minigame : MonoBehaviour
 {
     [Header("UI")]
     public CanvasGroup panelGroup;
-    public Image alienImage;
+    public Transform monster;
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI failCounterText;
 
@@ -39,6 +39,7 @@ public class Minigame : MonoBehaviour
     public float maxAlienDuration = 4f;
     public int maxFails = 3;
     public float alienGrowthPerFail = 1.25f;
+    public float monsterDropPerFail = 0.25f;
     public Key debugStartKey = Key.M;
 
     public event Action<bool> OnMinigameEnded;
@@ -58,13 +59,15 @@ public class Minigame : MonoBehaviour
     private readonly List<GameObject> spawned = new List<GameObject>();
     private float currentDuration;
     private int failCount;
-    private Vector3 alienBaseScale;
+    private Vector3 monsterBaseScale;
+    private Vector3 monsterBasePosition;
     private bool strayMissThisRound;
 
     private void Start()
     {
         clickAction = InputSystem.actions?.FindAction("Click");
-        alienBaseScale = alienImage.rectTransform.localScale;
+        monsterBaseScale = monster.localScale;
+        monsterBasePosition = monster.localPosition;
         HidePanel();
         UpdateFailCounter();
     }
@@ -83,11 +86,15 @@ public class Minigame : MonoBehaviour
 
         failCount = 0;
         UpdateFailCounter();
-        alienImage.rectTransform.localScale = alienBaseScale;
+        monster.localScale = monsterBaseScale;
+        monster.localPosition = monsterBasePosition;
         ShowPanel();
 
         if (GameManager.Instance != null)
+        {
+            GameManager.Instance.MinigameActive = true;
             GameManager.Instance.SetLocked(true);
+        }
 
         StartCoroutine(RunSession());
     }
@@ -126,7 +133,8 @@ public class Minigame : MonoBehaviour
 
             failCount++;
             UpdateFailCounter();
-            alienImage.rectTransform.localScale *= alienGrowthPerFail;
+            monster.localScale *= alienGrowthPerFail;
+            monster.localPosition += Vector3.down * monsterDropPerFail;
             yield return new WaitForSecondsRealtime(0.8f);
 
             if (failCount >= maxFails)
@@ -317,6 +325,7 @@ public class Minigame : MonoBehaviour
         panelGroup.alpha = 1f;
         panelGroup.interactable = true;
         panelGroup.blocksRaycasts = true;
+        if (monster != null) monster.gameObject.SetActive(true);
     }
 
     private void HidePanel()
@@ -324,16 +333,21 @@ public class Minigame : MonoBehaviour
         panelGroup.alpha = 0f;
         panelGroup.interactable = false;
         panelGroup.blocksRaycasts = false;
+        if (monster != null) monster.gameObject.SetActive(false);
     }
 
     private void EndSession(bool won)
     {
         ClearRound();
         HidePanel();
-        alienImage.rectTransform.localScale = alienBaseScale;
+        monster.localScale = monsterBaseScale;
+        monster.localPosition = monsterBasePosition;
 
         if (GameManager.Instance != null)
+        {
+            GameManager.Instance.MinigameActive = false;
             GameManager.Instance.SetLocked(false);
+        }
 
         state = State.Idle;
         OnMinigameEnded?.Invoke(won);
