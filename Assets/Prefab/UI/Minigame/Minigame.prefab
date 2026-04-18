@@ -221,7 +221,6 @@ MonoBehaviour:
   peakHeight: 100
   peakHalfWidthSec: 0.02
   clickClip: {fileID: 8300000, guid: ddeceb9949b925d4782b820b0ce16d12, type: 3}
-  audioManager: {fileID: 0}
   hitTolerance: 0.18
   minPlayerClicks: 3
   maxPlayerClicks: 5
@@ -242,7 +241,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968097806900145997}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

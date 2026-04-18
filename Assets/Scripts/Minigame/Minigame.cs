@@ -26,7 +26,6 @@ public class Minigame : MonoBehaviour
 
     [Header("Audio")]
     public AudioClip clickClip;
-    public AudioManager audioManager;
 
     [Header("Tuning")]
     public float hitTolerance = 0.18f;
@@ -305,7 +304,7 @@ public class Minigame : MonoBehaviour
 
     private void PlayClickSfx(float minPitch, float maxPitch)
     {
-        audioManager.PlaySfxWithPitchShifting(new List<AudioClip> { clickClip }, minPitch, maxPitch);
+        AudioManager.Instance.PlaySfxWithPitchShifting(new List<AudioClip> { clickClip }, minPitch, maxPitch);
     }
 
     private void UpdateFailCounter()
