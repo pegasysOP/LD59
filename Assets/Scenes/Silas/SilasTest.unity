@@ -504,72 +504,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 315687260}
   m_CullTransparentMesh: 1
---- !u!1001 &419607305
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1478254127}
-    m_Modifications:
-    - target: {fileID: 4664836020836940149, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: slotColour
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -6.8238473
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.8895998
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -8.309999
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9050621524510642148, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_Name
-      value: BatterySlotGreen
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
---- !u!4 &419607306 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-  m_PrefabInstance: {fileID: 419607305}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &522704560
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,72 +616,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &630997380
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1478254127}
-    m_Modifications:
-    - target: {fileID: 4664836020836940149, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: slotColour
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -9.53433
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.9323704
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -8.306
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9050621524510642148, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_Name
-      value: BatterySlotBlue
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
---- !u!4 &630997381 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-  m_PrefabInstance: {fileID: 630997380}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &738354002
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,17 +778,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
-      propertyPath: colour
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 1060064900}
     - target: {fileID: 4718912905371244592, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_Name
-      value: BatteryGreen
+      value: Battery (1)
       objectReference: {fileID: 0}
     - target: {fileID: 9220625343451694253, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_LocalScale.x
@@ -1087,17 +947,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1060064900 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2189392033409192641, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
-  m_PrefabInstance: {fileID: 1403677656}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3302878c10d45a479d33493a7bdb3aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1325505082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1303,68 +1152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfdfe27c78ec31f4eaf0bef7d6ffe65f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
---- !u!1001 &1346945783
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1478254127}
-    m_Modifications:
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -4.076329
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.8667889
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -8.3096
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9050621524510642148, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-      propertyPath: m_Name
-      value: BatterySlotYellow
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
---- !u!4 &1346945784 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6097885335763648846, guid: 35343c23572e5874e81a0e55b6568493, type: 3}
-  m_PrefabInstance: {fileID: 1346945783}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1396049603
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1373,17 +1160,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
-      propertyPath: colour
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 1060064900}
     - target: {fileID: 4718912905371244592, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_Name
-      value: BatteryBlue
+      value: Battery (2)
       objectReference: {fileID: 0}
     - target: {fileID: 9220625343451694253, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_LocalScale.x
@@ -1495,11 +1274,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
---- !u!4 &1478254127 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3636451383083743876, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-  m_PrefabInstance: {fileID: 4466151890526683198}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1655425525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1681,14 +1455,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 397352726879886350, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-      propertyPath: m_Name
-      value: BatterySlot
-      objectReference: {fileID: 0}
-    - target: {fileID: 1590970266380032562, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-      propertyPath: m_Name
-      value: BatterySlot
-      objectReference: {fileID: 0}
     - target: {fileID: 3636451383083743876, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1733,10 +1499,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level
       objectReference: {fileID: 0}
-    - target: {fileID: 8638691367881772168, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-      propertyPath: m_Name
-      value: BatterySlot
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6145628341558580402, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
@@ -1756,19 +1518,7 @@ PrefabInstance:
     - {fileID: 5023839970657530809, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
     - {fileID: 5738277092032053076, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
     - {fileID: 3083601223566484672, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-    - {fileID: 8638691367881772168, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-    - {fileID: 1590970266380032562, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-    - {fileID: 397352726879886350, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3636451383083743876, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 1346945784}
-    - targetCorrespondingSourceObject: {fileID: 3636451383083743876, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 419607306}
-    - targetCorrespondingSourceObject: {fileID: 3636451383083743876, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 630997381}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ccba78d931473741b904fbbb8aa988c, type: 3}
 --- !u!1001 &7823092704273427445
@@ -1779,13 +1529,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 1060064900}
     - target: {fileID: 4718912905371244592, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_Name
-      value: BatteryYellow
+      value: Battery
       objectReference: {fileID: 0}
     - target: {fileID: 9220625343451694253, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: m_LocalScale.x
