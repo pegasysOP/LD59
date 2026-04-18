@@ -1,18 +1,33 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInteractions : MonoBehaviour
 {
-    //TODO: Implement raycasting and calling objects interact methods, such as picking up batteries, interacting with doors, etc.
+    private Mouse mouse = Mouse.current;
+
+    [SerializeField]
+    private float interactDistance = 3f;
+
+    private InputAction interactAction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        interactAction = InputSystem.actions.FindAction("Interact");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (interactAction.WasPressedThisFrame())
+        {
+             Ray ray = Camera.main.ScreenPointToRay(mouse.position.ReadValue());
+             if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
+             {
+                IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+                if (interactable != null && interactable.IsInteractable())
+                    interactable.Interact();
+            }
+        }
     }
 }
