@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -15,22 +16,26 @@ public class BatterySlot : MonoBehaviour, IInteractable
     [SerializeField]
     private float ejectForce = 2.5f;
 
+    // Minimum gap between plays of the same sound type on this slot.
+    // Absorbs rapid-fire duplicate events (re-entering triggers, click + trigger races, etc.)
+    // without relying on complex coroutine / state guards.
+    private const float SoundCooldown = 1f;
+    private readonly Dictionary<SfxBank, float> _lastPlayedAt = new Dictionary<SfxBank, float>();
+
     public void Interact()
     {
         //TODO: Maybe play a sound when trying to place nothing in the slot?
         //Set the light to green when the correct battery is placed in the slot?
-        if(battery != null)
-        {
-            battery.isHeld = false;
+        if (battery == null)
+            return;
 
-            //TODO: Set the batterys position to be in the middle of the slot
-            battery.transform.parent = null;
-            Vector3 positon = slotPosition.position;
-            battery.transform.position = positon;
+        battery.isHeld = false;
 
-            // capture and pass the specific battery so concurrent trigger events won't clobber the reference
-            StartCoroutine(RotateBattery(battery, battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
-        }
+        //TODO: Set the batterys position to be in the middle of the slot
+        battery.transform.parent = null;
+        battery.transform.position = slotPosition.position;
+
+        StartCoroutine(RotateBattery(battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
     }
 
     public bool IsInteractable()
@@ -39,7 +44,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
         return battery != null;
     }
 
-    private IEnumerator RotateBattery(Battery rotatingBattery, Transform target, Quaternion targetRotation, float duration)
+    private IEnumerator RotateBattery(Transform target, Quaternion targetRotation, float duration)
     {
         Quaternion startRotation = target.rotation;
         float time = 0f;
@@ -62,19 +67,24 @@ public class BatterySlot : MonoBehaviour, IInteractable
     {
         yield return new WaitForSeconds(0.05f);
 
-        //Battery is null here
         if (battery == null)
             yield break;
 
+        BatterySounds sounds = AudioManager.Instance != null ? AudioManager.Instance.batterySounds : null;
+        Vector3 slotPos = slotPosition != null ? slotPosition.position : transform.position;
+
         if (!battery.isInCorrectSlot)
         {
+            PlayWithCooldown(sounds?.rejectFeedback, slotPos);
+            PlayWithCooldown(sounds?.rejectStaticZap, slotPos);
             EjectBattery();
         }
         else
         {
+            PlayWithCooldown(sounds?.acceptFeedback, slotPos);
             GameManager.Instance.CollectBattery();
             battery = null;
-        } 
+        }
     }
 
     private void EjectBattery()
@@ -90,25 +100,48 @@ public class BatterySlot : MonoBehaviour, IInteractable
         Vector3 ejectDir = (battery.transform.position - transform.position).normalized + Vector3.up * 0.5f;
 
         rb.AddForce(ejectDir * ejectForce, ForceMode.Impulse);
+
+        // Play the drop sound so the ejection feels physical.
+        // Polish note: ideally the drop sound would play when the battery actually
+        // hits the ground (via a collision callback on Battery), not the moment it
+        // leaves the slot. Good enough for now.
+        AudioManager.Instance?.batterySounds?.drop.PlayAt(battery.transform.position);
+
         battery = null;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Battery otherBattery = other.GetComponent<Battery>();
-        if (otherBattery != null)
+        if (otherBattery == null)
+            return;
+
+        battery = otherBattery;
+
+        Debug.Log("Battery placed in a slot!");
+
+        Vector3 clunkPos = slotPosition != null ? slotPosition.position : transform.position;
+        PlayWithCooldown(AudioManager.Instance?.batterySounds?.placeClunk, clunkPos);
+
+        Interact();
+
+        if (battery != null && battery.colour == slotColour)
         {
-            battery = otherBattery;
-
-            Debug.Log("Battery placed in a slot!");
-            Interact();
-
-            if(battery.colour == slotColour)
-            {
-                Debug.Log("Battery placed in correct slot!");
-                battery.isInCorrectSlot = true;
-            }
-
+            Debug.Log("Battery placed in correct slot!");
+            battery.isInCorrectSlot = true;
         }
+    }
+
+    private void PlayWithCooldown(SfxBank bank, Vector3 worldPosition)
+    {
+        if (bank == null)
+            return;
+
+        float now = Time.time;
+        if (_lastPlayedAt.TryGetValue(bank, out float last) && now - last < SoundCooldown)
+            return;
+
+        _lastPlayedAt[bank] = now;
+        bank.PlayAt(worldPosition);
     }
 }

@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
     {
         currentBatteries++;
 
+        AudioManager.Instance?.batterySounds?.GetPowerUpFor(currentBatteries)?.Play();
+
         if(currentBatteries == totalBatteries)
         {
             Debug.Log("All batteries collected");

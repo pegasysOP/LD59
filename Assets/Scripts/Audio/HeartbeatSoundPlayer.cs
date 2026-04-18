@@ -16,7 +16,8 @@ public class HeartbeatSoundPlayer : MonoBehaviour
     [Header("References")]
     [Tooltip("Data asset with per-level banks, intervals and envelope values.")]
     public HeartbeatSoundConfig config;
-    [Tooltip("Dedicated source used for heartbeat one-shots. If null, AudioManager.sfxSource is used.")]
+    [Tooltip("Dedicated source used for heartbeat one-shots. If null, AudioManager.uiSfxSource " +
+             "is used (dry, no-reverb \"in your head\" routing), falling back to sfxSource.")]
     public AudioSource audioSource;
 
     [Header("Debug")]
@@ -150,52 +151,21 @@ public class HeartbeatSoundPlayer : MonoBehaviour
         return config != null && config.smoothEnvelope ? Mathf.SmoothStep(0f, 1f, t) : t;
     }
 
-    /// <summary>
-    /// Maps the perceived-loudness envelope value to a linear amplitude value
-    /// suitable for <see cref="AudioSource.PlayOneShot(AudioClip, float)"/>, via the
-    /// shared <see cref="AudioVolume"/> helper. Per-asset exponent allows
-    /// heartbeat-specific punch independent of the project default.
-    /// </summary>
-    private float ShapeAmplitude(float perceivedMultiplier)
-    {
-        float exp = config != null ? config.volumeExponent : AudioVolume.DefaultExponent;
-        return AudioVolume.ToLinear(perceivedMultiplier, exp);
-    }
-
     private void PlayBeat()
     {
         HeartbeatSoundConfig.LevelEntry entry = config.GetEntry(boundManager.CurrentLevel);
         if (entry == null || entry.clips == null) return;
-        PlayRandomFromBank(entry.clips, currentVolumeMultiplier);
-    }
-
-    private void PlayRandomFromBank(SfxBank bank, float volumeMultiplier)
-    {
-        if (bank == null || bank.clips == null || bank.clips.Count == 0)
-            return;
 
         AudioSource src = audioSource;
         if (src == null && AudioManager.Instance != null)
-            src = AudioManager.Instance.sfxSource;
+            src = AudioManager.Instance.uiSfxSource != null
+                ? AudioManager.Instance.uiSfxSource
+                : AudioManager.Instance.sfxSource;
         if (src == null) return;
 
-        float pMin = Mathf.Min(bank.pitchMin, bank.pitchMax);
-        float pMax = Mathf.Max(bank.pitchMin, bank.pitchMax);
-
-        int start = Random.Range(0, bank.clips.Count);
-        for (int i = 0; i < bank.clips.Count; i++)
-        {
-            int idx = (start + i) % bank.clips.Count;
-            AudioClipVolume entry = bank.clips[idx];
-            if (entry == null || entry.Clip == null)
-                continue;
-
-            float previousPitch = src.pitch;
-            src.pitch = Random.Range(pMin, pMax);
-            float shaped = ShapeAmplitude(volumeMultiplier);
-            src.PlayOneShot(entry.Clip, Mathf.Clamp01(entry.Volume * shaped));
-            src.pitch = previousPitch;
-            return;
-        }
+        // SfxBank.PlayOnSource composes the envelope multiplier with the clip's authored
+        // volume, the bank gain and the jitter in perceived space before a single ToLinear,
+        // so the full inspector-authored loudness model is respected on the heartbeat path.
+        entry.clips.PlayOnSource(src, currentVolumeMultiplier);
     }
 }

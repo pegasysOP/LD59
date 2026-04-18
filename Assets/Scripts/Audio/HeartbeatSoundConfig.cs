@@ -35,10 +35,6 @@ public class HeartbeatSoundConfig : ScriptableObject
     [Range(0f, 1f)] public float peakVolumeMultiplier = 1f;
     [Tooltip("Perceived-loudness multiplier during the resting / subtle phase (0-1).")]
     [Range(0f, 1f)] public float subtleVolumeMultiplier = 0.5f;
-    [Tooltip("Exponent applied to the envelope before it's sent to PlayOneShot, to convert perceived " +
-            "loudness into linear amplitude. 1 = linear (subtle=0.5 only -6 dB below peak). " +
-            "2 = squared (-12 dB, project default). 3 = cubed (-18 dB). Use 2-3 for a punchy heartbeat.")]
-    [Range(1f, 4f)] public float volumeExponent = AudioVolume.DefaultExponent;
     [Tooltip("If true the ramp-up and decay phases are eased with SmoothStep instead of a straight " +
             "linear lerp. Gives a more natural-feeling swell and ringdown.")]
     public bool smoothEnvelope = true;

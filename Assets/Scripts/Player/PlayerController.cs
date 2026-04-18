@@ -61,8 +61,9 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             if (movementSounds != null)
             {
-                movementSounds.jumpAir.Play();
-                movementSounds.jumpStep.Play();
+                Vector3 pos = transform.position;
+                movementSounds.jumpAir.PlayAt(pos);
+                movementSounds.jumpStep.PlayAt(pos);
             }
             //animator.SetBool("isJumping", true);
         }
@@ -102,7 +103,7 @@ public class PlayerController : MonoBehaviour
             if (!withinSpawnSuppressionWindow
                 && movementSounds != null
                 && airTime >= movementSounds.minAirTimeForLanding)
-                movementSounds.landing.Play();
+                movementSounds.landing.PlayAt(transform.position);
             airTime = 0f;
             footstepTimer = FootstepInterval;
         }
@@ -114,7 +115,7 @@ public class PlayerController : MonoBehaviour
             if (footstepTimer <= 0f)
             {
                 if (movementSounds != null)
-                    movementSounds.footsteps.Play();
+                    movementSounds.footsteps.PlayAt(transform.position);
                 footstepTimer = FootstepInterval;
             }
         }
