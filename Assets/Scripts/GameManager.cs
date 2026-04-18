@@ -10,7 +10,10 @@ public class GameManager : MonoBehaviour
     public CameraController cameraController;
     public HudController hudController;
 
-    private InputAction escapeAction; 
+    private InputAction escapeAction;
+
+    private int totalBatteries = 3;
+    private int currentBatteries = 0;
 
     public bool LOCKED = false;
 
@@ -22,6 +25,19 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(this);
+    }
+
+    public void CollectBattery()
+    {
+        currentBatteries++;
+
+        if(currentBatteries == totalBatteries)
+        {
+            Debug.Log("All batteries collected");
+
+            //TODO: Implement logic for triggering some event after all batteries. 
+            //e.g. powering up other rooms, opening doors etc. 
+        }
     }
 
     private void Start()

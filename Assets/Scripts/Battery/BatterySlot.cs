@@ -72,6 +72,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
         }
         else
         {
+            GameManager.Instance.CollectBattery();
             battery = null;
         } 
     }
