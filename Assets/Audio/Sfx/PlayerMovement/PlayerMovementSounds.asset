@@ -40,17 +40,23 @@ MonoBehaviour:
       _delay: 0
     pitchMin: 0.92
     pitchMax: 1.08
+    gain: 1
+    volumeExponent: 1
+    volumeJitter: 0
   footstepInterval: 0.6
   jumpAir:
     clips:
     - _clip: {fileID: 8300000, guid: 40698a7bb628b46b98fe51b131bf594f, type: 3}
-      _volume: 0.4
+      _volume: 0.58
       _delay: 0.05
     - _clip: {fileID: 8300000, guid: 992a5717e6ccd471188bc8102fcd7ab9, type: 3}
-      _volume: 0.4
+      _volume: 0.58
       _delay: 0.05
     pitchMin: 0.95
     pitchMax: 1.05
+    gain: 1
+    volumeExponent: 1
+    volumeJitter: 0
   jumpStep:
     clips:
     - _clip: {fileID: 8300000, guid: 9abacfce9abe740d7a376180ba93a276, type: 3}
@@ -79,6 +85,9 @@ MonoBehaviour:
       _delay: 0
     pitchMin: 0.95
     pitchMax: 1.05
+    gain: 1
+    volumeExponent: 1
+    volumeJitter: 0
   landing:
     clips:
     - _clip: {fileID: 8300000, guid: b690ef5a010004f45aebc249b44a3b03, type: 3}
@@ -89,4 +98,7 @@ MonoBehaviour:
       _delay: -0.22
     pitchMin: 0.95
     pitchMax: 1.05
+    gain: 1
+    volumeExponent: 1
+    volumeJitter: 0
   minAirTimeForLanding: 0.1

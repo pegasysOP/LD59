@@ -9,7 +9,12 @@ public class AudioClipVolume
 
     public AudioClip Clip => _clip;
 
-    /// <summary>0–1 scale passed to <see cref="AudioSource.PlayOneShot(AudioClip, float)"/>.</summary>
+    /// <summary>
+    /// Authored loudness in 0-1 <b>perceived-loudness space</b>. Higher-level systems
+    /// (e.g. <see cref="SfxBank"/>, <see cref="HeartbeatSoundPlayer"/>, fade routines)
+    /// are expected to convert this to linear amplitude via <see cref="AudioVolume.ToLinear(float, float)"/>
+    /// before it reaches the audio engine. See <see cref="AudioVolume"/> for the rationale.
+    /// </summary>
     public float Volume => Mathf.Clamp01(_volume);
 
     /// <summary>
