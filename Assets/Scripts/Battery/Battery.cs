@@ -35,6 +35,11 @@ public class Battery : MonoBehaviour, IInteractable
         rb.useGravity = true;
         rb.isKinematic = false;
         isHeld = false;
+
+        // Polish note: ideally the drop sound would play when the battery actually
+        // hits the ground (via a collision callback), not the instant the player
+        // lets go. Good enough for now.
+        AudioManager.Instance?.batterySounds?.drop.PlayAt(transform.position);
     }
     public void Interact()
     {
@@ -56,6 +61,8 @@ public class Battery : MonoBehaviour, IInteractable
         //Disable physics 
         rb.useGravity = false;
         rb.isKinematic = true;
+
+        AudioManager.Instance?.batterySounds?.pickup.Play();
 
         FollowMouse();
     }

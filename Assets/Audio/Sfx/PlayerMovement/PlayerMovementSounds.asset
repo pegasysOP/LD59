@@ -40,8 +40,7 @@ MonoBehaviour:
       _delay: 0
     pitchMin: 0.92
     pitchMax: 1.08
-    gain: 1
-    volumeExponent: 1
+    gain: 0.7
     volumeJitter: 0
   footstepInterval: 0.6
   jumpAir:
@@ -55,7 +54,6 @@ MonoBehaviour:
     pitchMin: 0.95
     pitchMax: 1.05
     gain: 1
-    volumeExponent: 1
     volumeJitter: 0
   jumpStep:
     clips:
@@ -86,7 +84,6 @@ MonoBehaviour:
     pitchMin: 0.95
     pitchMax: 1.05
     gain: 1
-    volumeExponent: 1
     volumeJitter: 0
   landing:
     clips:
@@ -99,6 +96,5 @@ MonoBehaviour:
     pitchMin: 0.95
     pitchMax: 1.05
     gain: 1
-    volumeExponent: 1
     volumeJitter: 0
   minAirTimeForLanding: 0.1
