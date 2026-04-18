@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RepeatMinigame : MonoBehaviour
 {
@@ -17,6 +16,7 @@ public class RepeatMinigame : MonoBehaviour
     public float fastTime = 0.3f;
     public float slowTime = 1.0f;
     public float gapTime = 0.25f;
+    public float wrongInputPause = 0.5f;
 
     public event Action<bool> OnMinigameEnded;
 
@@ -30,12 +30,12 @@ public class RepeatMinigame : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        foreach (var character in SOSCharacters)
+        foreach (GameObject character in SOSCharacters)
         {
             character.SetActive(false);
         }
 
-        foreach (var button in buttons)
+        foreach (RepeatButton button in buttons)
         {
             button.OnPressed += HandleInput;
         }
@@ -100,7 +100,7 @@ public class RepeatMinigame : MonoBehaviour
     {
         float showTime = GetSpeed();
 
-        foreach (var colour in sequence)
+        foreach (RepeatButton.Colour colour in sequence)
         {
             RepeatButton button = GetButtonByColour(colour);
 
@@ -127,7 +127,7 @@ public class RepeatMinigame : MonoBehaviour
 
     private void HandleInput(RepeatButton.Colour colour)
     {
-        if (state != State.PlayerInput) 
+        if (state != State.PlayerInput)
             return;
 
         if (sequence[playerIndex] == colour)
@@ -136,7 +136,12 @@ public class RepeatMinigame : MonoBehaviour
         }
         else
         {
-            playerIndex = 0; // reset progress for this round and replay the sequence
+            if (isReplaying) 
+                return;
+
+            playerIndex = 0;
+            isReplaying = true;
+            state = State.ShowingSequence;
             StartCoroutine(ReplaySequence());
         }
     }
@@ -145,10 +150,7 @@ public class RepeatMinigame : MonoBehaviour
 
     private IEnumerator ReplaySequence()
     {
-        if (isReplaying) yield break;
-        isReplaying = true;
-
-        state = State.ShowingSequence;
+        yield return new WaitForSeconds(wrongInputPause);
         yield return ShowSequence();
         state = State.PlayerInput;
 
@@ -157,7 +159,7 @@ public class RepeatMinigame : MonoBehaviour
 
     private RepeatButton GetButtonByColour(RepeatButton.Colour colour)
     {
-        foreach (var b in buttons)
+        foreach (RepeatButton b in buttons)
         {
             if (b.GetColour() == colour)
                 return b;
@@ -175,5 +177,12 @@ public class RepeatMinigame : MonoBehaviour
     {
         state = State.Idle;
         OnMinigameEnded?.Invoke(won);
+        if (won)
+        {
+            foreach (RepeatButton b in buttons)
+            {
+                b.isInteractable = false;
+            }
+        }
     }
 }

@@ -12,6 +12,8 @@ public class RepeatButton : MonoBehaviour, IInteractable
 
     public event Action<Colour> OnPressed;
 
+    public bool isInteractable = true;
+
     public void Interact()
     {
         Debug.Log($"Button {colour} was pressed");
@@ -58,7 +60,7 @@ public class RepeatButton : MonoBehaviour, IInteractable
 
     public bool IsInteractable()
     {
-        return true;
+        return isInteractable;
     }
 
     public Colour GetColour()
