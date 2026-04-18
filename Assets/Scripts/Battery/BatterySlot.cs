@@ -20,7 +20,9 @@ public class BatterySlot : MonoBehaviour, IInteractable
             battery.isHeld = false;
 
             //TODO: Set the batterys position to be in the middle of the slot
-            battery.transform.parent = this.transform.parent;
+            battery.transform.parent = null;
+            Vector3 positon = slotPosition.position;
+            battery.transform.position = positon;
 
             StartCoroutine(RotateBattery(battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
         }

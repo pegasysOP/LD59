@@ -13,7 +13,7 @@ public class Battery : MonoBehaviour, IInteractable
     private Mouse mouse = Mouse.current;
 
     [SerializeField]
-    private float holdDistance = 2f;
+    private float holdDistance = 1f;
 
     public bool isHeld = false;
 
