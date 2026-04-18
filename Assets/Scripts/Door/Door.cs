@@ -10,7 +10,8 @@ public class Door : MonoBehaviour, IInteractable
     private GameObject doorPanel;
 
     private const float OpenOffset = -1.45f;
-    private const float OpenDuration = 0.5f;
+
+    private const float OpenDuration = 0.35f;
 
     public void Interact()
     {
