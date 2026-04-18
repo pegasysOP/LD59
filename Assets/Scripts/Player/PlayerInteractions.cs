@@ -3,23 +3,23 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteractions : MonoBehaviour
 {
-    //TODO: Replace with Actions
-    private Keyboard keyboard = Keyboard.current;
     private Mouse mouse = Mouse.current;
 
     [SerializeField]
     private float interactDistance = 3f;
 
+    private InputAction interactAction;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        interactAction = InputSystem.actions.FindAction("Interact");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (keyboard.eKey.wasPressedThisFrame)
+        if (interactAction.WasPressedThisFrame())
         {
              Ray ray = Camera.main.ScreenPointToRay(mouse.position.ReadValue());
              if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
