@@ -5,7 +5,7 @@
 public enum IntensityLevel
 {
     /// <summary>0.00 - 0.25 (anxiety)</summary>
-    Calm = 0,
+    Anxiety = 0,
     /// <summary>0.25 - 0.50 (fear)</summary>
     Elevated = 1,
     /// <summary>0.50 - 0.75 (terror)</summary>

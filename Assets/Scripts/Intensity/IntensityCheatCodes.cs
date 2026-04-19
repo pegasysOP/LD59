@@ -135,7 +135,7 @@ public class IntensityCheatCodes : MonoBehaviour
     private void StepLevel(IntensityManager manager, int direction)
     {
         int current = (int)manager.CurrentLevel;
-        int target = Mathf.Clamp(current + direction, (int)IntensityLevel.Calm, (int)IntensityLevel.Overload);
+        int target = Mathf.Clamp(current + direction, (int)IntensityLevel.Anxiety, (int)IntensityLevel.Overload);
 
         IntensityLevel targetLevel = (IntensityLevel)target;
         float zoneBase = ZoneBase(targetLevel);
@@ -152,7 +152,7 @@ public class IntensityCheatCodes : MonoBehaviour
             case IntensityLevel.Overload: return 0.75f;
             case IntensityLevel.Intense: return 0.50f;
             case IntensityLevel.Elevated: return 0.25f;
-            case IntensityLevel.Calm:
+            case IntensityLevel.Anxiety:
             default: return 0.00f;
         }
     }

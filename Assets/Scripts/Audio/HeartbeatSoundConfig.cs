@@ -47,7 +47,7 @@ public class HeartbeatSoundConfig : ScriptableObject
             case IntensityLevel.Overload: return overload;
             case IntensityLevel.Intense: return intense;
             case IntensityLevel.Elevated: return elevated;
-            case IntensityLevel.Calm:
+            case IntensityLevel.Anxiety:
             default: return calm;
         }
     }

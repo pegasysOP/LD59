@@ -137,6 +137,6 @@ public class IntensityManager : MonoBehaviour
         if (intensity01 >= 0.75f) return IntensityLevel.Overload;
         if (intensity01 >= 0.50f) return IntensityLevel.Intense;
         if (intensity01 >= 0.25f) return IntensityLevel.Elevated;
-        return IntensityLevel.Calm;
+        return IntensityLevel.Anxiety;
     }
 }

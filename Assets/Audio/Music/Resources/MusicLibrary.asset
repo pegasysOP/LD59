@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MusicLibrary
   m_EditorClassIdentifier: Assembly-CSharp::MusicLibrary
   mainMenu: {fileID: 8300000, guid: 5feebfb974a3f4b81b7a3f238afc5afc, type: 3}
-  normalStation: {fileID: 0}
+  normalStation: {fileID: 8300000, guid: 5cd0f680123514f8f894e6485244fe97, type: 3}
   damagedStationLowAnxiety: {fileID: 8300000, guid: f8c5f9f7b3d5f43c0b5747792e9be360, type: 3}
   pointOfInterest: {fileID: 0}
   gotAway: {fileID: 0}
