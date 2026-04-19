@@ -216,6 +216,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
   doorPanel: {fileID: 3390350659155340455}
+  triggerPowerDownOnInteract: 1
+  powerDownSequence: {fileID: 0}
+  powerDownStartDelay: 0.5
+  buttonPress:
+    clips:
+    - _clip: {fileID: 8300000, guid: 3074c64f7a4c44a599ef0890736e4408, type: 3}
+      _volume: 0.5
+      _delay: 0
+    pitchMin: 0.97
+    pitchMax: 1.03
+    gain: 1
+    volumeJitter: 0
+  doorOpen:
+    clips:
+    - _clip: {fileID: 8300000, guid: 2a460b78db95846daa29cd40a10f4261, type: 3}
+      _volume: 0.8
+      _delay: 0
+    pitchMin: 1
+    pitchMax: 1
+    gain: 1
+    volumeJitter: 0
+  doorOpenSoundDelay: 0
 --- !u!1 &7168782720487754459
 GameObject:
   m_ObjectHideFlags: 0

@@ -62,7 +62,7 @@ public class Battery : MonoBehaviour, IInteractable
         rb.useGravity = false;
         rb.isKinematic = true;
 
-        AudioManager.Instance?.batterySounds?.pickup.Play();
+        AudioManager.Instance?.batterySounds?.pickup.PlayAt(transform.position);
 
         FollowMouse();
     }

@@ -68,14 +68,34 @@ public class MusicManager : MonoBehaviour
     [Tooltip("Perceived-loudness multiplier for menu/victory/credits music. 1.0 = full loudness.")]
     [Range(0f, 1f)] public float fullVolumeMultiplier = 1f;
 
+    [Header("Pre-warm")]
+    [Tooltip("Optional library whose clips are pre-loaded on Start so the first real Play call does not hitch. " +
+             "If left null, the manager falls back to Resources.Load at 'prewarmLibraryResourcePath'.")]
+    public MusicLibrary prewarmLibrary;
+    [Tooltip("Resources path used to auto-load the pre-warm library when 'prewarmLibrary' is not assigned.")]
+    public string prewarmLibraryResourcePath = "MusicLibrary";
+    [Tooltip("If true, every pre-warmed clip is briefly played on a dedicated muted source to force the audio decoder " +
+             "to initialise. Turn off if you only want the compressed data loaded.")]
+    public bool prewarmPrimeDecoder = true;
+
     [Header("Debug")]
     [SerializeField] private AudioClip currentClipDebug;
     [SerializeField, Range(0f, 1f)] private float currentPerceivedMultiplierDebug;
     [SerializeField] private Mode currentModeDebug = Mode.None;
     [SerializeField] private string phaseDebug = "Idle";
+    [SerializeField] private bool prewarmCompleteDebug;
 
     private AudioSource activeSource;
     private Coroutine routine;
+    private Coroutine prewarmRoutine;
+
+    /// <summary>
+    /// True while game music has been suspended (typically by the PowerDownSequence).
+    /// While this is set, <see cref="PlayGameMusic"/> is ignored so external drivers
+    /// (e.g. <see cref="GameMusicGuy"/>) can keep requesting clips without fighting the
+    /// suspension. Clear with <see cref="ResumeGameMusic"/>.
+    /// </summary>
+    public bool IsGameMusicSuspended { get; private set; }
 
     private void Awake()
     {
@@ -85,6 +105,23 @@ public class MusicManager : MonoBehaviour
         EnsureSource(ref sourceA, "MusicSourceA");
         EnsureSource(ref sourceB, "MusicSourceB");
         activeSource = sourceA;
+    }
+
+    private void Start()
+    {
+        MusicLibrary lib = prewarmLibrary != null
+            ? prewarmLibrary
+            : (string.IsNullOrEmpty(prewarmLibraryResourcePath)
+                ? null
+                : Resources.Load<MusicLibrary>(prewarmLibraryResourcePath));
+
+        if (lib == null)
+        {
+            prewarmCompleteDebug = true;
+            return;
+        }
+
+        prewarmRoutine = StartCoroutine(PrewarmRoutine(lib));
     }
 
     private void OnDestroy()
@@ -124,6 +161,7 @@ public class MusicManager : MonoBehaviour
     public void PlayGameMusic(AudioClip clip, float crossfadeOverride = -1f)
     {
         if (clip == null) return;
+        if (IsGameMusicSuspended) return;
         if (IsAlreadyPlaying(clip)) return;
 
         StopRoutine();
@@ -179,6 +217,28 @@ public class MusicManager : MonoBehaviour
         }
 
         routine = StartCoroutine(FadeOutRoutine(fadeOutDuration));
+    }
+
+    /// <summary>
+    /// Fade game music out (same ramp as <see cref="StopMusic"/>) and latch a suspension
+    /// flag so subsequent <see cref="PlayGameMusic"/> calls are ignored until
+    /// <see cref="ResumeGameMusic"/> is called. Intended for narrative moments where
+    /// music must drop out and stay silent (e.g. the power-down sequence).
+    /// </summary>
+    public void SuspendGameMusic(float fadeOutDuration)
+    {
+        IsGameMusicSuspended = true;
+        StopMusic(Mathf.Max(0f, fadeOutDuration));
+    }
+
+    /// <summary>
+    /// Clears the <see cref="IsGameMusicSuspended"/> latch. Does NOT auto-restart any
+    /// track; the next <see cref="PlayGameMusic"/> call (typically from
+    /// <see cref="GameMusicGuy"/>) will crossfade the appropriate clip back in.
+    /// </summary>
+    public void ResumeGameMusic()
+    {
+        IsGameMusicSuspended = false;
     }
 
     //==================== Internals ====================
@@ -289,6 +349,56 @@ public class MusicManager : MonoBehaviour
         currentPerceivedMultiplierDebug = backgroundMultiplier;
         phaseDebug = "Background";
         routine = null;
+    }
+
+    // Load (and optionally decoder-prime) every clip in the library so the first
+    // real Play call does not stall waiting on disk I/O or decoder allocation.
+    private IEnumerator PrewarmRoutine(MusicLibrary lib)
+    {
+        AudioSource primeSource = null;
+        if (prewarmPrimeDecoder)
+        {
+            GameObject go = new GameObject("MusicPrewarmSource");
+            go.transform.SetParent(transform, false);
+            primeSource = go.AddComponent<AudioSource>();
+            primeSource.playOnAwake = false;
+            primeSource.loop = false;
+            primeSource.spatialBlend = 0f;
+            primeSource.volume = 0f;
+            primeSource.mute = true;
+            if (mixerGroup != null)
+                primeSource.outputAudioMixerGroup = mixerGroup;
+        }
+
+        foreach (MusicTrack track in System.Enum.GetValues(typeof(MusicTrack)))
+        {
+            AudioClip clip = lib.Get(track);
+            if (clip == null) continue;
+
+            if (clip.loadState != AudioDataLoadState.Loaded)
+            {
+                clip.LoadAudioData();
+                while (clip.loadState == AudioDataLoadState.Loading)
+                    yield return null;
+            }
+
+            if (primeSource != null && clip.loadState == AudioDataLoadState.Loaded)
+            {
+                primeSource.clip = clip;
+                primeSource.Play();
+                yield return null;
+                primeSource.Stop();
+                primeSource.clip = null;
+            }
+
+            yield return null;
+        }
+
+        if (primeSource != null)
+            Destroy(primeSource.gameObject);
+
+        prewarmCompleteDebug = true;
+        prewarmRoutine = null;
     }
 
     private IEnumerator FadeOutRoutine(float duration)

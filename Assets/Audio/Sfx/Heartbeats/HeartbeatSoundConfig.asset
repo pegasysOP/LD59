@@ -16,22 +16,24 @@ MonoBehaviour:
     clips:
       clips:
       - _clip: {fileID: 8300000, guid: a394786814c744f399dafdec70009bae, type: 3}
-        _volume: 0.7
+        _volume: 1
         _delay: 0
       - _clip: {fileID: 8300000, guid: 2ec15500f3e5e4e4e9a58cb8f8d3cfad, type: 3}
-        _volume: 0.7
+        _volume: 1
         _delay: 0
       - _clip: {fileID: 8300000, guid: 028ebc2bc249c4645b85c9d514b502d0, type: 3}
-        _volume: 0.7
+        _volume: 1
         _delay: 0
       - _clip: {fileID: 8300000, guid: 8121d544cc22343c7bfc6b0279f6c3ff, type: 3}
-        _volume: 0.7
+        _volume: 1
         _delay: 0
       - _clip: {fileID: 8300000, guid: 36c7712c320e949278ba9f23ca5a78f9, type: 3}
-        _volume: 0.7
+        _volume: 1
         _delay: 0
       pitchMin: 0.97
       pitchMax: 1.03
+      gain: 0.7
+      volumeJitter: 0
     secondsBetweenBeats: 1.1
   elevated:
     clips:
@@ -53,6 +55,8 @@ MonoBehaviour:
         _delay: 0
       pitchMin: 0.97
       pitchMax: 1.03
+      gain: 1
+      volumeJitter: 0
     secondsBetweenBeats: 0.75
   intense:
     clips:
@@ -74,6 +78,8 @@ MonoBehaviour:
         _delay: 0
       pitchMin: 0.97
       pitchMax: 1.03
+      gain: 1
+      volumeJitter: 0
     secondsBetweenBeats: 0.55
   overload:
     clips:
@@ -95,9 +101,12 @@ MonoBehaviour:
         _delay: 0
       pitchMin: 0.97
       pitchMax: 1.03
+      gain: 1
+      volumeJitter: 0
     secondsBetweenBeats: 0.4
   rampUpDuration: 0.35
   peakHoldDuration: 4
   decayDuration: 8
   peakVolumeMultiplier: 1
   subtleVolumeMultiplier: 0.5
+  smoothEnvelope: 1

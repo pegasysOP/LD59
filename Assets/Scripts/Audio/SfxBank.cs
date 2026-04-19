@@ -97,6 +97,41 @@ public class SfxBank
     }
 
     /// <summary>
+    /// Listener-followed variant of <see cref="PlayAt"/>: picks a clip, applies the same perceived-loudness
+    /// shaping and jitter, and spawns a 3D AudioSource parented to <paramref name="parent"/> at the given
+    /// <paramref name="localOffset"/>. The source moves/rotates with the parent for the clip's lifetime,
+    /// giving you readable stereo placement (left/right/behind) that tracks the camera - useful for
+    /// atmospheric reveals that should feel "over there, near me" without being pinned to a world point.
+    /// </summary>
+    public void PlayAttached(Transform parent, Vector3 localOffset)
+    {
+        if (parent == null || clips == null || clips.Count == 0 || AudioManager.Instance == null)
+            return;
+
+        float pMin = Mathf.Min(pitchMin, pitchMax);
+        float pMax = Mathf.Max(pitchMin, pitchMax);
+
+        int start = Random.Range(0, clips.Count);
+        for (int i = 0; i < clips.Count; i++)
+        {
+            int idx = (start + i) % clips.Count;
+            AudioClipVolume entry = clips[idx];
+            if (entry == null || entry.Clip == null)
+                continue;
+
+            float perceived = entry.Volume * gain;
+            if (volumeJitter > 0f)
+                perceived *= 1f + Random.Range(-volumeJitter, volumeJitter);
+
+            float shapedAmp = AudioVolume.ToLinear(perceived);
+
+            AudioClipVolume shapedEntry = new AudioClipVolume(entry.Clip, shapedAmp, entry.Delay);
+            AudioManager.Instance.PlaySfxAttached(shapedEntry, Random.Range(pMin, pMax), parent, localOffset);
+            return;
+        }
+    }
+
+    /// <summary>
     /// Plays a random clip from this bank on a caller-provided <see cref="AudioSource"/> (used by
     /// systems like the heartbeat that need a dedicated, persistent source rather than the shared
     /// SFX pool). Applies the identical loudness model as <see cref="Play"/>:

@@ -2,113 +2,90 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Drives the full station power-down + creature-reveal audio sequence
-/// described in <c>_silas_design/sound/power-down-sequence.md</c>.
+/// Drives the Tier 0 ("skeleton") pass of the station power-down + creature-reveal
+/// audio sequence described in <c>_silas_design/sound/power-down-sequence.md</c>.
 ///
-/// The sequence is timeline-based: on <see cref="Run"/> (or via
-/// <see cref="runOnStart"/> / the context-menu item) a single coroutine walks
-/// a cursor across six phases and fires <see cref="SfxBank"/> triggers and
-/// looping <see cref="AudioSource"/>s at authored offsets. Every trigger is
-/// guarded so unassigned or empty banks / clips are silently skipped - the
-/// sequence plays whatever assets currently exist, which means assets can be
-/// added progressively without breaking anything.
+/// This is the minimum-viable arc: one sound per phase, every phase independently
+/// optional. On <see cref="Run"/> (or via <see cref="runOnStart"/> / the context-menu
+/// item) a single coroutine walks a cursor across firing moments and one sustaining
+/// loop. Every trigger is guarded so unassigned banks / clips are silently skipped -
+/// assets can be dropped in progressively without breaking the sequence.
 ///
-/// Phases (from the design doc):
-///   1. Interaction (0.0s)  - button press + mechanical ack
-///   2. Door opening (0.5s) - motor start, track rattle, slide loop, end thunk
-///   3. Power collapse (2.0s) - dropout, flickers, relays, hum pitch-down
-///   4. Silence gap (3.5s) - residual low hum + distant creak, nothing more
-///   5. Chaos (4.2s) - Wave A impact+creature, B humans/alarms, C creature
-///      escalation, D environment instability
-///   6. Residual state (8.5s+) - low-power ambience + distant creature loops
-///      with intermittent failure events
+/// Phases owned by this component:
+///   Stinger (parallel)           - <see cref="stinger"/> one-shot on the UI channel,
+///                                  fired stingerDelay seconds after Run(). Does NOT
+///                                  advance the timeline.
+///   0. Pre-collapse ambience     - <see cref="preCollapseAmbienceLoop"/> plays continuously
+///                                  (started on enable, faded out at phase 3)
+///   3. Power collapse (2.0s)     - <see cref="powerDropout"/> hit + music suspended
+///                                  + pre-collapse ambience fades out
+///   4. Silence gap (3.5s)        - intentionally empty
+///   5. Chaos / reveal (4.2s)     - <see cref="metalImpactLarge"/> + <see cref="creatureBurst"/>
+///   6. Residual state (8.5s+)   - <see cref="lowPowerAmbienceLoop"/> fades in
+///                                  + game music resumes
+///
+/// Phases 1 (button press) and 2 (door opening) are owned by <see cref="Door"/>
+/// so each door can carry its own clip and still fire button/door audio even when
+/// no <see cref="PowerDownSequence"/> is wired up. This component's internal clock
+/// still starts at 0 = <see cref="Run"/>, which corresponds to ~0.5s after the
+/// door-interact when launched via the door's powerDownStartDelay.
 ///
 /// One-shots route through <see cref="AudioManager.Instance"/> via
 /// <see cref="SfxBank"/>, so they inherit the project's master volume and
-/// perceived-loudness curve. Loop sources are parented under this component
-/// and routed through the same mixer group as <see cref="AudioManager.sfxSource"/>;
-/// fades use <see cref="AudioVolume"/> to keep the loudness curve consistent
-/// with the rest of the audio stack.
+/// perceived-loudness curve. The residual loop is parented under this component
+/// and routed through the same mixer group as <see cref="AudioManager.sfxSource"/>.
+///
+/// Future tiers (extra door detail, hum pitch-down, chaos waves B/C/D, intermittent
+/// failures, etc.) are tracked in <c>_silas_design/sound/power-down-sound-assets-todo-order.md</c>.
 /// </summary>
 [DisallowMultipleComponent]
 public class PowerDownSequence : MonoBehaviour
 {
-    // ---------- Phase 1: Interaction ----------
+    // ---------- Stinger (UI channel, parallel to the timeline) ----------
 
-    [Header("Phase 1 — Interaction (0.0s)")]
-    [Tooltip("button_press_heavy_* - solid tactile button press from the design doc.")]
-    public SfxBank buttonPress = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
-    [Tooltip("system_ack_mechanical_* - mechanical acknowledgement that fires just after the press.")]
-    public SfxBank systemAck = new SfxBank { pitchMin = 0.98f, pitchMax = 1.02f };
-    [Tooltip("Seconds between the button press and the acknowledgement tick.")]
-    [Min(0f)] public float systemAckDelay = 0.15f;
+    [Header("Stinger (UI channel, parallel to timeline)")]
+    [Tooltip("One-shot stinger fired on Run() via the UI audio channel. Runs in parallel - it does " +
+             "NOT advance the power-down timeline, so its duration is irrelevant to phase scheduling. " +
+             "Leave the bank empty to disable.")]
+    public SfxBank stinger = new SfxBank { pitchMin = 1f, pitchMax = 1f };
+    [Tooltip("Seconds after Run() before the stinger plays. 0 = fire immediately with the sequence.")]
+    [Min(0f)] public float stingerDelay = 0f;
 
-    // ---------- Phase 2: Door Opening ----------
+    // ---------- Phase 0: Pre-Collapse Ambience ----------
 
-    [Header("Phase 2 — Door Opening (0.5s → 2.0s)")]
-    [Tooltip("Absolute sequence time at which the door motor kicks in.")]
-    [Min(0f)] public float doorStartTime = 0.5f;
-    [Tooltip("door_slide_start_* - motor spin-up / detent release.")]
-    public SfxBank doorStart = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
-    [Tooltip("door_track_rattle_* - mechanical chatter layered on top of the motor.")]
-    public SfxBank doorTrackRattle = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
-    [Tooltip("door_slide_loop_* - sustained slide. Plays as a loop until doorEndTime.")]
-    public AudioClip doorSlideLoop;
-    [Tooltip("Perceived loudness (0-1) for the door slide loop.")]
-    [Range(0f, 1f)] public float doorSlideLoopVolume = 0.7f;
-    [Tooltip("Absolute sequence time at which the door thunk lands and the slide loop stops.")]
-    [Min(0f)] public float doorEndTime = 2.0f;
-    [Tooltip("door_slide_end_* - final clunk when the door finishes travelling.")]
-    public SfxBank doorEnd = new SfxBank { pitchMin = 0.96f, pitchMax = 1.02f };
+    [Header("Phase 0 — Pre-Collapse Ambience (2D, looping)")]
+    [Tooltip("Looping 2D stereo ambient bed that plays BEFORE the power goes down. " +
+             "Starts when this component is enabled, fades out during Phase 3.")]
+    public AudioClip preCollapseAmbienceLoop;
+    [Tooltip("Perceived loudness (0-1) of the pre-collapse ambient bed. Keep low - this is a room-tone pad.")]
+    [Range(0f, 1f)] public float preCollapseAmbienceVolume = 0.25f;
+    [Tooltip("Seconds to fade the pre-collapse ambient bed up from silence when it first starts.")]
+    [Min(0f)] public float preCollapseAmbienceFadeIn = 2.0f;
+    [Tooltip("Seconds to fade the pre-collapse ambient bed out once Phase 3 fires.")]
+    [Min(0.01f)] public float preCollapseAmbienceFadeOut = 1.2f;
 
     // ---------- Phase 3: Power Collapse ----------
 
-    [Header("Phase 3 — Power Collapse (2.0s → 3.5s)")]
-    [Tooltip("Absolute sequence time at which power begins to collapse.")]
+    [Header("Phase 3 — Power Collapse (2.0s)")]
+    [Tooltip("Absolute sequence time at which power dies.")]
     [Min(0f)] public float powerCollapseStartTime = 2.0f;
     [Tooltip("power_dropout_main_* - primary dropout hit. The hard transition moment.")]
     public SfxBank powerDropout = new SfxBank { pitchMin = 0.98f, pitchMax = 1.02f };
-    [Tooltip("electrical_flicker_* - fast flicker bursts scattered across the collapse window.")]
-    public SfxBank flickerBursts = new SfxBank { pitchMin = 0.9f, pitchMax = 1.1f };
-    [Tooltip("How many flicker bursts to fire across the collapse window.")]
-    [Min(0)] public int flickerBurstCount = 4;
-    [Tooltip("Offset window (seconds, relative to powerCollapseStartTime) over which flickers are scattered.")]
-    public Vector2 flickerBurstWindow = new Vector2(0.0f, 1.2f);
-    [Tooltip("relay_clicks_* - mechanical relay clicks peppered across the collapse.")]
-    public SfxBank relayClicks = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
-    [Tooltip("How many relay clicks to fire across the collapse window.")]
-    [Min(0)] public int relayClickCount = 5;
-    [Tooltip("Offset window (seconds, relative to powerCollapseStartTime) over which relay clicks are scattered.")]
-    public Vector2 relayClickWindow = new Vector2(0.1f, 1.3f);
-    [Tooltip("system_hum_down_* - station hum that pitches down as power dies. Plays as a loop with pitch automation.")]
-    public AudioClip systemHumDown;
-    [Tooltip("Perceived loudness (0-1) for the hum at the start of the collapse.")]
-    [Range(0f, 1f)] public float systemHumDownVolume = 0.6f;
-    [Tooltip("Starting playback pitch for the collapsing hum.")]
-    [Range(0.05f, 2f)] public float humDownStartPitch = 1.0f;
-    [Tooltip("Final playback pitch for the hum just before the silence gap.")]
-    [Range(0.05f, 2f)] public float humDownEndPitch = 0.25f;
-    [Tooltip("Duration of the pitch-down ramp. The hum fades out during the silence gap.")]
-    [Min(0.05f)] public float humDownDuration = 1.3f;
+    [Tooltip("Seconds over which to fade the game music out when power collapses. Music stays " +
+             "suspended until Phase 6 resumes it, so GameMusicGuy won't restart it mid-sequence.")]
+    [Min(0.01f)] public float musicFadeOutDuration = 1.2f;
 
     // ---------- Phase 4: Silence Gap ----------
 
-    [Header("Phase 4 — Silence Gap (3.5s → 4.2s)")]
-    [Tooltip("Absolute sequence time at which the silence gap begins.")]
+    [Header("Phase 4 — Silence Gap (3.5s)")]
+    [Tooltip("Absolute sequence time at which the silence gap begins. " +
+             "Intentionally empty in Tier 0 - silence IS the content here.")]
     [Min(0f)] public float silenceStartTime = 3.5f;
-    [Tooltip("residual_hum_low_01 - optional, very quiet sustained hum.")]
-    public AudioClip residualHumLow;
-    [Tooltip("Perceived loudness (0-1) for the residual hum during the gap. Keep this LOW.")]
-    [Range(0f, 1f)] public float residualHumVolume = 0.08f;
-    [Tooltip("metal_creak_distant_* - single distant creak, fired late in the gap to sell tension.")]
-    public SfxBank metalCreakDistant = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
-    [Tooltip("Seconds after the silence gap starts before the distant creak lands.")]
-    [Min(0f)] public float metalCreakDelay = 0.35f;
 
-    // ---------- Phase 5: Chaos ----------
+    // ---------- Phase 5: Chaos Wave A (reveal) ----------
 
-    [Header("Phase 5 — Chaos: Wave A (4.2s) — Impact + first threat")]
-    [Tooltip("Absolute sequence time at which the chaos begins (Wave A).")]
+    [Header("Phase 5 — Chaos Wave A (4.2s) — Reveal")]
+    [Tooltip("Absolute sequence time at which the reveal fires.")]
     [Min(0f)] public float chaosStartTime = 4.2f;
     [Tooltip("metal_impact_large_* - the big hit that breaks the silence.")]
     public SfxBank metalImpactLarge = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
@@ -117,56 +94,36 @@ public class PowerDownSequence : MonoBehaviour
     [Tooltip("Seconds between the metal impact and the creature burst (keep tight - they should feel coupled).")]
     [Min(0f)] public float creatureBurstDelay = 0.12f;
 
-    [Header("Phase 5 — Chaos: Wave B (5.0s) — World reacting")]
-    [Tooltip("Absolute sequence time at which Wave B fires.")]
-    [Min(0f)] public float waveBTime = 5.0f;
-    [Tooltip("alarm_degraded_* - broken alarms spinning up.")]
-    public SfxBank alarmDegraded = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
-    [Tooltip("distant_scream_muffled_* - wide stereo, reverb-heavy human elements.")]
-    public SfxBank distantScream = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
-    [Tooltip("comms_fragment_distorted_* - clipped radio fragments.")]
-    public SfxBank commsFragment = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
-
-    [Header("Phase 5 — Chaos: Wave C (6.0s) — Creature escalation")]
-    [Tooltip("Absolute sequence time at which Wave C fires. Ducks other chaos layers.")]
-    [Min(0f)] public float waveCTime = 6.0f;
-    [Tooltip("vent_scramble_fast_* - frantic movement through vents. Strong L/R directional cue.")]
-    public SfxBank ventScramble = new SfxBank { pitchMin = 0.95f, pitchMax = 1.08f };
-    [Tooltip("wall_scrape_* - claws / hide on surfaces.")]
-    public SfxBank wallScrape = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
-    [Tooltip("distant_movement_* - implied presence somewhere else in the ship.")]
-    public SfxBank distantMovement = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
-
-    [Header("Phase 5 — Chaos: Wave D (7.0s) — Environment instability")]
-    [Tooltip("Absolute sequence time at which Wave D fires.")]
-    [Min(0f)] public float waveDTime = 7.0f;
-    [Tooltip("air_leak_* - pressurised hiss.")]
-    public SfxBank airLeak = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
-    [Tooltip("loose_object_rattle_* - props reacting to the instability.")]
-    public SfxBank looseObjectRattle = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
-    [Tooltip("electrical_arc_* - sparking electrical discharges.")]
-    public SfxBank electricalArc = new SfxBank { pitchMin = 0.96f, pitchMax = 1.06f };
+    [Header("Phase 5 — Spatial Placement (listener-followed)")]
+    [Tooltip("If true, Phase 5 reveal sounds spawn as 3D sources parented to the camera (listener) at a random " +
+             "offset, so they pan/attenuate as if 'over there' while still being clearly audible. Disable to " +
+             "fall back to the 2D non-diegetic pipe.")]
+    public bool chaosSpatialized = true;
+    [Tooltip("Horizontal distance range (meters) from the listener at which the reveal sounds spawn.")]
+    [Min(0f)] public float chaosMinDistance = 3f;
+    [Min(0f)] public float chaosMaxDistance = 5f;
+    [Tooltip("Height offset range relative to listener (meters). Negative = below ear height, positive = above.")]
+    public Vector2 chaosHeightRange = new Vector2(-0.3f, 0.6f);
+    [Tooltip("Half-width of the angular window for the metal impact (degrees off the forward axis, mirrored " +
+             "left/right). 0 = straight ahead, 90 = hard sides, 180 = directly behind. 75° keeps the impact " +
+             "front/side of the listener.")]
+    [Range(0f, 180f)] public float metalImpactAngleMax = 75f;
+    [Tooltip("Angular window (degrees off forward, mirrored) where the creature burst is allowed to spawn. " +
+             "Bias behind the listener (e.g. 90-180) for maximum unease.")]
+    [Range(0f, 180f)] public float creatureBurstAngleMin = 90f;
+    [Range(0f, 180f)] public float creatureBurstAngleMax = 180f;
 
     // ---------- Phase 6: Residual ----------
 
     [Header("Phase 6 — Residual State (8.5s+)")]
     [Tooltip("Absolute sequence time at which the residual ambient bed fades in.")]
     [Min(0f)] public float residualStartTime = 8.5f;
-    [Tooltip("low_power_ambience_loop - the new gameplay ambient bed.")]
+    [Tooltip("low_power_ambience_loop - the new gameplay ambient bed. Loops until Stop() is called.")]
     public AudioClip lowPowerAmbienceLoop;
     [Tooltip("Perceived loudness (0-1) for the low-power ambience bed.")]
     [Range(0f, 1f)] public float lowPowerAmbienceVolume = 0.6f;
-    [Tooltip("distant_creature_loop - implied creature presence under the ambience.")]
-    public AudioClip distantCreatureLoop;
-    [Tooltip("Perceived loudness (0-1) for the distant creature loop.")]
-    [Range(0f, 1f)] public float distantCreatureVolume = 0.35f;
-    [Tooltip("Fade-in duration for the residual ambient loops.")]
+    [Tooltip("Fade-in duration for the residual ambient loop.")]
     [Min(0.01f)] public float residualFadeIn = 1.5f;
-    [Tooltip("intermittent_failure_events - one-shots sprinkled on top of the residual state " +
-             "(creaks, sparks, distant thumps). Leave empty to disable.")]
-    public SfxBank intermittentFailureEvents = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
-    [Tooltip("Random delay (seconds) between intermittent failure events. X = min, Y = max.")]
-    public Vector2 intermittentFailureInterval = new Vector2(5f, 12f);
 
     // ---------- Debug / Triggering ----------
 
@@ -174,17 +131,27 @@ public class PowerDownSequence : MonoBehaviour
     [Tooltip("If true, runs the sequence automatically in Start. Useful for iteration.")]
     public bool runOnStart = false;
 
+    [Tooltip("If true (default), the sequence can only be triggered once per play session. " +
+             "Subsequent Run() calls are ignored until ResetLockout() is called. This prevents " +
+             "the dropout / reveal SFX from double-firing when multiple Doors (or the context-menu " +
+             "item) trigger the sequence more than once.")]
+    public bool singleFire = true;
+
     // ---------- Runtime State ----------
 
     private Coroutine _runningSequence;
-    private Coroutine _intermittentFailureCoroutine;
-    private AudioSource _humSource;
-    private AudioSource _residualHumSource;
-    private AudioSource _doorLoopSource;
+    private Coroutine _runningStinger;
     private AudioSource _lowPowerAmbienceSource;
-    private AudioSource _distantCreatureSource;
+    private AudioSource _preCollapseAmbienceSource;
+    private bool _hasFired;
+    private Transform _listenerCached;
 
     // ---------- Public API ----------
+
+    private void OnEnable()
+    {
+        StartPreCollapseAmbience();
+    }
 
     private void Start()
     {
@@ -195,27 +162,44 @@ public class PowerDownSequence : MonoBehaviour
     private void OnDisable()
     {
         Stop();
+        KillLoop(ref _preCollapseAmbienceSource);
     }
 
-    /// <summary>Fires the full power-down sequence from the top. Safe to call even if another run is in flight.</summary>
+    /// <summary>
+    /// Fires the power-down sequence from the top. When <see cref="singleFire"/> is true (default)
+    /// subsequent calls are ignored until <see cref="ResetLockout"/> runs, so repeated triggers
+    /// (e.g. several Doors with triggerPowerDownOnInteract = true) don't double-fire the one-shots.
+    /// </summary>
     [ContextMenu("Run Sequence")]
     public void Run()
     {
+        if (singleFire && _hasFired)
+            return;
+
         Stop();
+        _hasFired = true;
         _runningSequence = StartCoroutine(RunSequence());
+        _runningStinger = StartCoroutine(RunStinger());
     }
 
-    /// <summary>Cancels any in-flight sequence and silences every loop spawned by this component.</summary>
+    /// <summary>Cancels any in-flight sequence and silences the residual ambience loop.</summary>
     [ContextMenu("Stop Sequence")]
     public void Stop()
     {
         if (_runningSequence != null) { StopCoroutine(_runningSequence); _runningSequence = null; }
-        if (_intermittentFailureCoroutine != null) { StopCoroutine(_intermittentFailureCoroutine); _intermittentFailureCoroutine = null; }
-        KillLoop(ref _humSource);
-        KillLoop(ref _residualHumSource);
-        KillLoop(ref _doorLoopSource);
+        if (_runningStinger != null) { StopCoroutine(_runningStinger); _runningStinger = null; }
         KillLoop(ref _lowPowerAmbienceSource);
-        KillLoop(ref _distantCreatureSource);
+    }
+
+    /// <summary>
+    /// Clears the single-fire lockout so <see cref="Run"/> will play the sequence again. Call this
+    /// from a level-reset or new-game path if the same <see cref="PowerDownSequence"/> instance
+    /// needs to fire more than once per session.
+    /// </summary>
+    [ContextMenu("Reset Lockout")]
+    public void ResetLockout()
+    {
+        _hasFired = false;
     }
 
     // ---------- Sequence ----------
@@ -224,72 +208,29 @@ public class PowerDownSequence : MonoBehaviour
     {
         float cursor = 0f;
 
-        // --- Phase 1: Interaction ---
-        TryPlay(buttonPress);
-        if (systemAckDelay > 0f) StartCoroutine(DelayThenPlay(systemAckDelay, systemAck));
-        else TryPlay(systemAck);
-
-        // --- Phase 2: Door Opening ---
-        yield return WaitTo(ref cursor, doorStartTime);
-        TryPlay(doorStart);
-        TryPlay(doorTrackRattle);
-        _doorLoopSource = StartLoop(doorSlideLoop, doorSlideLoopVolume, fadeInDuration: 0.15f, loop: true);
-
-        yield return WaitTo(ref cursor, doorEndTime);
-        FadeOutAndKill(ref _doorLoopSource, 0.2f);
-        TryPlay(doorEnd);
-
         // --- Phase 3: Power Collapse ---
         yield return WaitTo(ref cursor, powerCollapseStartTime);
         TryPlay(powerDropout);
-        StartCoroutine(ScatterPlays(flickerBursts, flickerBurstCount, flickerBurstWindow));
-        StartCoroutine(ScatterPlays(relayClicks, relayClickCount, relayClickWindow));
-        _humSource = StartLoop(systemHumDown, systemHumDownVolume, fadeInDuration: 0.05f, loop: true);
-        if (_humSource != null)
-        {
-            _humSource.pitch = humDownStartPitch;
-            StartCoroutine(RampPitch(_humSource, humDownStartPitch, humDownEndPitch, humDownDuration));
-        }
+        StartFadeOutAndDestroy(ref _preCollapseAmbienceSource, preCollapseAmbienceFadeOut);
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.SuspendGameMusic(musicFadeOutDuration);
 
-        // --- Phase 4: Silence Gap ---
+        // --- Phase 4: Silence Gap (intentionally empty in Tier 0) ---
         yield return WaitTo(ref cursor, silenceStartTime);
-        FadeOutAndKill(ref _humSource, 0.3f);
-        _residualHumSource = StartLoop(residualHumLow, residualHumVolume, fadeInDuration: 0.2f, loop: true);
-        if (metalCreakDelay > 0f) StartCoroutine(DelayThenPlay(metalCreakDelay, metalCreakDistant));
-        else TryPlay(metalCreakDistant);
 
-        // --- Phase 5: Chaos ---
-        // Wave A: impact + creature burst.
+        // --- Phase 5: Chaos Wave A ---
         yield return WaitTo(ref cursor, chaosStartTime);
-        FadeOutAndKill(ref _residualHumSource, 0.15f);
-        TryPlay(metalImpactLarge);
-        if (creatureBurstDelay > 0f) StartCoroutine(DelayThenPlay(creatureBurstDelay, creatureBurst));
-        else TryPlay(creatureBurst);
-
-        // Wave B: world reacting.
-        yield return WaitTo(ref cursor, waveBTime);
-        TryPlay(alarmDegraded);
-        TryPlay(distantScream);
-        TryPlay(commsFragment);
-
-        // Wave C: creature escalation.
-        yield return WaitTo(ref cursor, waveCTime);
-        TryPlay(ventScramble);
-        TryPlay(wallScrape);
-        TryPlay(distantMovement);
-
-        // Wave D: environment instability.
-        yield return WaitTo(ref cursor, waveDTime);
-        TryPlay(airLeak);
-        TryPlay(looseObjectRattle);
-        TryPlay(electricalArc);
+        PlayChaosBank(metalImpactLarge, 0f, metalImpactAngleMax);
+        if (creatureBurstDelay > 0f) StartCoroutine(DelayThenPlayChaos(creatureBurstDelay, creatureBurst, creatureBurstAngleMin, creatureBurstAngleMax));
+        else PlayChaosBank(creatureBurst, creatureBurstAngleMin, creatureBurstAngleMax);
 
         // --- Phase 6: Residual State ---
         yield return WaitTo(ref cursor, residualStartTime);
         _lowPowerAmbienceSource = StartLoop(lowPowerAmbienceLoop, lowPowerAmbienceVolume, fadeInDuration: residualFadeIn, loop: true);
-        _distantCreatureSource = StartLoop(distantCreatureLoop, distantCreatureVolume, fadeInDuration: residualFadeIn, loop: true);
-        if (intermittentFailureEvents != null && intermittentFailureEvents.HasAnyClip)
-            _intermittentFailureCoroutine = StartCoroutine(IntermittentFailureLoop());
+        // Re-open the gate on GameMusicGuy; it will crossfade the post-intro track
+        // back in over MusicManager.crossfadeDuration.
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.ResumeGameMusic();
 
         _runningSequence = null;
     }
@@ -311,43 +252,90 @@ public class PowerDownSequence : MonoBehaviour
         TryPlay(bank);
     }
 
-    private IEnumerator ScatterPlays(SfxBank bank, int count, Vector2 window)
+    private IEnumerator DelayThenPlayChaos(float delay, SfxBank bank, float angleMin, float angleMax)
     {
-        if (bank == null || !bank.HasAnyClip || count <= 0) yield break;
-        float a = Mathf.Max(0f, Mathf.Min(window.x, window.y));
-        float b = Mathf.Max(a, Mathf.Max(window.x, window.y));
-
-        // Sample `count` absolute offsets in [a, b] and play them in chronological order.
-        float[] offsets = new float[count];
-        for (int i = 0; i < count; i++) offsets[i] = Random.Range(a, b);
-        System.Array.Sort(offsets);
-
-        float elapsed = 0f;
-        for (int i = 0; i < count; i++)
-        {
-            float wait = Mathf.Max(0f, offsets[i] - elapsed);
-            if (wait > 0f) yield return new WaitForSeconds(wait);
-            elapsed = offsets[i];
-            bank.Play();
-        }
+        yield return new WaitForSeconds(Mathf.Max(0f, delay));
+        PlayChaosBank(bank, angleMin, angleMax);
     }
 
-    private IEnumerator IntermittentFailureLoop()
+    // Fires a Phase 5 reveal bank either as a listener-attached 3D one-shot (the spatial path,
+    // so the impact/creature read as "over there" with real stereo + reverb) or as the 2D fallback
+    // when the listener can't be resolved or chaosSpatialized is off.
+    private void PlayChaosBank(SfxBank bank, float angleMin, float angleMax)
     {
-        float a = Mathf.Max(0.25f, Mathf.Min(intermittentFailureInterval.x, intermittentFailureInterval.y));
-        float b = Mathf.Max(a + 0.01f, Mathf.Max(intermittentFailureInterval.x, intermittentFailureInterval.y));
-        while (intermittentFailureEvents != null && intermittentFailureEvents.HasAnyClip)
+        if (bank == null || !bank.HasAnyClip) return;
+
+        if (!chaosSpatialized)
         {
-            yield return new WaitForSeconds(Random.Range(a, b));
-            intermittentFailureEvents.Play();
+            bank.Play();
+            return;
         }
-        _intermittentFailureCoroutine = null;
+
+        Transform listener = GetListener();
+        if (listener == null)
+        {
+            bank.Play();
+            return;
+        }
+
+        Vector3 offset = RandomListenerOffset(angleMin, angleMax);
+        bank.PlayAttached(listener, offset);
+    }
+
+    private Transform GetListener()
+    {
+        if (_listenerCached != null) return _listenerCached;
+        Camera cam = Camera.main;
+        _listenerCached = cam != null ? cam.transform : null;
+        return _listenerCached;
+    }
+
+    // Builds a camera-local offset: a random angle within [min,max] degrees off forward (randomly
+    // flipped left/right so it lands on either side), a random distance within the chaos distance
+    // range, plus a random height jitter. Z = forward, X = right (Unity camera-local convention).
+    private Vector3 RandomListenerOffset(float angleMin, float angleMax)
+    {
+        float a = Mathf.Min(angleMin, angleMax);
+        float b = Mathf.Max(angleMin, angleMax);
+        float angleDeg = Random.Range(a, b);
+        float sign = Random.value < 0.5f ? -1f : 1f;
+        float rad = angleDeg * Mathf.Deg2Rad * sign;
+
+        float dMin = Mathf.Min(chaosMinDistance, chaosMaxDistance);
+        float dMax = Mathf.Max(chaosMinDistance, chaosMaxDistance);
+        float dist = Random.Range(dMin, dMax);
+
+        float hMin = Mathf.Min(chaosHeightRange.x, chaosHeightRange.y);
+        float hMax = Mathf.Max(chaosHeightRange.x, chaosHeightRange.y);
+        float height = Random.Range(hMin, hMax);
+
+        return new Vector3(Mathf.Sin(rad) * dist, height, Mathf.Cos(rad) * dist);
+    }
+
+    // Runs in parallel to RunSequence. Waits stingerDelay seconds then plays the stinger
+    // bank on AudioManager.uiSfxSource so the one-shot goes through the UI channel rather
+    // than the SFX channel. Has zero effect on the main sequence timeline.
+    private IEnumerator RunStinger()
+    {
+        if (stingerDelay > 0f)
+            yield return new WaitForSeconds(stingerDelay);
+        PlayOnUiChannel(stinger);
+        _runningStinger = null;
     }
 
     private static void TryPlay(SfxBank bank)
     {
         if (bank == null || !bank.HasAnyClip) return;
         bank.Play();
+    }
+
+    private static void PlayOnUiChannel(SfxBank bank)
+    {
+        if (bank == null || !bank.HasAnyClip) return;
+        if (AudioManager.Instance == null) return;
+        AudioSource uiSource = AudioManager.Instance.uiSfxSource;
+        if (uiSource == null) return;
+        bank.PlayOnSource(uiSource);
     }
 
     // ---------- Loop source helpers ----------
@@ -391,18 +379,49 @@ public class PowerDownSequence : MonoBehaviour
         return src;
     }
 
-    private void FadeOutAndKill(ref AudioSource src, float duration)
-    {
-        if (src == null) return;
-        StartCoroutine(FadeOutAndDestroy(src, duration));
-        src = null;
-    }
-
     private static void KillLoop(ref AudioSource src)
     {
         if (src == null) return;
         if (src.gameObject != null) Destroy(src.gameObject);
         src = null;
+    }
+
+    private void StartPreCollapseAmbience()
+    {
+        if (_preCollapseAmbienceSource != null) return;
+        if (preCollapseAmbienceLoop == null) return;
+        _preCollapseAmbienceSource = StartLoop(
+            preCollapseAmbienceLoop,
+            preCollapseAmbienceVolume,
+            fadeInDuration: preCollapseAmbienceFadeIn,
+            loop: true);
+    }
+
+    // Detaches ownership of `src` (clears the ref) and starts a coroutine that fades it
+    // out in perceived space then destroys its GameObject. Safe to call with a null src.
+    private void StartFadeOutAndDestroy(ref AudioSource src, float duration)
+    {
+        if (src == null) return;
+        AudioSource captured = src;
+        src = null;
+        StartCoroutine(FadeOutAndDestroy(captured, duration));
+    }
+
+    private IEnumerator FadeOutAndDestroy(AudioSource src, float duration)
+    {
+        if (src == null) yield break;
+        float start = src.volume;
+        float safeDuration = Mathf.Max(0.01f, duration);
+        float t = 0f;
+        while (t < safeDuration && src != null)
+        {
+            t += Time.deltaTime;
+            float k = Mathf.Clamp01(t / safeDuration);
+            src.volume = AudioVolume.LerpAmplitudePerceived(start, 0f, k);
+            yield return null;
+        }
+        if (src != null && src.gameObject != null)
+            Destroy(src.gameObject);
     }
 
     private IEnumerator FadeVolume(AudioSource src, float from, float to, float duration)
@@ -417,34 +436,5 @@ public class PowerDownSequence : MonoBehaviour
             yield return null;
         }
         if (src != null) src.volume = to;
-    }
-
-    private IEnumerator FadeOutAndDestroy(AudioSource src, float duration)
-    {
-        if (src == null) yield break;
-        float startVolume = src.volume;
-        float t = 0f;
-        while (t < duration && src != null)
-        {
-            t += Time.deltaTime;
-            float k = Mathf.Clamp01(t / duration);
-            src.volume = AudioVolume.LerpAmplitudePerceived(startVolume, 0f, k);
-            yield return null;
-        }
-        if (src != null && src.gameObject != null) Destroy(src.gameObject);
-    }
-
-    private IEnumerator RampPitch(AudioSource src, float fromPitch, float toPitch, float duration)
-    {
-        if (src == null) yield break;
-        float t = 0f;
-        while (t < duration && src != null)
-        {
-            t += Time.deltaTime;
-            float k = Mathf.Clamp01(t / duration);
-            src.pitch = Mathf.Lerp(fromPitch, toPitch, k);
-            yield return null;
-        }
-        if (src != null) src.pitch = toPitch;
     }
 }

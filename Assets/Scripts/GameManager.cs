@@ -23,11 +23,13 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    public void CollectBattery()
+    public void CollectBattery(Vector3 slotPosition)
     {
         currentBatteries++;
 
-        AudioManager.Instance?.batterySounds?.GetPowerUpFor(currentBatteries)?.Play();
+        // Power-up stinger is a diegetic event at the slot - route through the positional path
+        // so it pans/attenuates relative to the player and picks up the room's reverb.
+        AudioManager.Instance?.batterySounds?.GetPowerUpFor(currentBatteries)?.PlayAt(slotPosition);
 
         if(currentBatteries == totalBatteries)
         {

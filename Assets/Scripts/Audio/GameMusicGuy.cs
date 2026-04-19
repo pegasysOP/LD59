@@ -138,6 +138,17 @@ public class GameMusicGuy : MonoBehaviour
         if (library == null || MusicManager.Instance == null)
             return;
 
+        // While the PowerDownSequence (or anything else) has game music suspended,
+        // stay out of the way entirely. Clear the cached clip so when music resumes
+        // we re-evaluate the priority ladder and crossfade the correct track in,
+        // rather than short-circuiting because lastRequestedClip still matches the
+        // track that was playing before the suspension fade-out.
+        if (MusicManager.Instance.IsGameMusicSuspended)
+        {
+            lastRequestedClip = null;
+            return;
+        }
+
         IntensityManager intensityManager = IntensityManager.Instance;
         if (intensityManager == null)
             return;

@@ -44,42 +44,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af1668ff6f90437ba0e1dcea9a7549b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerDownSequence
-  buttonPress:
-    clips: []
-    pitchMin: 0.97
-    pitchMax: 1.03
-    gain: 1
+  stinger:
+    clips:
+    - _clip: {fileID: 8300000, guid: 6cfd3926ff2df42c5b7498a6d00ea83a, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 1
+    pitchMax: 1
+    gain: 0.6
     volumeJitter: 0
-  systemAck:
-    clips: []
-    pitchMin: 0.98
-    pitchMax: 1.02
-    gain: 1
-    volumeJitter: 0
-  systemAckDelay: 0.15
-  doorStartTime: 0.5
-  doorStart:
-    clips: []
-    pitchMin: 0.97
-    pitchMax: 1.03
-    gain: 1
-    volumeJitter: 0
-  doorTrackRattle:
-    clips: []
-    pitchMin: 0.95
-    pitchMax: 1.05
-    gain: 1
-    volumeJitter: 0
-  doorSlideLoop: {fileID: 0}
-  doorSlideLoopVolume: 0.7
-  doorEndTime: 2
-  doorEnd:
-    clips: []
-    pitchMin: 0.96
-    pitchMax: 1.02
-    gain: 1
-    volumeJitter: 0
-  powerCollapseStartTime: 2
+  stingerDelay: 0
+  preCollapseAmbienceLoop: {fileID: 8300000, guid: f4b6c0e07318b4f15bade2b77b7c168e, type: 3}
+  preCollapseAmbienceVolume: 0.25
+  preCollapseAmbienceFadeIn: 0
+  preCollapseAmbienceFadeOut: 1.2
+  powerCollapseStartTime: 4.6
   powerDropout:
     clips:
     - _clip: {fileID: 8300000, guid: 46c20198c825d484fb4d276228d69391, type: 3}
@@ -89,119 +68,38 @@ MonoBehaviour:
     pitchMax: 1.02
     gain: 1
     volumeJitter: 0
-  flickerBursts:
-    clips: []
-    pitchMin: 0.9
-    pitchMax: 1.1
-    gain: 1
-    volumeJitter: 0
-  flickerBurstCount: 4
-  flickerBurstWindow: {x: 0, y: 1.2}
-  relayClicks:
-    clips: []
-    pitchMin: 0.95
-    pitchMax: 1.05
-    gain: 1
-    volumeJitter: 0
-  relayClickCount: 5
-  relayClickWindow: {x: 0.1, y: 1.3}
-  systemHumDown: {fileID: 0}
-  systemHumDownVolume: 0.6
-  humDownStartPitch: 1
-  humDownEndPitch: 0.25
-  humDownDuration: 1.3
-  silenceStartTime: 3.5
-  residualHumLow: {fileID: 0}
-  residualHumVolume: 0.08
-  metalCreakDistant:
-    clips: []
-    pitchMin: 0.95
-    pitchMax: 1.05
-    gain: 1
-    volumeJitter: 0
-  metalCreakDelay: 0.35
-  chaosStartTime: 4.2
+  musicFadeOutDuration: 2
+  silenceStartTime: 6.6
+  chaosStartTime: 9.2
   metalImpactLarge:
-    clips: []
+    clips:
+    - _clip: {fileID: 8300000, guid: 65e1ef0fdea6c4ed996da266c536c61b, type: 3}
+      _volume: 1
+      _delay: 0
     pitchMin: 0.95
     pitchMax: 1.05
     gain: 1
     volumeJitter: 0
   creatureBurst:
-    clips: []
+    clips:
+    - _clip: {fileID: 8300000, guid: e4638dca079bf4f94a85e1a1bff33523, type: 3}
+      _volume: 1
+      _delay: 0
     pitchMin: 0.95
     pitchMax: 1.08
     gain: 1
     volumeJitter: 0
-  creatureBurstDelay: 0.12
-  waveBTime: 5
-  alarmDegraded:
-    clips: []
-    pitchMin: 0.97
-    pitchMax: 1.03
-    gain: 1
-    volumeJitter: 0
-  distantScream:
-    clips: []
-    pitchMin: 0.95
-    pitchMax: 1.05
-    gain: 1
-    volumeJitter: 0
-  commsFragment:
-    clips: []
-    pitchMin: 0.97
-    pitchMax: 1.03
-    gain: 1
-    volumeJitter: 0
-  waveCTime: 6
-  ventScramble:
-    clips: []
-    pitchMin: 0.95
-    pitchMax: 1.08
-    gain: 1
-    volumeJitter: 0
-  wallScrape:
-    clips: []
-    pitchMin: 0.95
-    pitchMax: 1.05
-    gain: 1
-    volumeJitter: 0
-  distantMovement:
-    clips: []
-    pitchMin: 0.95
-    pitchMax: 1.05
-    gain: 1
-    volumeJitter: 0
-  waveDTime: 7
-  airLeak:
-    clips: []
-    pitchMin: 0.97
-    pitchMax: 1.03
-    gain: 1
-    volumeJitter: 0
-  looseObjectRattle:
-    clips: []
-    pitchMin: 0.95
-    pitchMax: 1.05
-    gain: 1
-    volumeJitter: 0
-  electricalArc:
-    clips: []
-    pitchMin: 0.96
-    pitchMax: 1.06
-    gain: 1
-    volumeJitter: 0
-  residualStartTime: 8.5
-  lowPowerAmbienceLoop: {fileID: 0}
-  lowPowerAmbienceVolume: 0.6
-  distantCreatureLoop: {fileID: 0}
-  distantCreatureVolume: 0.35
+  creatureBurstDelay: 0.5
+  chaosSpatialized: 1
+  chaosMinDistance: 3
+  chaosMaxDistance: 5
+  chaosHeightRange: {x: -0.3, y: 0.6}
+  metalImpactAngleMax: 75
+  creatureBurstAngleMin: 90
+  creatureBurstAngleMax: 180
+  residualStartTime: 14
+  lowPowerAmbienceLoop: {fileID: 8300000, guid: 3caf1cbb411bf48a495b910baa8841d9, type: 3}
+  lowPowerAmbienceVolume: 0.148
   residualFadeIn: 1.5
-  intermittentFailureEvents:
-    clips: []
-    pitchMin: 0.95
-    pitchMax: 1.05
-    gain: 1
-    volumeJitter: 0
-  intermittentFailureInterval: {x: 5, y: 12}
   runOnStart: 0
+  singleFire: 1
