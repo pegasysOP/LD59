@@ -614,7 +614,7 @@ GameObject:
   - component: {fileID: 5397176109365202199}
   - component: {fileID: 4715859173173586824}
   m_Layer: 0
-  m_Name: Password2
+  m_Name: Password1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1181,7 +1181,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: ba7c4bed1725c5241ae097bb75e89834, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1240,8 +1240,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RepeatMinigame
   SOSCharacters:
   - {fileID: 7051635257158968236}
-  - {fileID: 8104573011219656988}
   - {fileID: 4184394681661801580}
+  - {fileID: 8104573011219656988}
   buttons:
   - {fileID: 5943594947813676832}
   - {fileID: 421019633907526459}
@@ -1481,7 +1481,7 @@ GameObject:
   - component: {fileID: 4721067026789003523}
   - component: {fileID: 3242663396079565376}
   m_Layer: 0
-  m_Name: Password1
+  m_Name: Password2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
