@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +12,7 @@ public class Minigame : MonoBehaviour
     [Header("UI")]
     public CanvasGroup panelGroup;
     public Transform monster;
+    public Transform monster3D;
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI failCounterText;
 
@@ -40,6 +42,11 @@ public class Minigame : MonoBehaviour
     public int maxFails = 3;
     public float alienGrowthPerFail = 1.25f;
     public float monsterDropPerFail = 0.25f;
+    public float monster3DApproachDistance = 0.5f;
+    public const float monster3DApproachDistanceFloor = 0.5f;
+    public float monster3DWalkDuration = 0.5f;
+    public Ease monster3DWalkEase = Ease.InOutSine;
+    public float monster3DFallbackDistance = 3f;
     public Key debugStartKey = Key.M;
 
     public event Action<bool> OnMinigameEnded;
@@ -67,6 +74,9 @@ public class Minigame : MonoBehaviour
     private int failCount;
     private Vector3 monsterBaseScale;
     private Vector3 monsterBasePosition;
+    private Vector3 monster3DSpawnPos;
+    private Vector3 monster3DApproachPos;
+    private Tweener monster3DWalkTween;
     private bool strayMissThisRound;
 
     private void Start()
@@ -74,6 +84,7 @@ public class Minigame : MonoBehaviour
         clickAction = InputSystem.actions?.FindAction("Click");
         monsterBaseScale = monster.localScale;
         monsterBasePosition = monster.localPosition;
+        if (monster != null) monster.gameObject.SetActive(false);
         HidePanel();
         UpdateFailCounter();
     }
@@ -94,12 +105,16 @@ public class Minigame : MonoBehaviour
         UpdateFailCounter();
         monster.localScale = monsterBaseScale;
         monster.localPosition = monsterBasePosition;
+        SetupMonster3DWaypoints();
+        PlaceMonster3DAtSpawn();
         ShowPanel();
 
         if (GameManager.Instance != null)
         {
             GameManager.Instance.MinigameActive = true;
             GameManager.Instance.SetLocked(true);
+            if (GameManager.Instance.cameraController != null)
+                GameManager.Instance.cameraController.lookAtTarget = monster3D;
         }
 
         StartCoroutine(RunSession());
@@ -141,6 +156,7 @@ public class Minigame : MonoBehaviour
             UpdateFailCounter();
             monster.localScale *= alienGrowthPerFail;
             monster.localPosition += Vector3.down * monsterDropPerFail;
+            WalkMonster3DToFailStep();
             yield return new WaitForSecondsRealtime(0.8f);
 
             if (failCount >= maxFails)
@@ -174,7 +190,9 @@ public class Minigame : MonoBehaviour
                 }
             }
 
-            if (clickAction != null && clickAction.WasPressedThisFrame())
+            bool clicked = clickAction != null && clickAction.WasPressedThisFrame();
+            bool spaced = Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame;
+            if (clicked || spaced)
                 EvaluateClick(seekerTime);
 
             yield return null;
@@ -326,12 +344,104 @@ public class Minigame : MonoBehaviour
         failCounterText.text = $"Strikes: {failCount}/{maxFails}";
     }
 
+    private void SetupMonster3DWaypoints()
+    {
+        Transform player = GameManager.Instance != null && GameManager.Instance.playerController != null
+            ? GameManager.Instance.playerController.transform
+            : null;
+
+        AlienSpawnPoint sp = AlienZoneTracker.CurrentSpawnPoint;
+        if (sp != null)
+        {
+            monster3DSpawnPos = sp.Position;
+        }
+        else if (player != null)
+        {
+            Debug.LogWarning("[Minigame] No AlienSpawnPoint available — falling back to player-forward ray.");
+            Vector3 flat = player.forward; flat.y = 0f;
+            if (flat.sqrMagnitude < 0.0001f) flat = Vector3.forward;
+            flat.Normalize();
+            monster3DSpawnPos = player.position + flat * monster3DFallbackDistance;
+        }
+        else
+        {
+            monster3DSpawnPos = monster3D != null ? monster3D.position : Vector3.zero;
+        }
+
+        Camera cam = GameManager.Instance != null && GameManager.Instance.cameraController != null
+            ? GameManager.Instance.cameraController.playerCamera
+            : null;
+        if (cam != null)
+        {
+            Vector3 camForward = cam.transform.forward; camForward.y = 0f;
+            if (camForward.sqrMagnitude < 0.0001f) camForward = Vector3.forward;
+            camForward.Normalize();
+            monster3DApproachPos = cam.transform.position + camForward * Mathf.Max(monster3DApproachDistanceFloor, monster3DApproachDistance);
+            monster3DApproachPos.y = monster3DSpawnPos.y;
+        }
+        else if (player != null)
+        {
+            Vector3 flat = player.forward; flat.y = 0f;
+            if (flat.sqrMagnitude < 0.0001f) flat = Vector3.forward;
+            flat.Normalize();
+            monster3DApproachPos = player.position + flat * Mathf.Max(monster3DApproachDistanceFloor, monster3DApproachDistance);
+            monster3DApproachPos.y = monster3DSpawnPos.y;
+        }
+        else
+        {
+            monster3DApproachPos = monster3DSpawnPos;
+        }
+    }
+
+    private void PlaceMonster3DAtSpawn()
+    {
+        if (monster3D == null) return;
+        KillMonster3DWalk();
+        monster3D.position = monster3DSpawnPos;
+        FaceMonster3DAtPlayer();
+    }
+
+    private void WalkMonster3DToFailStep()
+    {
+        if (monster3D == null) return;
+        float t = maxFails > 0 ? Mathf.Clamp01((float)failCount / maxFails) : 1f;
+        Vector3 target = Vector3.Lerp(monster3DSpawnPos, monster3DApproachPos, t);
+
+        KillMonster3DWalk();
+        monster3DWalkTween = monster3D.DOMove(target, monster3DWalkDuration)
+            .SetEase(monster3DWalkEase)
+            .SetUpdate(true)
+            .OnUpdate(FaceMonster3DAtPlayer)
+            .OnComplete(FaceMonster3DAtPlayer);
+    }
+
+    private void FaceMonster3DAtPlayer()
+    {
+        if (monster3D == null) return;
+        Transform player = GameManager.Instance != null && GameManager.Instance.playerController != null
+            ? GameManager.Instance.playerController.transform
+            : null;
+        if (player == null) return;
+
+        Vector3 toPlayer = player.position - monster3D.position;
+        toPlayer.y = 0f;
+        if (toPlayer.sqrMagnitude < 0.0001f) return;
+        monster3D.rotation = Quaternion.LookRotation(toPlayer.normalized, Vector3.up);
+    }
+
+    private void KillMonster3DWalk()
+    {
+        if (monster3DWalkTween != null && monster3DWalkTween.IsActive())
+            monster3DWalkTween.Kill();
+        monster3DWalkTween = null;
+    }
+
     private void ShowPanel()
     {
         panelGroup.alpha = 1f;
         panelGroup.interactable = true;
         panelGroup.blocksRaycasts = true;
-        if (monster != null) monster.gameObject.SetActive(true);
+        if (monster3D != null) monster3D.gameObject.SetActive(true);
     }
 
     private void HidePanel()
@@ -339,15 +449,19 @@ public class Minigame : MonoBehaviour
         panelGroup.alpha = 0f;
         panelGroup.interactable = false;
         panelGroup.blocksRaycasts = false;
-        if (monster != null) monster.gameObject.SetActive(false);
+        if (monster3D != null) monster3D.gameObject.SetActive(false);
     }
 
     private void EndSession(bool won)
     {
+        KillMonster3DWalk();
         ClearRound();
         HidePanel();
         monster.localScale = monsterBaseScale;
         monster.localPosition = monsterBasePosition;
+
+        if (GameManager.Instance != null && GameManager.Instance.cameraController != null)
+            GameManager.Instance.cameraController.lookAtTarget = null;
 
         if (GameManager.Instance != null)
         {

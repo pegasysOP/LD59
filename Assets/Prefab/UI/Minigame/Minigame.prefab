@@ -210,6 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Minigame
   panelGroup: {fileID: 178711752564406726}
   monster: {fileID: 700088530158004696}
+  monster3D: {fileID: 0}
   titleText: {fileID: 5909536455541754304}
   failCounterText: {fileID: 5162479902815714509}
   waveformContainer: {fileID: 5856232208799207363}
@@ -221,7 +222,7 @@ MonoBehaviour:
   peakHeight: 100
   peakHalfWidthSec: 0.02
   clickClip: {fileID: 8300000, guid: ddeceb9949b925d4782b820b0ce16d12, type: 3}
-  hitTolerance: 0.18
+  hitTolerance: 0.12
   minPlayerClicks: 3
   maxPlayerClicks: 5
   minPatternDuration: 1.5
@@ -232,6 +233,11 @@ MonoBehaviour:
   maxAlienDuration: 4
   maxFails: 3
   alienGrowthPerFail: 1.25
+  monsterDropPerFail: 0.25
+  monster3DApproachDistance: 1.2
+  monster3DWalkDuration: 0.5
+  monster3DWalkEase: 4
+  monster3DFallbackDistance: 3
   debugStartKey: 27
 --- !u!225 &178711752564406726
 CanvasGroup:

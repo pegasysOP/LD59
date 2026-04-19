@@ -9,6 +9,10 @@ public class CameraController : MonoBehaviour
     public float mouseSensitivity;
     public float maxLookAngle;
 
+    [Header("Minigame aim")]
+    public Transform lookAtTarget;
+    public float lookAtFollowSpeed = 12f;
+
     private float sensitivitySetting = 1f;
     private InputAction lookAction;
 
@@ -26,7 +30,11 @@ public class CameraController : MonoBehaviour
     {
         if (GameManager.Instance.LOCKED)
         {
-            if (GameManager.Instance.MinigameActive)
+            if (GameManager.Instance.MinigameActive && lookAtTarget != null)
+            {
+                AimAt(lookAtTarget.position);
+            }
+            else if (GameManager.Instance.MinigameActive)
             {
                 pitch = 0f;
                 playerCamera.transform.localEulerAngles = Vector3.zero;
@@ -48,5 +56,23 @@ public class CameraController : MonoBehaviour
     public void UpdateSensitivity(float value)
     {
         sensitivitySetting = value;
+    }
+
+    private void AimAt(Vector3 worldPoint)
+    {
+        Vector3 toTarget = worldPoint - playerCamera.transform.position;
+        if (toTarget.sqrMagnitude < 0.0001f) return;
+
+        float desiredYaw = Mathf.Atan2(toTarget.x, toTarget.z) * Mathf.Rad2Deg;
+        float flatDist = new Vector2(toTarget.x, toTarget.z).magnitude;
+        float desiredPitch = -Mathf.Atan2(toTarget.y, flatDist) * Mathf.Rad2Deg;
+        desiredPitch = Mathf.Clamp(desiredPitch, -maxLookAngle, maxLookAngle);
+
+        float t = 1f - Mathf.Exp(-lookAtFollowSpeed * Time.deltaTime);
+        yaw = Mathf.LerpAngle(yaw, desiredYaw, t);
+        pitch = Mathf.Lerp(pitch, desiredPitch, t);
+
+        transform.localEulerAngles = new Vector3(0, yaw, 0);
+        playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
     }
 }

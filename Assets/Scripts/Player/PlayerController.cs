@@ -86,9 +86,20 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // If in a cutscene, do not execute physics movement logic
-        if (GameManager.Instance.LOCKED || inCutscene)
+        if (inCutscene) return;
+
+        if (GameManager.Instance.LOCKED)
+        {
+            if (GameManager.Instance.MinigameActive)
+            {
+                Vector3 v = rb.linearVelocity;
+                rb.linearVelocity = new Vector3(0f, v.y, 0f);
+
+                Vector3 gNormal = groundDetector != null ? groundDetector.GroundNormal : Vector3.up;
+                rb.AddForce(-gNormal * Physics.gravity.magnitude * rb.mass, ForceMode.Acceleration);
+            }
             return;
+        }
 
         Vector3 moveDir = transform.TransformDirection(inputDir.normalized);
         float velocityX = Mathf.Clamp(moveDir.x * moveSpeed, -maxVelocity, maxVelocity);
