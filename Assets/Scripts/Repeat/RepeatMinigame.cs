@@ -86,6 +86,7 @@ public class RepeatMinigame : MonoBehaviour
 
         while (round < rounds)
         {
+            SetButtonInteractible(true);
             GenerateSequence();
 
             state = State.ShowingSequence;
@@ -112,6 +113,7 @@ public class RepeatMinigame : MonoBehaviour
 
             round++;
             sequenceLength++;
+            SetButtonInteractible(false);
             yield return new WaitForSeconds(roundGapTime);
         }
 
