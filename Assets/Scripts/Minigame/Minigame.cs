@@ -47,6 +47,11 @@ public class Minigame : MonoBehaviour
     public float monster3DWalkDuration = 0.5f;
     public Ease monster3DWalkEase = Ease.InOutSine;
     public float monster3DFallbackDistance = 3f;
+    public float monster3DAimHeight = 1.7f;
+    public string monster3DWalkState = "walk";
+    public string monster3DIdleState = "idle 1";
+    public string monster3DAttackState = "attack 1";
+    public float monster3DAnimCrossfade = 0.15f;
     public Key debugStartKey = Key.M;
 
     public event Action<bool> OnMinigameEnded;
@@ -77,6 +82,7 @@ public class Minigame : MonoBehaviour
     private Vector3 monster3DSpawnPos;
     private Vector3 monster3DApproachPos;
     private Tweener monster3DWalkTween;
+    private Animator monster3DAnimator;
     private bool strayMissThisRound;
 
     private void Start()
@@ -85,6 +91,7 @@ public class Minigame : MonoBehaviour
         monsterBaseScale = monster.localScale;
         monsterBasePosition = monster.localPosition;
         if (monster != null) monster.gameObject.SetActive(false);
+        if (monster3D != null) monster3DAnimator = monster3D.GetComponentInChildren<Animator>(true);
         HidePanel();
         UpdateFailCounter();
     }
@@ -114,7 +121,10 @@ public class Minigame : MonoBehaviour
             GameManager.Instance.MinigameActive = true;
             GameManager.Instance.SetLocked(true);
             if (GameManager.Instance.cameraController != null)
+            {
                 GameManager.Instance.cameraController.lookAtTarget = monster3D;
+                GameManager.Instance.cameraController.lookAtYOffset = monster3DAimHeight;
+            }
         }
 
         StartCoroutine(RunSession());
@@ -156,7 +166,16 @@ public class Minigame : MonoBehaviour
             UpdateFailCounter();
             monster.localScale *= alienGrowthPerFail;
             monster.localPosition += Vector3.down * monsterDropPerFail;
-            WalkMonster3DToFailStep();
+            if (failCount >= maxFails)
+            {
+                KillMonster3DWalk();
+                FaceMonster3DAtPlayer();
+                PlayMonster3DAnim(monster3DAttackState);
+            }
+            else
+            {
+                WalkMonster3DToFailStep();
+            }
             yield return new WaitForSecondsRealtime(0.8f);
 
             if (failCount >= maxFails)
@@ -399,6 +418,13 @@ public class Minigame : MonoBehaviour
         KillMonster3DWalk();
         monster3D.position = monster3DSpawnPos;
         FaceMonster3DAtPlayer();
+        PlayMonster3DAnim(monster3DIdleState);
+    }
+
+    private void PlayMonster3DAnim(string stateName)
+    {
+        if (monster3DAnimator == null || string.IsNullOrEmpty(stateName)) return;
+        monster3DAnimator.CrossFadeInFixedTime(stateName, monster3DAnimCrossfade);
     }
 
     private void WalkMonster3DToFailStep()
@@ -408,11 +434,16 @@ public class Minigame : MonoBehaviour
         Vector3 target = Vector3.Lerp(monster3DSpawnPos, monster3DApproachPos, t);
 
         KillMonster3DWalk();
+        PlayMonster3DAnim(monster3DWalkState);
         monster3DWalkTween = monster3D.DOMove(target, monster3DWalkDuration)
             .SetEase(monster3DWalkEase)
             .SetUpdate(true)
             .OnUpdate(FaceMonster3DAtPlayer)
-            .OnComplete(FaceMonster3DAtPlayer);
+            .OnComplete(() =>
+            {
+                FaceMonster3DAtPlayer();
+                PlayMonster3DAnim(monster3DIdleState);
+            });
     }
 
     private void FaceMonster3DAtPlayer()
@@ -442,6 +473,7 @@ public class Minigame : MonoBehaviour
         panelGroup.interactable = true;
         panelGroup.blocksRaycasts = true;
         if (monster3D != null) monster3D.gameObject.SetActive(true);
+        HideHudHelpers();
     }
 
     private void HidePanel()
@@ -450,6 +482,22 @@ public class Minigame : MonoBehaviour
         panelGroup.interactable = false;
         panelGroup.blocksRaycasts = false;
         if (monster3D != null) monster3D.gameObject.SetActive(false);
+        RestoreHudHelpers();
+    }
+
+    private void HideHudHelpers()
+    {
+        HudController hud = GameManager.Instance != null ? GameManager.Instance.hudController : null;
+        if (hud == null) return;
+        if (hud.centreDot != null) hud.centreDot.SetActive(false);
+        if (hud.interactPrompt != null) hud.interactPrompt.SetActive(false);
+    }
+
+    private void RestoreHudHelpers()
+    {
+        HudController hud = GameManager.Instance != null ? GameManager.Instance.hudController : null;
+        if (hud == null) return;
+        if (hud.centreDot != null) hud.centreDot.SetActive(true);
     }
 
     private void EndSession(bool won)

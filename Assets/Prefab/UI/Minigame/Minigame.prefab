@@ -238,6 +238,7 @@ MonoBehaviour:
   monster3DWalkDuration: 0.5
   monster3DWalkEase: 4
   monster3DFallbackDistance: 3
+  monster3DAimHeight: 2.4
   debugStartKey: 27
 --- !u!225 &178711752564406726
 CanvasGroup:

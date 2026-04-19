@@ -11,8 +11,8 @@ public class AlienSpawnPoint : MonoBehaviour
     public float groundRaycastDistance = 10f;
     [Tooltip("Layers considered floor for the spawn raycast. Set to the ground/environment layer(s).")]
     public LayerMask groundMask = ~0;
-    [Tooltip("Vertical offset applied above the floor hit point. Raises the alien's pivot off the ground.")]
-    public float spawnHeightOffset = 1.5f;
+    //[Tooltip("Vertical offset applied above the floor hit point. Raises the alien's pivot off the ground.")]
+    //public float spawnHeightOffset = 1.5f;
 
     public Vector3 Position => GetGroundedPosition();
     public Quaternion Rotation => transform.rotation;
@@ -21,7 +21,7 @@ public class AlienSpawnPoint : MonoBehaviour
     {
         Vector3 origin = transform.position;
         if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, groundRaycastDistance, groundMask, QueryTriggerInteraction.Ignore))
-            return hit.point + Vector3.up * spawnHeightOffset;
+            return hit.point;// + Vector3.up * spawnHeightOffset;
         return origin;
     }
 
@@ -29,7 +29,7 @@ public class AlienSpawnPoint : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, groundRaycastDistance, groundMask, QueryTriggerInteraction.Ignore))
         {
-            pos = hit.point + Vector3.up * spawnHeightOffset;
+            pos = hit.point;// + Vector3.up * spawnHeightOffset;
             return true;
         }
         pos = transform.position;

@@ -12,6 +12,8 @@ public class CameraController : MonoBehaviour
     [Header("Minigame aim")]
     public Transform lookAtTarget;
     public float lookAtFollowSpeed = 12f;
+    [Tooltip("World-space vertical offset added to lookAtTarget.position when aiming. Lets the camera target the head of a floor-anchored object.")]
+    public float lookAtYOffset = 0f;
 
     private float sensitivitySetting = 1f;
     private InputAction lookAction;
@@ -32,7 +34,7 @@ public class CameraController : MonoBehaviour
         {
             if (GameManager.Instance.MinigameActive && lookAtTarget != null)
             {
-                AimAt(lookAtTarget.position);
+                AimAt(lookAtTarget.position + Vector3.up * lookAtYOffset);
             }
             else if (GameManager.Instance.MinigameActive)
             {
