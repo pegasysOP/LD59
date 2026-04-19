@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RepeatButton : MonoBehaviour, IInteractable
+public class RepeatButton : BaseButton, IInteractable
 {
     public enum Colour { Red, Green, Blue, Yellow }
 
@@ -15,51 +15,15 @@ public class RepeatButton : MonoBehaviour, IInteractable
 
     public event Action<Colour> OnPressed;
 
-    public bool isInteractable = true;
+    public bool isInteractable = false;
 
     public void Interact()
     {
         Debug.Log($"Button {colour} was pressed");
 
         OnPressed?.Invoke(colour);
-
-        Flash(flashTime);
-    }
-
-    private bool flashing = false;
-
-    public void Flash(float duration)
-    {
-        if (flashing) 
-            return;
-        StartCoroutine(FlashRoutine(duration));
-    }
-
-    private IEnumerator FlashRoutine(float duration)
-    {
-        flashing = true;
-
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-
-        Color original = Color.white;
-        bool hasOriginal = false;
-
-        if (meshRenderer != null)
-        {
-            original = meshRenderer.material.color;
-            hasOriginal = true;
-            Color bright = new Color(Mathf.Min(original.r * 1.8f, 1f), Mathf.Min(original.g * 1.8f, 1f), Mathf.Min(original.b * 1.8f, 1f), original.a);
-            meshRenderer.material.color = bright;
-        }
-
-        yield return new WaitForSeconds(duration);
-
-        if (hasOriginal)
-        {
-            if (meshRenderer != null) meshRenderer.material.color = original;
-        }
-
-        flashing = false;
+        if(isInteractable)
+            Flash(flashTime);
     }
 
     public bool IsInteractable()

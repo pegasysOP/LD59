@@ -127,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   colour: 1
   flashTime: 0.2
-  isInteractable: 1
+  isInteractable: 0
 --- !u!1 &906381635808248199
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RepeatButton
   colour: 0
   flashTime: 0.2
-  isInteractable: 1
+  isInteractable: 0
 --- !u!1 &3162242654132735913
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,7 +474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RepeatButton
   colour: 2
   flashTime: 0.2
-  isInteractable: 1
+  isInteractable: 0
 --- !u!1 &4073166099516979593
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,7 +602,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RepeatButton
   colour: 3
   flashTime: 0.2
-  isInteractable: 1
+  isInteractable: 0
 --- !u!1 &4184394681661801580
 GameObject:
   m_ObjectHideFlags: 0
@@ -1242,6 +1242,9 @@ MonoBehaviour:
   - {fileID: 7051635257158968236}
   - {fileID: 4184394681661801580}
   - {fileID: 8104573011219656988}
+  loginText:
+  - {fileID: 6423240361470590085}
+  - {fileID: 3162242654132735913}
   buttons:
   - {fileID: 5943594947813676832}
   - {fileID: 421019633907526459}
@@ -1253,6 +1256,8 @@ MonoBehaviour:
   flashGapTime: 0.25
   wrongInputPause: 0.5
   roundGapTime: 4
+  rounds: 3
+  sequenceLength: 3
 --- !u!1 &7051635257158968236
 GameObject:
   m_ObjectHideFlags: 0
@@ -1470,6 +1475,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   minigame: {fileID: 2633652086222178150}
+  delayBeforeStart: 5
+  flashTime: 0.2
 --- !u!1 &8104573011219656988
 GameObject:
   m_ObjectHideFlags: 0

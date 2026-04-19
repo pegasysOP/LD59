@@ -10,6 +10,9 @@ public class RepeatMinigame : MonoBehaviour
     private GameObject[] SOSCharacters;
 
     [SerializeField]
+    private GameObject[] loginText;
+
+    [SerializeField]
     private List<RepeatButton> buttons;
 
     [SerializeField]
@@ -21,6 +24,9 @@ public class RepeatMinigame : MonoBehaviour
     public float flashGapTime = 0.25f; // Gap between flashes
     public float wrongInputPause = 0.5f; //Pause after replaying on wrong guess
     public float roundGapTime = 4f; //Gap between rounds after correct sequence
+
+    // Delay before the first round begins when the minigame starts
+    public float initialDelay = 1f;
 
     public int rounds = 3;
 
@@ -43,6 +49,11 @@ public class RepeatMinigame : MonoBehaviour
             character.SetActive(false);
         }
 
+        foreach (GameObject text in loginText)
+        {
+            text.SetActive(false);
+        }
+
         foreach (RepeatButton button in buttons)
         {
             button.OnPressed += HandleInput;
@@ -53,15 +64,29 @@ public class RepeatMinigame : MonoBehaviour
 
     public void StartMinigame()
     {
+        foreach (GameObject text in loginText)
+        {
+            text.SetActive(true);
+        }
+
         if (state != State.Idle)
             return;
 
         round = 0;
+
+        foreach (RepeatButton button in buttons)
+        {
+            button.isInteractable = true;
+        }
         StartCoroutine(RunSession());
     }
 
     private IEnumerator RunSession()
     {
+        // Initial delay before first round so player has a moment to prepare
+        //if (initialDelay > 0f)
+        //    yield return new WaitForSeconds(initialDelay);
+
         while (round < rounds)
         {
             GenerateSequence();
