@@ -18,6 +18,12 @@ public class RepeatMinigame : MonoBehaviour
     [SerializeField]
     private GameObject approved;
 
+    [SerializeField]
+    private RepeatMinigameSounds sounds;
+
+    /// <summary>Shared Simon SFX config (used by <see cref="StartMinigameButton"/> for the start cue).</summary>
+    public RepeatMinigameSounds SoundConfig => sounds;
+
     [Header("Timing")]
     public float fastTime = 0.3f; // How long each button flashes in fast phase
     public float slowTime = 1.0f; // How long each button flashes in slow phase
@@ -140,6 +146,7 @@ public class RepeatMinigame : MonoBehaviour
         {
             RepeatButton button = GetButtonByColour(colour);
 
+            PlayButtonPressAtButton(button);
             button.Flash(slowTime);
             yield return new WaitForSeconds(slowTime + flashGapTime);
         }
@@ -159,14 +166,19 @@ public class RepeatMinigame : MonoBehaviour
         if (state != State.PlayerInput)
             return;
 
+        RepeatButton pressed = GetButtonByColour(colour);
+        PlayButtonPressAtButton(pressed);
+
         if (sequence[playerIndex] == colour)
         {
             playerIndex++;
         }
         else
         {
-            if (isReplaying) 
+            if (isReplaying)
                 return;
+
+            PlaySequenceFailAtButton(pressed);
 
             playerIndex = 0;
             isReplaying = true;
@@ -216,7 +228,49 @@ public class RepeatMinigame : MonoBehaviour
             }
             StateTracker.Instance?.CompleteTask(TaskType.SimonSays);
 
-            approved.SetActive(true);   
+            Vector3 successPos = approved != null ? approved.transform.position : transform.position;
+            PlayMinigameSuccessAt(successPos);
+
+            approved.SetActive(true);
         }
+    }
+
+    private void PlaySfxPositional(AudioClipVolume perceived, Vector3 worldPosition, float pitch = 1f)
+    {
+        if (sounds == null || perceived == null || perceived.Clip == null || AudioManager.Instance == null)
+            return;
+
+        float linear = AudioVolume.ToLinear(perceived.Volume);
+        var shaped = new AudioClipVolume(perceived.Clip, linear, perceived.Delay);
+        AudioManager.Instance.PlaySfxAtPoint(shaped, pitch, worldPosition);
+    }
+
+    private void PlayButtonPressAtButton(RepeatButton button)
+    {
+        if (button == null || sounds == null || sounds.buttonPressByButtonIndex == null ||
+            sounds.buttonPressByButtonIndex.Count == 0)
+            return;
+
+        int idx = buttons.IndexOf(button);
+        if (idx < 0)
+            return;
+
+        int clipIdx = Mathf.Clamp(idx, 0, sounds.buttonPressByButtonIndex.Count - 1);
+        AudioClipVolume cv = sounds.buttonPressByButtonIndex[clipIdx];
+        PlaySfxPositional(cv, button.transform.position);
+    }
+
+    private void PlaySequenceFailAtButton(RepeatButton button)
+    {
+        if (button == null)
+            return;
+        PlaySfxPositional(sounds?.sequenceFail, button.transform.position);
+    }
+
+    private void PlayMinigameSuccessAt(Vector3 worldPosition)
+    {
+        if (sounds == null || sounds.minigameSuccess == null || !sounds.minigameSuccess.HasAnyClip)
+            return;
+        sounds.minigameSuccess.PlayAt(worldPosition);
     }
 }

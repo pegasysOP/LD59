@@ -14,6 +14,7 @@ public class StartMinigameButton : BaseButton, IInteractable
     public void Interact()
     {
         hasStarted = true;
+        minigame?.SoundConfig?.PlayStartMinigameAt(transform.position);
         Flash(flashTime);
         minigame.StartMinigame();
     }

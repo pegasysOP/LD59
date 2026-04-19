@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Drives the Tier 0 ("skeleton") pass of the station power-down + creature-reveal
@@ -226,7 +227,8 @@ public class PowerDownSequence : MonoBehaviour
 
         // --- Phase 6: Residual State ---
         yield return WaitTo(ref cursor, residualStartTime);
-        _lowPowerAmbienceSource = StartLoop(lowPowerAmbienceLoop, lowPowerAmbienceVolume, fadeInDuration: residualFadeIn, loop: true);
+        if (!IsCreditsOrMenuScene())
+            _lowPowerAmbienceSource = StartLoop(lowPowerAmbienceLoop, lowPowerAmbienceVolume, fadeInDuration: residualFadeIn, loop: true);
         // Re-open the gate on GameMusicGuy; it will crossfade the post-intro track
         // back in over MusicManager.crossfadeDuration.
         if (MusicManager.Instance != null)
@@ -388,6 +390,7 @@ public class PowerDownSequence : MonoBehaviour
 
     private void StartPreCollapseAmbience()
     {
+        if (IsCreditsOrMenuScene()) return;
         if (_preCollapseAmbienceSource != null) return;
         if (preCollapseAmbienceLoop == null) return;
         _preCollapseAmbienceSource = StartLoop(
@@ -436,5 +439,11 @@ public class PowerDownSequence : MonoBehaviour
             yield return null;
         }
         if (src != null) src.volume = to;
+    }
+
+    private static bool IsCreditsOrMenuScene()
+    {
+        string n = SceneManager.GetActiveScene().name;
+        return n == SceneUtils.MENU_SCENE || n == SceneUtils.CREDIT_SCENE;
     }
 }

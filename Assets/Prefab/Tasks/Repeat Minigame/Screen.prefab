@@ -1251,6 +1251,7 @@ MonoBehaviour:
   - {fileID: 6292574840765988391}
   - {fileID: 5845600339733400482}
   approved: {fileID: 6542723747166021988}
+  sounds: {fileID: 11400000, guid: 5f637791c97624c8b926f900a159ddd2, type: 2}
   fastTime: 0.25
   slowTime: 0.6
   flashGapTime: 0.25
