@@ -12,6 +12,9 @@ public class RepeatMinigame : MonoBehaviour
     [SerializeField]
     private List<RepeatButton> buttons;
 
+    [SerializeField]
+    private GameObject approved;
+
     [Header("Timing")]
     public float fastTime = 0.3f; // How long each button flashes in fast phase
     public float slowTime = 1.0f; // How long each button flashes in slow phase
@@ -40,6 +43,8 @@ public class RepeatMinigame : MonoBehaviour
         {
             button.OnPressed += HandleInput;
         }
+
+        approved.SetActive(false);
     }
 
     public void StartMinigame()
@@ -180,6 +185,8 @@ public class RepeatMinigame : MonoBehaviour
                 b.isInteractable = false;
             }
             StateTracker.Instance?.CompleteTask(TaskType.SimonSays);
+
+            approved.SetActive(true);   
         }
     }
 }
