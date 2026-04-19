@@ -22,4 +22,4 @@ MonoBehaviour:
   monsterAboutToKill: {fileID: 8300000, guid: c3ddf4dd2972147ed8edf06c0c522972, type: 3}
   gameOver: {fileID: 0}
   victory: {fileID: 0}
-  credits: {fileID: 0}
+  credits: {fileID: 8300000, guid: cae65c6b902634d409be80d14c5d8802, type: 3}

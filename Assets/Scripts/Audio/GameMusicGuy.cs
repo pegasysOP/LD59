@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Drives in-game music selection from a single place. On Start it primes
 /// <see cref="MusicManager"/> with the intro track (or, when the active scene
-/// is the menu scene, snaps to the menu track using the non-envelope playback
-/// path and stops steering after that). While the gameplay scene is running,
+/// is the menu or credits scene, snaps to that scene's track using the
+/// non-envelope playback path and stops steering after that). While the gameplay scene is running,
 /// each frame it chooses the desired track based on a small priority ladder
 /// and asks <see cref="MusicManager"/> to crossfade into it (respecting the
 /// in-game envelope). Track ids follow the creative ordering in
@@ -45,6 +45,7 @@ public class GameMusicGuy : MonoBehaviour
     // ---------- Track mapping (hardcoded, see class-level summary) ----------
 
     private const MusicTrack MenuTrack = MusicTrack.MainMenu;
+    private const MusicTrack CreditsTrack = MusicTrack.Credits;
     private const MusicTrack IntroCalmTrack = MusicTrack.NormalStation;
     private const MusicTrack PostIntroCalmTrack = MusicTrack.DamagedStationLowAnxiety;
     private const MusicTrack ElevatedTrack = MusicTrack.MonsterAround;
@@ -106,6 +107,18 @@ public class GameMusicGuy : MonoBehaviour
             {
                 lastRequestedClip = menuClip;
                 MusicManager.Instance.PlayMusic(menuClip);
+            }
+            return;
+        }
+
+        if (IsCreditsScene())
+        {
+            menuModeActive = true;
+            AudioClip creditsClip = library.Get(CreditsTrack);
+            if (creditsClip != null)
+            {
+                lastRequestedClip = creditsClip;
+                MusicManager.Instance.PlayMusic(creditsClip);
             }
             return;
         }
@@ -307,6 +320,11 @@ public class GameMusicGuy : MonoBehaviour
     private static bool IsMenuScene()
     {
         return SceneManager.GetActiveScene().name == SceneUtils.MENU_SCENE;
+    }
+
+    private static bool IsCreditsScene()
+    {
+        return SceneManager.GetActiveScene().name == SceneUtils.CREDIT_SCENE;
     }
 
     private static bool IsMinigameActive()
