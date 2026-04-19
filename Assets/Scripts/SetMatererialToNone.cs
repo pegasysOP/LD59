@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -45,3 +46,4 @@ public static class SetMaterialToNone
         return false;
     }
 }
+#endif
