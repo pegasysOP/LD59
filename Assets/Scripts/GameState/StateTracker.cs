@@ -25,7 +25,6 @@ public class StateTracker : MonoBehaviour
     [Header("Debug (read-only runtime view)")]
     [SerializeField] private bool startingDoorOpenedDebug;
     [SerializeField] private bool batteriesCompleteDebug;
-    [SerializeField] private bool signalCompleteDebug;
     [SerializeField] private bool simonSaysCompleteDebug;
     [SerializeField] private bool radarAlignmentCompleteDebug;
     [SerializeField] private EndState endStateDebug = EndState.InProgress;
@@ -36,7 +35,6 @@ public class StateTracker : MonoBehaviour
     private readonly Dictionary<TaskType, bool> tasks = new Dictionary<TaskType, bool>
     {
         { TaskType.Batteries, false },
-        { TaskType.Signal, false },
         { TaskType.SimonSays, false },
         { TaskType.RadarAlignment, false },
     };
@@ -61,7 +59,11 @@ public class StateTracker : MonoBehaviour
         get
         {
             foreach (KeyValuePair<TaskType, bool> kvp in tasks)
+            {
+                Debug.Log(kvp.Key + " " + kvp.Value);
                 if (!kvp.Value) return false;
+            }
+                
             return true;
         }
     }
@@ -171,7 +173,6 @@ public class StateTracker : MonoBehaviour
         switch (task)
         {
             case TaskType.Batteries: batteriesCompleteDebug = done; break;
-            case TaskType.Signal: signalCompleteDebug = done; break;
             case TaskType.SimonSays: simonSaysCompleteDebug = done; break;
             case TaskType.RadarAlignment: radarAlignmentCompleteDebug = done; break;
         }
