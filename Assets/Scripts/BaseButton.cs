@@ -18,22 +18,40 @@ public class BaseButton : MonoBehaviour
 
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
 
-        Color original = Color.white;
-        bool hasOriginal = false;
-
         if (meshRenderer != null)
         {
-            original = meshRenderer.material.color;
-            hasOriginal = true;
-            Color bright = new Color(Mathf.Min(original.r * 1.8f, 1f), Mathf.Min(original.g * 1.8f, 1f), Mathf.Min(original.b * 1.8f, 1f), original.a);
-            meshRenderer.material.color = bright;
+            Material mat = meshRenderer.material;
+
+            Color originalEmission = Color.black;
+            bool hadEmission = mat.IsKeywordEnabled("_EMISSION");
+
+            if (mat.HasProperty("_EmissionColor"))
+            {
+                originalEmission = mat.GetColor("_EmissionColor");
+            }
+
+            mat.EnableKeyword("_EMISSION");
+
+            Color baseColor = mat.HasProperty("_BaseColor")
+                ? mat.GetColor("_BaseColor")
+                : Color.white;
+
+            float intensity = 1.5f;
+            mat.SetColor("_EmissionColor", baseColor * intensity);
         }
 
         yield return new WaitForSeconds(duration);
 
-        if (hasOriginal)
+        if (meshRenderer != null)
         {
-            if (meshRenderer != null) meshRenderer.material.color = original;
+            Material mat = meshRenderer.material;
+
+            if (mat.HasProperty("_EmissionColor"))
+            {
+                mat.SetColor("_EmissionColor", Color.black);
+            }
+
+            mat.DisableKeyword("_EMISSION");
         }
 
         flashing = false;
