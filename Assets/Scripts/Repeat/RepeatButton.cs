@@ -10,6 +10,9 @@ public class RepeatButton : MonoBehaviour, IInteractable
     [SerializeField]
     private Colour colour;
 
+    [SerializeField]
+    private float flashTime = 0.2f;
+
     public event Action<Colour> OnPressed;
 
     public bool isInteractable = true;
@@ -20,7 +23,7 @@ public class RepeatButton : MonoBehaviour, IInteractable
 
         OnPressed?.Invoke(colour);
 
-        Flash(0.2f);
+        Flash(flashTime);
     }
 
     private bool flashing = false;
