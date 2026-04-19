@@ -15,8 +15,9 @@ public class RepeatMinigame : MonoBehaviour
     [Header("Timing")]
     public float fastTime = 0.3f;
     public float slowTime = 1.0f;
-    public float gapTime = 0.25f;
+    public float flashGapTime = 0.25f;
     public float wrongInputPause = 0.5f;
+    public float roundGapTime = 4f;
 
     public event Action<bool> OnMinigameEnded;
 
@@ -77,7 +78,7 @@ public class RepeatMinigame : MonoBehaviour
             SOSCharacters[round].SetActive(true);
 
             round++;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(roundGapTime);
         }
 
         EndGame(true);
@@ -104,8 +105,8 @@ public class RepeatMinigame : MonoBehaviour
         {
             RepeatButton button = GetButtonByColour(colour);
 
-            yield return FlashButton(button, showTime);
-            yield return new WaitForSeconds(gapTime);
+            button.Flash(showTime);
+            yield return new WaitForSeconds(showTime + flashGapTime);
         }
     }
 
@@ -165,12 +166,6 @@ public class RepeatMinigame : MonoBehaviour
                 return b;
         }
         return null;
-    }
-
-    private IEnumerator FlashButton(RepeatButton button, float duration)
-    {
-        button.Flash(duration);
-        yield return new WaitForSeconds(duration);
     }
 
     private void EndGame(bool won)
