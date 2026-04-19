@@ -1,0 +1,55 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Rendering.Universal;
+
+public class EscapePodDoor : MonoBehaviour, IInteractable
+{
+    private bool isClosed = true;
+
+    [SerializeField]
+    private GameObject doorPanel;
+
+    private const float OpenOffset = -1.45f;
+
+    private const float OpenDuration = 0.35f;
+
+    public void Interact()
+    {
+        Debug.Log("Interacting with escape pod door");
+        if (isClosed && doorPanel != null)
+        {
+            StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
+        }
+    }
+
+    public bool IsInteractable()
+    {
+        //return true;
+        return StateTracker.Instance.AllTasksComplete;
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    private IEnumerator MoveDoor(float deltaZ, float duration)
+    {
+        isClosed = false;
+
+        Transform t = doorPanel.transform;
+        Vector3 start = t.localPosition;
+        Vector3 target = start + new Vector3(0f, 0f, deltaZ);
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float frac = Mathf.Clamp01(elapsed / duration);
+            t.localPosition = Vector3.Lerp(start, target, frac);
+            yield return null;
+        }
+
+        t.localPosition = target;
+
+        StateTracker.Instance?.NotifyStartingDoorOpened();
+    }
+
+}
