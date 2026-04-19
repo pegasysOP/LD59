@@ -624,10 +624,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5495838554613307765, guid: c1bdb724cd3ac6e42aec684a39dd67bc, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: d41892af688474dc693c44800b0e2faa, type: 2}
     - target: {fileID: 7168782720487754459, guid: c1bdb724cd3ac6e42aec684a39dd67bc, type: 3}
       propertyPath: m_Name
       value: OpenableDoor
