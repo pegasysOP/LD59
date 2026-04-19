@@ -1256,6 +1256,7 @@ MonoBehaviour:
   flashGapTime: 0.25
   wrongInputPause: 0.5
   roundGapTime: 4
+  initialDelay: 1
   rounds: 3
   sequenceLength: 3
 --- !u!1 &7051635257158968236
@@ -1475,7 +1476,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   minigame: {fileID: 2633652086222178150}
-  delayBeforeStart: 5
   flashTime: 0.2
 --- !u!1 &8104573011219656988
 GameObject:
