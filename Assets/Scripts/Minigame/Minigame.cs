@@ -44,6 +44,12 @@ public class Minigame : MonoBehaviour
 
     public event Action<bool> OnMinigameEnded;
 
+    /// <summary>Number of failed rounds accumulated during the active session. Resets to 0 at the start of a new session.</summary>
+    public int FailCount => failCount;
+
+    /// <summary>Maximum number of failed rounds before the session ends in Game Over.</summary>
+    public int MaxFails => maxFails;
+
     private enum State { Idle, AlienPlaying, PlayerPrepare, PlayerInput, RoundResolved, GameOver }
 
     private class Peak

@@ -2,20 +2,26 @@ using UnityEngine;
 
 /// <summary>
 /// Canonical ids for the project's music tracks. Keep in sync with
-/// <see cref="MusicLibrary"/> and <c>_silas_design/music/tracklist.md</c>.
+/// <see cref="MusicLibrary"/> and <c>_silas_design/music/tracklist-v2.md</c>.
+///
+/// Numeric values are intentionally stable (do not renumber) so Unity
+/// serialization of <see cref="MusicTrack"/> fields in scenes / prefabs
+/// does not silently remap. Declaration order below follows the creative
+/// order in the tracklist; numeric values reflect historical insertion.
 /// </summary>
 public enum MusicTrack
 {
     MainMenu = 0,
     NormalStation = 1,
     DamagedStationLowAnxiety = 2,
+    PointOfInterest = 6,
+    GotAway = 5,
     MonsterAround = 3,
     MonsterNear = 4,
-    GotAway = 5,
-    PointOfInterest = 6,
+    MonsterAboutToKill = 10,
+    GameOver = 9,
     Victory = 7,
     Credits = 8,
-    GameOver = 9,
 }
 
 /// <summary>
@@ -36,26 +42,29 @@ public class MusicLibrary : ScriptableObject
     [Header("03 — Damaged Station — Low Anxiety")]
     public AudioClip damagedStationLowAnxiety;
 
-    [Header("04 — Monster Is Around — Light Fear")]
-    public AudioClip monsterAround;
-
-    [Header("05 — Monster Is Near — Fear / Suspense / Terror")]
-    public AudioClip monsterNear;
-
-    [Header("06 — Got Away From Monster — Back to Calm")]
-    public AudioClip gotAway;
-
-    [Header("07 — Point of Interest — Near a Ship System")]
+    [Header("04 — Point of Interest — Near a Ship System")]
     public AudioClip pointOfInterest;
 
-    [Header("08 — Victory — Escape in Rescue Ship")]
+    [Header("05 — Got Away From Monster — Back to Calm (slightly busier)")]
+    public AudioClip gotAway;
+
+    [Header("06 — Monster Is Around — Light Fear")]
+    public AudioClip monsterAround;
+
+    [Header("07 — Monster Is Near — Fear / Suspense / Terror")]
+    public AudioClip monsterNear;
+
+    [Header("08 — Monster About To Kill You — Terror, High Intensity")]
+    public AudioClip monsterAboutToKill;
+
+    [Header("09 — Game Over — Monster Killed You")]
+    public AudioClip gameOver;
+
+    [Header("10 — Victory — Escape in Rescue Ship")]
     public AudioClip victory;
 
-    [Header("09 — Credits — Epic Triumph")]
+    [Header("11 — Credits — Epic Triumph")]
     public AudioClip credits;
-
-    [Header("10 — Game Over — Monster Killed You")]
-    public AudioClip gameOver;
 
     /// <summary>Returns the clip assigned to <paramref name="track"/>, or null if unassigned.</summary>
     public AudioClip Get(MusicTrack track)
@@ -65,13 +74,14 @@ public class MusicLibrary : ScriptableObject
             case MusicTrack.MainMenu: return mainMenu;
             case MusicTrack.NormalStation: return normalStation;
             case MusicTrack.DamagedStationLowAnxiety: return damagedStationLowAnxiety;
+            case MusicTrack.PointOfInterest: return pointOfInterest;
+            case MusicTrack.GotAway: return gotAway;
             case MusicTrack.MonsterAround: return monsterAround;
             case MusicTrack.MonsterNear: return monsterNear;
-            case MusicTrack.GotAway: return gotAway;
-            case MusicTrack.PointOfInterest: return pointOfInterest;
+            case MusicTrack.MonsterAboutToKill: return monsterAboutToKill;
+            case MusicTrack.GameOver: return gameOver;
             case MusicTrack.Victory: return victory;
             case MusicTrack.Credits: return credits;
-            case MusicTrack.GameOver: return gameOver;
             default: return null;
         }
     }
