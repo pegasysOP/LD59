@@ -97,8 +97,8 @@ public class PlayerController : MonoBehaviour
 
                 Vector3 gNormal = groundDetector != null ? groundDetector.GroundNormal : Vector3.up;
                 rb.AddForce(-gNormal * Physics.gravity.magnitude * rb.mass, ForceMode.Acceleration);
+                return;
             }
-            return;
         }
 
         Vector3 moveDir = transform.TransformDirection(inputDir.normalized);
