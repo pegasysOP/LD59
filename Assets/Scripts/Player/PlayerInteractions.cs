@@ -19,7 +19,11 @@ public class PlayerInteractions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (interactAction.WasPressedThisFrame())
+        //Lock interaction if the game is locked (e.g. during cutscenes)
+        if (GameManager.Instance != null && GameManager.Instance.LOCKED)
+            return;
+
+        if (interactAction != null && interactAction.WasPressedThisFrame())
         {
              Ray ray = Camera.main.ScreenPointToRay(mouse.position.ReadValue());
              if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))

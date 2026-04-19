@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -34,6 +35,8 @@ public class PlayerController : MonoBehaviour
     private float airTime;
     private float firstGroundedTime = -1f;
 
+    private bool inCutscene = false;
+
     private void Start()
     {
         jumpAction = InputSystem.actions.FindAction("Jump");
@@ -44,7 +47,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.LOCKED)
+        // If the game or cutscene is locking the player, suppress input
+        if (GameManager.Instance.LOCKED || inCutscene)
         {
             inputDir = Vector3.zero;
             return;
@@ -82,6 +86,21 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (inCutscene) return;
+
+        if (GameManager.Instance.LOCKED)
+        {
+            if (GameManager.Instance.MinigameActive)
+            {
+                Vector3 v = rb.linearVelocity;
+                rb.linearVelocity = new Vector3(0f, v.y, 0f);
+
+                Vector3 gNormal = groundDetector != null ? groundDetector.GroundNormal : Vector3.up;
+                rb.AddForce(-gNormal * Physics.gravity.magnitude * rb.mass, ForceMode.Acceleration);
+            }
+            return;
+        }
+
         Vector3 moveDir = transform.TransformDirection(inputDir.normalized);
         float velocityX = Mathf.Clamp(moveDir.x * moveSpeed, -maxVelocity, maxVelocity);
         float velocityZ = Mathf.Clamp(moveDir.z * moveSpeed, -maxVelocity, maxVelocity);
