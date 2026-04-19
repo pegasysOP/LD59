@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class RepeatButton : MonoBehaviour, IInteractable
 {
     public enum Colour { Red, Green, Blue, Yellow }
-    
+
     [SerializeField]
     private Colour colour;
 
@@ -19,7 +19,7 @@ public class RepeatButton : MonoBehaviour, IInteractable
         Debug.Log($"Button {colour} was pressed");
 
         OnPressed?.Invoke(colour);
-        
+
         Flash(0.2f);
     }
 
@@ -27,7 +27,8 @@ public class RepeatButton : MonoBehaviour, IInteractable
 
     public void Flash(float duration)
     {
-        if (flashing) return;
+        if (flashing) 
+            return;
         StartCoroutine(FlashRoutine(duration));
     }
 

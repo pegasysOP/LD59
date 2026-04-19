@@ -13,11 +13,11 @@ public class RepeatMinigame : MonoBehaviour
     private List<RepeatButton> buttons;
 
     [Header("Timing")]
-    public float fastTime = 0.3f;
-    public float slowTime = 1.0f;
-    public float flashGapTime = 0.25f;
-    public float wrongInputPause = 0.5f;
-    public float roundGapTime = 4f;
+    public float fastTime = 0.3f; // How long each button flashes in fast phase
+    public float slowTime = 1.0f; // How long each button flashes in slow phase
+    public float flashGapTime = 0.25f; // Gap between flashes
+    public float wrongInputPause = 0.5f; //Pause after replaying on wrong guess
+    public float roundGapTime = 4f; //Gap between rounds after correct sequence
 
     public event Action<bool> OnMinigameEnded;
 
@@ -66,8 +66,10 @@ public class RepeatMinigame : MonoBehaviour
             state = State.PlayerInput;
             playerIndex = 0;
 
+            //This "pauses" execution of the rest of RunSession until the player has guessed 3 times
             yield return WaitForPlayerInput();
 
+            //After this check for game loss
             if (playerIndex == -1)
             {
                 state = State.GameOver;
@@ -75,6 +77,8 @@ public class RepeatMinigame : MonoBehaviour
                 yield break;
             }
 
+            //If we get here then they won so set the next SOS character and increment the rounds
+            //TODO: We may want to replace this with an animation or different visual effects
             SOSCharacters[round].SetActive(true);
 
             round++;
