@@ -40,9 +40,6 @@ public class RepeatMinigame : MonoBehaviour
         {
             button.OnPressed += HandleInput;
         }
-
-        //We probably want to start this from some trigger, pressing a button or entering the room. For testing purposes, we can start it immediately.
-        StartMinigame();
     }
 
     public void StartMinigame()
