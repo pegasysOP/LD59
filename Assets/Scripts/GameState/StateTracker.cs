@@ -7,6 +7,7 @@ public enum TaskType
     Batteries = 0,
     Signal = 1,
     SimonSays = 2,
+    RadarAlignment = 3,
 }
 
 public enum EndState
@@ -26,6 +27,7 @@ public class StateTracker : MonoBehaviour
     [SerializeField] private bool batteriesCompleteDebug;
     [SerializeField] private bool signalCompleteDebug;
     [SerializeField] private bool simonSaysCompleteDebug;
+    [SerializeField] private bool radarAlignmentCompleteDebug;
     [SerializeField] private EndState endStateDebug = EndState.InProgress;
     [SerializeField] private int encounterCountDebug;
     [SerializeField] private bool lastEncounterWonDebug;
@@ -36,6 +38,7 @@ public class StateTracker : MonoBehaviour
         { TaskType.Batteries, false },
         { TaskType.Signal, false },
         { TaskType.SimonSays, false },
+        { TaskType.RadarAlignment, false },
     };
 
     public bool StartingDoorOpened { get; private set; }
@@ -170,6 +173,7 @@ public class StateTracker : MonoBehaviour
             case TaskType.Batteries: batteriesCompleteDebug = done; break;
             case TaskType.Signal: signalCompleteDebug = done; break;
             case TaskType.SimonSays: simonSaysCompleteDebug = done; break;
+            case TaskType.RadarAlignment: radarAlignmentCompleteDebug = done; break;
         }
     }
 }
