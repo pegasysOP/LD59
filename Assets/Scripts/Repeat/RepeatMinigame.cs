@@ -74,10 +74,7 @@ public class RepeatMinigame : MonoBehaviour
 
         round = 0;
 
-        foreach (RepeatButton button in buttons)
-        {
-            button.isInteractable = true;
-        }
+        SetButtonInteractible(true);
         StartCoroutine(RunSession());
     }
 
@@ -136,6 +133,7 @@ public class RepeatMinigame : MonoBehaviour
 
     private IEnumerator ShowSequence()
     {
+        SetButtonInteractible(false);
         foreach (RepeatButton.Colour colour in sequence)
         {
             RepeatButton button = GetButtonByColour(colour);
@@ -143,6 +141,7 @@ public class RepeatMinigame : MonoBehaviour
             button.Flash(slowTime);
             yield return new WaitForSeconds(slowTime + flashGapTime);
         }
+        SetButtonInteractible(true);
     }
 
     private IEnumerator WaitForPlayerInput()
@@ -193,6 +192,14 @@ public class RepeatMinigame : MonoBehaviour
                 return b;
         }
         return null;
+    }
+
+    private void SetButtonInteractible(bool isInteractible)
+    {
+        foreach (RepeatButton b in buttons)
+        {
+            b.isInteractable = isInteractible;
+        }
     }
 
     private void EndGame(bool won)
