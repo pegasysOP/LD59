@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01f9f33a4c5c4433a87b6bd5338b2086, type: 3}
+  m_Name: RadarMinigameSounds
+  m_EditorClassIdentifier: Assembly-CSharp::RadarMinigameSounds
+  radarLoop:
+    _clip: {fileID: 8300000, guid: 4aaabf592630d4c4da66c627785ad1ae, type: 3}
+    _volume: 0.8
+    _delay: 0
+  radarMinPitch: 0.5
+  radarMaxPitch: 1
+  radarMinPerceivedVolume: 0.35
+  radarMaxPerceivedVolume: 0.8
+  radarResponseSpeed: 8
+  radarCompleteFadeOut: 0.8
+  radarIdleTimeoutSeconds: 8
+  radarIdleFadeOutDuration: 1.5
+  signalSend:
+    clips:
+    - _clip: {fileID: 8300000, guid: 0ff9cea42a67348e6a171edcd75c6cff, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 1
+    pitchMax: 1
+    gain: 1
+    volumeJitter: 0
+  handleGrab:
+    clips:
+    - _clip: {fileID: 8300000, guid: ba83ad1cf35a84b33937ddcf62bcb8a2, type: 3}
+      _volume: 0.8
+      _delay: 0
+    pitchMin: 0.97
+    pitchMax: 1.03
+    gain: 1
+    volumeJitter: 0
+  handleRelease:
+    clips:
+    - _clip: {fileID: 8300000, guid: c15933849e91347f7ab62ec9737027b6, type: 3}
+      _volume: 0.8
+      _delay: 0
+    pitchMin: 0.97
+    pitchMax: 1.03
+    gain: 1
+    volumeJitter: 0
+  moveLoop:
+    _clip: {fileID: 8300000, guid: 9693194adace548bbb9f01237e1172b3, type: 3}
+    _volume: 1
+    _delay: 0
+  moveBasePerceivedVolume: 0.55
+  moveBoostExtraPerceivedVolume: 0.35
+  moveSpeedForFullBoost: 0.9
+  moveFadeInSpeed: 14
+  moveFadeOutSpeed: 8
+  movePitch: 1

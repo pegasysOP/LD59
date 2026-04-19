@@ -584,6 +584,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7027027753223051572}
   - component: {fileID: 5541148645453256162}
+  - component: {fileID: 5847399409678535915}
   m_Layer: 0
   m_Name: Radar Task
   m_TagString: Untagged
@@ -634,11 +635,31 @@ MonoBehaviour:
   targetLine: {fileID: 7885763977030433843}
   targetPositionPadding: 0.05
   targetAnglePadding: 2
+  targetPositionMinFromCenter: 0.1
+  targetAngleMinFromCenter: 10
   positionTolerance: 0.04
   angleTolerance: 1
   lightRenderer: {fileID: 1848454081038242198}
   lightOffMaterial: {fileID: 2100000, guid: 8031add37ef014e47a996c21f836a050, type: 2}
   lightOnMaterial: {fileID: 2100000, guid: d4fdb1eb8b11b4e838cb10a5c487ca44, type: 2}
+--- !u!114 &5847399409678535915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4298365648389386371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e9cb77a253949e98e628e12447fd25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RadarAlignmentSounds
+  sounds: {fileID: 11400000, guid: ab96354ac92304e8d9caf80b5e5bdce3, type: 2}
+  alignment: {fileID: 5541148645453256162}
+  loopSourcesParent: {fileID: 0}
+  loopSpatialBlend: 1
+  loopMinDistance: 1.5
+  loopMaxDistance: 20
 --- !u!1 &5400211055584392832
 GameObject:
   m_ObjectHideFlags: 0
