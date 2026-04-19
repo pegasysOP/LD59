@@ -22,6 +22,10 @@ public class RepeatMinigame : MonoBehaviour
     public float wrongInputPause = 0.5f; //Pause after replaying on wrong guess
     public float roundGapTime = 4f; //Gap between rounds after correct sequence
 
+    public int rounds = 3;
+
+    public int sequenceLength = 3;
+
     public event Action<bool> OnMinigameEnded;
 
     private enum State { Idle, ShowingSequence, PlayerInput, RoundResolved, GameOver }
@@ -58,7 +62,7 @@ public class RepeatMinigame : MonoBehaviour
 
     private IEnumerator RunSession()
     {
-        while (round < 3)
+        while (round < rounds)
         {
             GenerateSequence();
 
@@ -81,9 +85,11 @@ public class RepeatMinigame : MonoBehaviour
 
             //If we get here then they won so set the next SOS character and increment the rounds
             //TODO: We may want to replace this with an animation or different visual effects
-            SOSCharacters[round].SetActive(true);
+            if (SOSCharacters.Length > round)
+                SOSCharacters[round].SetActive(true);
 
             round++;
+            sequenceLength++;
             yield return new WaitForSeconds(roundGapTime);
         }
 
@@ -94,7 +100,7 @@ public class RepeatMinigame : MonoBehaviour
     {
         sequence.Clear();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < sequenceLength; i++)
         {
             int rand = UnityEngine.Random.Range(0, buttons.Count);
             sequence.Add(buttons[rand].GetColour());
@@ -105,23 +111,13 @@ public class RepeatMinigame : MonoBehaviour
 
     private IEnumerator ShowSequence()
     {
-        float showTime = GetSpeed();
-
         foreach (RepeatButton.Colour colour in sequence)
         {
             RepeatButton button = GetButtonByColour(colour);
 
-            button.Flash(showTime);
-            yield return new WaitForSeconds(showTime + flashGapTime);
+            button.Flash(slowTime);
+            yield return new WaitForSeconds(slowTime + flashGapTime);
         }
-    }
-
-    private float GetSpeed()
-    {
-        // SOS: fast, slow, fast
-        if (round == 1)
-            return slowTime;
-        return fastTime;
     }
 
     private IEnumerator WaitForPlayerInput()
