@@ -105,6 +105,13 @@ public class StateTracker : MonoBehaviour
             if (!tasks[task])
                 CompleteTask(task);
         }
+
+        // Also short-circuit the opening power-down cutscene if it's still playing
+        // so you can jump straight into testing the mid/late-game flow without
+        // sitting through the ~20s intro.
+        if (CutsceneManager.Instance != null)
+            CutsceneManager.Instance.SkipIntroCutscene();
+
         Debug.Log("[StateTracker] Debug cheat: all tasks marked complete.");
     }
 #endif
