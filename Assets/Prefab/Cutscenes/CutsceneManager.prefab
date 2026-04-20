@@ -55,6 +55,69 @@ MonoBehaviour:
   fadeCanvasGroup: {fileID: 0}
   fadeDuration: 1
   lossPreFadeDelay: 0.35
+  tryAgainCanvasGroup: {fileID: 0}
+  tryAgainButton: {fileID: 0}
+  tryAgainAppearDelay: 1
+  tryAgainFadeDuration: 1
   postIntroLightingIntensity: 0.15
   decalsToSpawnAfterIntro: []
+  endStandPoint: {fileID: 0}
+  endAlien: {fileID: 0}
+  alienRunDuration: 2.5
+  postAlienHitDoorDelay: 0.15
+  doorCloseLeadTime: 0.7
+  endDoorCloseDuration: 0.6
+  shakeDuration: 0.4
+  shakeMagnitude: 0.08
+  postShakeDelay: 0.8
+  postFadeHoldDuration: 5
+  endRotateDuration: 1
+  endCutsceneStinger:
+    _clip: {fileID: 8300000, guid: 955a002f64704452194025cb0e9f8624, type: 3}
+    _volume: 1
+    _delay: 0
+  endCutsceneMusicFadeOutDuration: 1.5
+  endCutsceneSounds:
+  - _clip: {fileID: 8300000, guid: a64a6c06cc86d4586ac8ecfa22e9da6f, type: 3}
+    _volume: 1
+    _delay: 0
+  - _clip: {fileID: 8300000, guid: 119f5541c2d5d4297932b2c098e9f04c, type: 3}
+    _volume: 1
+    _delay: 0.5
+  - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+    _volume: 1
+    _delay: 0.6
+  - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+    _volume: 1
+    _delay: 1.1
+  - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+    _volume: 1
+    _delay: 1.6
+  - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+    _volume: 1
+    _delay: 2.1
+  - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+    _volume: 1
+    _delay: 2.6
+  - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+    _volume: 1
+    _delay: 3.1
+  - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+    _volume: 1
+    _delay: 3.6
+  - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+    _volume: 1
+    _delay: 4.1
+  - _clip: {fileID: 8300000, guid: da4078d74dfc64d5b82e74169755e449, type: 3}
+    _volume: 1
+    _delay: 2.3
+  - _clip: {fileID: 8300000, guid: 5a0299b04511348c7a128532b6619a20, type: 3}
+    _volume: 1
+    _delay: 3.9
+  - _clip: {fileID: 8300000, guid: 1bdbc1292b6f2493e9cc26f77d6e470c, type: 3}
+    _volume: 1
+    _delay: 4.2
+  - _clip: {fileID: 8300000, guid: 8febacfe898524c7bbedefa4f910c553, type: 3}
+    _volume: 1
+    _delay: 4.4
   type: 0
