@@ -17,6 +17,15 @@ public class CutsceneManager : MonoBehaviour
 
     [SerializeField] private float fadeDuration = 1f;
 
+    public enum CutsceneType
+    {
+        Wake,
+        Powerdown,
+        EscapePod
+    }
+
+    public CutsceneType type;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -29,20 +38,20 @@ public class CutsceneManager : MonoBehaviour
         Instance = this;
     }
 
-    public void PlayCutscene(int index)
+    public void PlayCutscene(CutsceneType type)
     {
-        switch (index) { 
-           case 0:
+        switch (type) { 
+           case CutsceneType.Wake:
                 PlayWakeCutscene();
                 break;
-            case 1:
+            case CutsceneType.Powerdown:
                 StartCoroutine(PowerdownCutsceneRoutine());
                 break;
-            case 2:
+            case CutsceneType.EscapePod:
                 PlayEscapePodCutscene();
                 break;
             default:
-                Debug.LogError("Invalid index: " + index);
+                Debug.LogError("Invalid cutscene type: " + type);
                 break;
         }
     }
