@@ -23,6 +23,8 @@ public class CutsceneManager : MonoBehaviour
 
     [SerializeField] private float fadeDuration = 1f;
 
+    [SerializeField] private float postIntroLightingIntensity = 0.15f;
+
     public enum CutsceneType
     {
         Wake,
@@ -76,6 +78,9 @@ public class CutsceneManager : MonoBehaviour
 
         //Fade out at start of power down cutscene
         yield return StartCoroutine(Fade(1f, fadeDuration));
+
+        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
+        RenderSettings.ambientIntensity = postIntroLightingIntensity; 
 
         //TODO: Play powerdown visual effects here 
 
