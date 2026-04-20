@@ -14,7 +14,6 @@ public enum MusicTrack
     MainMenu = 0,
     NormalStation = 1,
     DamagedStationLowAnxiety = 2,
-    PointOfInterest = 6,
     GotAway = 5,
     MonsterAround = 3,
     MonsterNear = 4,
@@ -42,28 +41,25 @@ public class MusicLibrary : ScriptableObject
     [Header("03 — Damaged Station — Low Anxiety")]
     public AudioClip damagedStationLowAnxiety;
 
-    [Header("04 — Point of Interest — Near a Ship System")]
-    public AudioClip pointOfInterest;
-
-    [Header("05 — Got Away From Monster — Back to Calm (slightly busier)")]
+    [Header("04 — Got Away From Monster — Back to Calm (slightly busier)")]
     public AudioClip gotAway;
 
-    [Header("06 — Monster Is Around — Light Fear")]
+    [Header("05 — Monster Is Around — Light Fear")]
     public AudioClip monsterAround;
 
-    [Header("07 — Monster Is Near — Fear / Suspense / Terror")]
+    [Header("06 — Monster Is Near — Fear / Suspense / Terror")]
     public AudioClip monsterNear;
 
-    [Header("08 — Monster About To Kill You — Terror, High Intensity")]
+    [Header("07 — Monster About To Kill You — Terror, High Intensity")]
     public AudioClip monsterAboutToKill;
 
-    [Header("09 — Game Over — Monster Killed You")]
+    [Header("08 — Game Over — Monster Killed You")]
     public AudioClip gameOver;
 
-    [Header("10 — Victory — Escape in Rescue Ship")]
+    [Header("09 — Victory — Escape in Rescue Ship")]
     public AudioClip victory;
 
-    [Header("11 — Credits — Epic Triumph")]
+    [Header("10 — Credits — Epic Triumph")]
     public AudioClip credits;
 
     /// <summary>Returns the clip assigned to <paramref name="track"/>, or null if unassigned.</summary>
@@ -74,7 +70,6 @@ public class MusicLibrary : ScriptableObject
             case MusicTrack.MainMenu: return mainMenu;
             case MusicTrack.NormalStation: return normalStation;
             case MusicTrack.DamagedStationLowAnxiety: return damagedStationLowAnxiety;
-            case MusicTrack.PointOfInterest: return pointOfInterest;
             case MusicTrack.GotAway: return gotAway;
             case MusicTrack.MonsterAround: return monsterAround;
             case MusicTrack.MonsterNear: return monsterNear;

@@ -235,6 +235,28 @@ MonoBehaviour:
     response: Yes I am
   - question: You seem off?
     response: Don't worry about it
+  - question: Why do you smell like that?
+    response: It's the suit
+  - question: Where is your hive?
+    response: Back that way
+  - question: Who sent you?
+    response: The council did
+  - question: Speak our true tongue
+    response: My throat is sore
+  - question: You walk funny
+    response: Old injury
+  - question: Show me your face
+    response: Maybe later
+  - question: What is your name?
+    response: Same as yours
+  - question: Why are you alone?
+    response: Others are coming
+  - question: Prove you belong
+    response: I already did
+  - question: Where were you born?
+    response: Far from here
+  - question: Your eyes look wrong
+    response: Bad light in here
   wrongAnswerWords:
   - not
   - help
@@ -260,6 +282,41 @@ MonoBehaviour:
   - eat
   - control
   - delete
+  - flesh
+  - skin
+  - soft
+  - warm
+  - blood
+  - bone
+  - meat
+  - crawl
+  - inside
+  - below
+  - teeth
+  - host
+  - wear
+  - replace
+  - hide
+  - peel
+  - burn
+  - swallow
+  - whisper
+  - mimic
+  - copy
+  - hollow
+  - empty
+  - they
+  - we
+  - one
+  - many
+  - never
+  - soon
+  - dark
+  - your
+  - mine
+  - watching
+  - hunger
+  - open
   gibberishChars: '!@#$%^&*?+~<>/\|='
   calculatingDelay: 1.4
   calculatingText: Calculating response...

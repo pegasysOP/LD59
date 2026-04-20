@@ -43,6 +43,12 @@ public class Door : DoorBase
     [SerializeField, Min(0f)]
     private float doorOpenSoundDelay = 0.5f;
 
+    [Tooltip("Rejection beep played when the player interacts with the door before it's ready " +
+             "(i.e. while it's still showing the red 'not interactable' state). Distinct from " +
+             "buttonPress so the locked state reads unambiguously.")]
+    [SerializeField]
+    private SfxBank rejectBeep = new SfxBank { pitchMin = 1f, pitchMax = 1f };
+
     private const float OpenOffset = -1.45f;
 
     private const float OpenDuration = 2f;
@@ -53,15 +59,31 @@ public class Door : DoorBase
     public override void Interact()
     {
         Debug.Log("Interacting with door");
-        if (isClosed && doorPanel != null)
+        if (!isClosed || doorPanel == null)
+            return;
+
+        // IsInteractable() stays true while the door is closed so the click always lands here;
+        // the "is the door armed yet?" gate is enforced inside Interact so we can play the reject
+        // beep during the red/initial-delay window instead of silently eating the input.
+        if (initialTimer > 0f)
         {
-            PlayAtDoor(buttonPress);
-            CutsceneManager.Instance.PlayCutscene(CutsceneManager.CutsceneType.Powerdown);
-            StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
-            StartCoroutine(PlayDoorOpenAfterDelay(doorOpenSoundDelay));
-            if (triggerPowerDownOnInteract)
-                StartCoroutine(TriggerPowerDownAfterDelay(powerDownStartDelay));
+            PlayAtDoor(rejectBeep);
+            return;
         }
+
+        PlayAtDoor(buttonPress);
+        CutsceneManager.Instance.PlayCutscene(CutsceneManager.CutsceneType.Powerdown);
+        StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
+        StartCoroutine(PlayDoorOpenAfterDelay(doorOpenSoundDelay));
+        if (triggerPowerDownOnInteract)
+            StartCoroutine(TriggerPowerDownAfterDelay(powerDownStartDelay));
+    }
+
+    public override bool IsInteractable()
+    {
+        // Always interactable while closed so the reject beep can fire during the red window.
+        // The actual "can it open?" gate is evaluated inside Interact().
+        return isClosed;
     }
 
     private IEnumerator PlayDoorOpenAfterDelay(float delay)

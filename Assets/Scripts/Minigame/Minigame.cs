@@ -130,8 +130,8 @@ public class Minigame : MonoBehaviour
     private bool strayMissThisRound;
     private Coroutine idleVocalsRoutine;
     private DialoguePair currentPair;
-    private int lastPairIndex = -1;
-    private readonly HashSet<int> usedPairIndices = new HashSet<int>();
+    private readonly List<int> shuffledPairOrder = new List<int>();
+    private int shuffledPairCursor;
     private Coroutine alienRevealCo;
     private Tweener titleFlashTween;
 
@@ -142,6 +142,7 @@ public class Minigame : MonoBehaviour
         monsterBasePosition = monster.localPosition;
         if (monster != null) monster.gameObject.SetActive(false);
         if (monster3D != null) monster3DAnimator = monster3D.GetComponentInChildren<Animator>(true);
+        BuildShuffledPairOrder();
         HidePanel();
         UpdateFailCounter();
     }
@@ -181,8 +182,6 @@ public class Minigame : MonoBehaviour
         torchController.enableEnemyFlicker = true;
 
         failCount = 0;
-        usedPairIndices.Clear();
-        lastPairIndex = -1;
         UpdateFailCounter();
         monster.localScale = monsterBaseScale;
         monster.localPosition = monsterBasePosition;
@@ -507,23 +506,28 @@ public class Minigame : MonoBehaviour
 
     private DialoguePair PickPair()
     {
-        if (dialoguePairs == null || dialoguePairs.Length == 0) return null;
-        if (usedPairIndices.Count >= dialoguePairs.Length)
-            usedPairIndices.Clear();
+        if (shuffledPairOrder.Count == 0) return null;
 
-        List<int> pool = new List<int>();
-        for (int i = 0; i < dialoguePairs.Length; i++)
-            if (!usedPairIndices.Contains(i) && i != lastPairIndex)
-                pool.Add(i);
-        if (pool.Count == 0)
-            for (int i = 0; i < dialoguePairs.Length; i++)
-                if (!usedPairIndices.Contains(i))
-                    pool.Add(i);
+        if (shuffledPairCursor >= shuffledPairOrder.Count)
+            shuffledPairCursor = 0;
 
-        int idx = pool[UnityEngine.Random.Range(0, pool.Count)];
-        usedPairIndices.Add(idx);
-        lastPairIndex = idx;
+        int idx = shuffledPairOrder[shuffledPairCursor];
+        shuffledPairCursor++;
         return dialoguePairs[idx];
+    }
+
+    private void BuildShuffledPairOrder()
+    {
+        shuffledPairOrder.Clear();
+        shuffledPairCursor = 0;
+        if (dialoguePairs == null) return;
+        for (int i = 0; i < dialoguePairs.Length; i++)
+            shuffledPairOrder.Add(i);
+        for (int i = shuffledPairOrder.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            (shuffledPairOrder[i], shuffledPairOrder[j]) = (shuffledPairOrder[j], shuffledPairOrder[i]);
+        }
     }
 
     private string MakeGibberish(int len)
@@ -935,10 +939,7 @@ public class Minigame : MonoBehaviour
             GameManager.Instance.SetLocked(false);
         }
 
-        if(won == true)
-        {
-            IntensityManager.Instance.SetIntensity(0);
-        }
+        IntensityManager.Instance.SetIntensity(0); 
 
         state = State.Idle;
         OnMinigameEnded?.Invoke(won);
