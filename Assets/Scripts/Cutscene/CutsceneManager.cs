@@ -125,6 +125,8 @@ public class CutsceneManager : MonoBehaviour
     {
         GameManager.Instance?.SetLocked(true);
 
+        IntensityManager.Instance.increasePerSecond = 0f;
+
         yield return new WaitForSeconds(lossPreFadeDelay);
 
         if (fadeCanvasGroup != null)
@@ -226,6 +228,8 @@ public class CutsceneManager : MonoBehaviour
     private IEnumerator EscapePodCutsceneRoutine()
     {
         Debug.Log("Playing Escape cutscene");
+
+        IntensityManager.Instance.increasePerSecond = 0f;
 
         //Immobilise Player
         GameManager.Instance?.SetLocked(true);
