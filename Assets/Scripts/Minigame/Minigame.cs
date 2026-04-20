@@ -935,10 +935,7 @@ public class Minigame : MonoBehaviour
             GameManager.Instance.SetLocked(false);
         }
 
-        if(won == true)
-        {
-            IntensityManager.Instance.SetIntensity(0);
-        }
+        IntensityManager.Instance.SetIntensity(0); 
 
         state = State.Idle;
         OnMinigameEnded?.Invoke(won);
