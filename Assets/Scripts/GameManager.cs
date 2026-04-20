@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
             StateTracker.Instance?.CompleteTask(TaskType.Batteries);
 
             //TODO: Play a sound while waiting for the minigame to start
-            StartCoroutine(StartMinigameAfterDelay(minigameStartDelay));
+            //StartCoroutine(StartMinigameAfterDelay(minigameStartDelay));
 
             //TODO: Implement logic for triggering some event after all batteries.
             //e.g. powering up other rooms, opening doors etc.
