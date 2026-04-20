@@ -63,7 +63,7 @@ public class TorchController : MonoBehaviour
             //float closeRangeCrush = Mathf.Clamp01((distance - 0.2f) / 1.3f);
 
             targetIntensity = Mathf.Clamp(baseIntensity * compensation, minIntensity, maxIntensity);
-            Debug.Log("Target Intensity: " + targetIntensity + " (Distance: " + distance + ")");
+            //Debug.Log("Target Intensity: " + targetIntensity + " (Distance: " + distance + ")");
         }
 
         if (enableFlicker)
