@@ -64,6 +64,7 @@ public class Door : MonoBehaviour, IInteractable
         if (isClosed && doorPanel != null)
         {
             PlayAtDoor(buttonPress);
+            CutsceneManager.Instance.PlayCutscene(CutsceneManager.CutsceneType.Powerdown);
             StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
             StartCoroutine(PlayDoorOpenAfterDelay(doorOpenSoundDelay));
             if (triggerPowerDownOnInteract)
