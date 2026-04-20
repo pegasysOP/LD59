@@ -27,7 +27,9 @@ public class Minigame : MonoBehaviour
     public float peakHalfWidthSec = 0.08f;
 
     [Header("Audio")]
-    public AudioClip clickClip;
+    [Tooltip("ScriptableObject bundling the monster appearance stinger, monster syllables (alien pattern beats), " +
+             "ambient grumble pool, and player snap feedback. Leave any pool empty to silence that channel.")]
+    public MonsterMinigameSounds sounds;
 
     [Header("Player Hand")]
     public Animator rightHandAnimator;
@@ -88,6 +90,7 @@ public class Minigame : MonoBehaviour
     private Tweener monster3DWalkTween;
     private Animator monster3DAnimator;
     private bool strayMissThisRound;
+    private Coroutine idleVocalsRoutine;
 
     private void Start()
     {
@@ -133,11 +136,24 @@ public class Minigame : MonoBehaviour
             }
         }
 
+        if (sounds != null) sounds.PlayMonsterAppearStinger();
+        PlayMonsterAppearRoar();
+        StartIdleVocalsRoutine();
+
         StartCoroutine(RunSession());
     }
 
     private IEnumerator RunSession()
     {
+        // Hold on the reveal before the first round so the appearance stinger + roar can breathe
+        // and the player gets a moment to register the creature before gameplay starts.
+        float settle = sounds != null ? Mathf.Max(0f, sounds.entranceSettleDelay) : 0f;
+        if (settle > 0f)
+        {
+            titleText.text = string.Empty;
+            yield return new WaitForSecondsRealtime(settle);
+        }
+
         while (true)
         {
             state = State.AlienPlaying;
@@ -220,6 +236,7 @@ public class Minigame : MonoBehaviour
             if (clicked || spaced)
             {
                 PlayRightHandClick();
+                PlayPlayerSnap();
                 EvaluateClick(seekerTime);
             }
 
@@ -247,7 +264,7 @@ public class Minigame : MonoBehaviour
         {
             if (t >= times[idx])
             {
-                PlayClickSfx(0.9f, 1.1f);
+                PlayMonsterSyllable();
                 idx++;
             }
             t += Time.deltaTime;
@@ -353,7 +370,6 @@ public class Minigame : MonoBehaviour
         {
             peaks[bestIdx].hit = true;
             SpawnMarker(tickPrefab, peaks[bestIdx].time);
-            PlayClickSfx(0.95f, 1.05f);
         }
         else
         {
@@ -368,9 +384,94 @@ public class Minigame : MonoBehaviour
         rightHandAnimator.Play(rightHandClickState, 0, 0f);
     }
 
-    private void PlayClickSfx(float minPitch, float maxPitch)
+    private void PlayMonsterHop()
     {
-        AudioManager.Instance.PlaySfxWithPitchShifting(new List<AudioClip> { clickClip }, minPitch, maxPitch);
+        if (sounds == null || sounds.monsterHop == null || !sounds.monsterHop.HasAnyClip)
+            return;
+        if (monster3D != null)
+            sounds.monsterHop.PlayAttached(monster3D, Vector3.zero);
+        else
+            sounds.monsterHop.Play();
+    }
+
+    private void PlayMonsterAppearRoar()
+    {
+        if (sounds == null || sounds.monsterAppearRoar == null || !sounds.monsterAppearRoar.HasAnyClip)
+            return;
+        if (monster3D != null)
+            sounds.monsterAppearRoar.PlayAt(monster3DSpawnPos);
+        else
+            sounds.monsterAppearRoar.Play();
+    }
+
+    private void PlayMonsterSyllable()
+    {
+        if (sounds == null || sounds.monsterSyllables == null || !sounds.monsterSyllables.HasAnyClip)
+            return;
+
+        int instances = Mathf.Max(1, sounds.syllableInstancesPerTrigger);
+        for (int i = 0; i < instances; i++)
+        {
+            if (monster3D != null)
+                sounds.monsterSyllables.PlayAttached(monster3D, Vector3.zero);
+            else
+                sounds.monsterSyllables.Play();
+        }
+    }
+
+    private void PlayMonsterIdleVocal()
+    {
+        if (sounds == null || sounds.monsterIdleVocals == null || !sounds.monsterIdleVocals.HasAnyClip)
+            return;
+        if (monster3D != null)
+            sounds.monsterIdleVocals.PlayAttached(monster3D, Vector3.zero);
+        else
+            sounds.monsterIdleVocals.Play();
+    }
+
+    private void PlayPlayerSnap()
+    {
+        if (sounds == null || sounds.playerSnap == null || !sounds.playerSnap.HasAnyClip)
+            return;
+        sounds.playerSnap.Play();
+    }
+
+    private void StartIdleVocalsRoutine()
+    {
+        StopIdleVocalsRoutine();
+        if (sounds == null || sounds.monsterIdleVocals == null || !sounds.monsterIdleVocals.HasAnyClip)
+            return;
+        idleVocalsRoutine = StartCoroutine(RunIdleVocalsLoop());
+    }
+
+    private void StopIdleVocalsRoutine()
+    {
+        if (idleVocalsRoutine != null)
+        {
+            StopCoroutine(idleVocalsRoutine);
+            idleVocalsRoutine = null;
+        }
+    }
+
+    private IEnumerator RunIdleVocalsLoop()
+    {
+        float initial = sounds != null ? Mathf.Max(0f, sounds.idleVocalsInitialDelay) : 1.5f;
+        if (initial > 0f)
+            yield return new WaitForSecondsRealtime(initial);
+
+        while (true)
+        {
+            float minI = sounds != null ? Mathf.Max(0f, sounds.idleVocalsMinInterval) : 2.5f;
+            float maxI = sounds != null ? Mathf.Max(minI, sounds.idleVocalsMaxInterval) : 6f;
+            float wait = UnityEngine.Random.Range(minI, maxI);
+            yield return new WaitForSecondsRealtime(wait);
+
+            // Skip this beat if the monster is mid-line or the session has ended.
+            if (state == State.AlienPlaying || state == State.Idle)
+                continue;
+
+            PlayMonsterIdleVocal();
+        }
     }
 
     private void UpdateFailCounter()
@@ -450,6 +551,7 @@ public class Minigame : MonoBehaviour
 
         KillMonster3DWalk();
         PlayMonster3DAnim(monster3DWalkState);
+        PlayMonsterHop();
         monster3DWalkTween = monster3D.DOMove(target, monster3DWalkDuration)
             .SetEase(monster3DWalkEase)
             .SetUpdate(true)
@@ -517,6 +619,7 @@ public class Minigame : MonoBehaviour
 
     private void EndSession(bool won)
     {
+        StopIdleVocalsRoutine();
         KillMonster3DWalk();
         ClearRound();
         HidePanel();

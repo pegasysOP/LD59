@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3145f6bde633c47de862d852d608710a, type: 3}
+  m_Name: MonsterMinigameSounds
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterMinigameSounds
+  monsterAppearStinger:
+    _clip: {fileID: 8300000, guid: 7cda1e3fe7e404a4d91692f6d403b232, type: 3}
+    _volume: 0.7
+    _delay: 0
+  monsterAppearRoar:
+    clips:
+    - _clip: {fileID: 8300000, guid: 119f5541c2d5d4297932b2c098e9f04c, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 1
+    pitchMax: 1
+    gain: 1
+    volumeJitter: 0
+  entranceSettleDelay: 4
+  monsterHop:
+    clips:
+    - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 0.95
+    pitchMax: 1.05
+    gain: 1
+    volumeJitter: 0
+  monsterSyllables:
+    clips:
+    - _clip: {fileID: 8300000, guid: 21807278bfeb44c0c856ef4fcb4d64a5, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 89d99300abb2b4f2d832f20a5768a46d, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 33dc00dca89474beabee04709c7e4c83, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 869ae6c44b6f84a1fa3615c52c07b2f2, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 80f529c7e01654e8089a902176fdad98, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 24d27dc2350744ad7a03a0c9d12a0778, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 0.9
+    pitchMax: 1.1
+    gain: 1
+    volumeJitter: 0
+  syllableInstancesPerTrigger: 3
+  monsterIdleVocals:
+    clips:
+    - _clip: {fileID: 8300000, guid: 7b33b6eb3a2bb424288242af474e55d7, type: 3}
+      _volume: 0
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 8229f2f0e6b60421eb6ab45021819d1f, type: 3}
+      _volume: 0
+      _delay: 0
+    pitchMin: 0.95
+    pitchMax: 1.05
+    gain: 0.5
+    volumeJitter: 0
+  idleVocalsMinInterval: 2.5
+  idleVocalsMaxInterval: 6
+  idleVocalsInitialDelay: 1.5
+  playerSnap:
+    clips:
+    - _clip: {fileID: 8300000, guid: 96ba3c610a76b498db20472082448efa, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 0.95
+    pitchMax: 1.05
+    gain: 1
+    volumeJitter: 0

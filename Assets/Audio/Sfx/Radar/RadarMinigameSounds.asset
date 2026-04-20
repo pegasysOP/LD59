@@ -36,7 +36,7 @@ MonoBehaviour:
   handleGrab:
     clips:
     - _clip: {fileID: 8300000, guid: ba83ad1cf35a84b33937ddcf62bcb8a2, type: 3}
-      _volume: 0.8
+      _volume: 1
       _delay: 0
     pitchMin: 0.97
     pitchMax: 1.03

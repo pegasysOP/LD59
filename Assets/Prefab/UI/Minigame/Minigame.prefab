@@ -221,7 +221,9 @@ MonoBehaviour:
   seeker: {fileID: 8071015865640186890}
   peakHeight: 100
   peakHalfWidthSec: 0.02
-  clickClip: {fileID: 8300000, guid: ddeceb9949b925d4782b820b0ce16d12, type: 3}
+  sounds: {fileID: 11400000, guid: e695617fc081448c596c09ea7d865ccc, type: 2}
+  rightHandAnimator: {fileID: 0}
+  rightHandClickState: Hand R Click
   hitTolerance: 0.12
   minPlayerClicks: 3
   maxPlayerClicks: 5
@@ -239,6 +241,10 @@ MonoBehaviour:
   monster3DWalkEase: 4
   monster3DFallbackDistance: 3
   monster3DAimHeight: 2.4
+  monster3DWalkState: walk
+  monster3DIdleState: idle 1
+  monster3DAttackState: attack 1
+  monster3DAnimCrossfade: 0.15
   debugStartKey: 27
 --- !u!225 &178711752564406726
 CanvasGroup:

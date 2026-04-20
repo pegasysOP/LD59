@@ -179,6 +179,9 @@ public class RepeatMinigame : MonoBehaviour
         if (sequence[playerIndex] == colour)
         {
             playerIndex++;
+
+            if (playerIndex < sequence.Count)
+                PlaySuccessfulEntryAtButton(pressed);
         }
         else
         {
@@ -272,6 +275,13 @@ public class RepeatMinigame : MonoBehaviour
         if (button == null)
             return;
         PlaySfxPositional(sounds?.sequenceFail, button.transform.position);
+    }
+
+    private void PlaySuccessfulEntryAtButton(RepeatButton button)
+    {
+        if (button == null)
+            return;
+        PlaySfxPositional(sounds?.successfulEntry, button.transform.position);
     }
 
     private void PlayMinigameSuccessAt(Vector3 worldPosition)

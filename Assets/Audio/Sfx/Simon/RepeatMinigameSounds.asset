@@ -33,6 +33,10 @@ MonoBehaviour:
     _clip: {fileID: 8300000, guid: 662364a37f74c4aa88fb09e4f4e1c5f8, type: 3}
     _volume: 1
     _delay: 0
+  successfulEntry:
+    _clip: {fileID: 8300000, guid: b7413c8932384858ae36348f006c085a, type: 3}
+    _volume: 1
+    _delay: 0
   minigameSuccess:
     clips:
     - _clip: {fileID: 8300000, guid: 43c8f297c6d2e46ffaf79a8b56589552, type: 3}

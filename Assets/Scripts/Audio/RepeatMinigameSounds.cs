@@ -17,6 +17,11 @@ public class RepeatMinigameSounds : ScriptableObject
     [Tooltip("Played at the wrongly pressed button when the player's input does not match the sequence.")]
     public AudioClipVolume sequenceFail;
 
+    [Header("Progress")]
+    [Tooltip("Played at the pressed button after each correct input EXCEPT the one that completes the sequence. " +
+             "Gives a little positive click between steps; the final step is left to the round-complete feedback.")]
+    public AudioClipVolume successfulEntry;
+
     [Header("Success")]
     [Tooltip("Pool of clips played when the full minigame completes successfully (e.g. at the approved object). " +
              "One clip is chosen at random each time — use two (or more) entries for variation.")]
