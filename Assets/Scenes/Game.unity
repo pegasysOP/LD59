@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 0.35
+  m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.09433961, g: 0.027144885, b: 0.033484016, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: b11391b3cfccb4bcabee9dc1fde9d0f0, type: 2}
@@ -246,6 +246,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &97294978 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3495598289712680530, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+  m_PrefabInstance: {fileID: 2995168048089533735}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &133640701 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3850312466175203117, guid: 5e297cd06d7bbeb4b98e4e9097cc661f, type: 3}
@@ -427,6 +432,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3302878c10d45a479d33493a7bdb3aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &471240533 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6056972011912765899, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+  m_PrefabInstance: {fileID: 2995168048089533735}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &509958707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -948,6 +958,11 @@ CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 4308917437472382467, guid: a34e1607a4be5f341841353b60deda1d, type: 3}
   m_PrefabInstance: {fileID: 6714545931915746168}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1028500480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 605312409395146142, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+  m_PrefabInstance: {fileID: 2995168048089533735}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1053535322
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1101,7 +1116,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3641527905203374550, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8535457319218612281, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1488,6 +1503,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
+--- !u!1 &1922162414 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3641527905203374550, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
+  m_PrefabInstance: {fileID: 1403677656}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &1940193902 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 3261407666262199783, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
@@ -1748,6 +1768,10 @@ PrefabInstance:
       value: CutsceneManager
       objectReference: {fileID: 0}
     - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: torch
+      value: 
+      objectReference: {fileID: 1922162414}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
       propertyPath: minigame
       value: 
       objectReference: {fileID: 405899022}
@@ -1763,6 +1787,22 @@ PrefabInstance:
       propertyPath: fadeCanvasGroup
       value: 
       objectReference: {fileID: 964068900}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: decalsToSpawnAfterIntro.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: 'decalsToSpawnAfterIntro.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1028500480}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: 'decalsToSpawnAfterIntro.Array.data[1]'
+      value: 
+      objectReference: {fileID: 471240533}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: 'decalsToSpawnAfterIntro.Array.data[2]'
+      value: 
+      objectReference: {fileID: 97294978}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1885,6 +1925,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4308917437472382467, guid: a34e1607a4be5f341841353b60deda1d, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308917437472382467, guid: a34e1607a4be5f341841353b60deda1d, type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6383205039207355623, guid: a34e1607a4be5f341841353b60deda1d, type: 3}
       propertyPath: m_Name
       value: FadeToBlack

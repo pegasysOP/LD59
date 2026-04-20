@@ -11,6 +11,9 @@ public class StartMinigameButton : BaseButton, IInteractable
     [SerializeField]
     private float flashTime = 0.2f;
 
+    [SerializeField]
+    private float startDelay = 2.75f;
+
     private Coroutine idleFlashRoutine;
 
     public void Start()
@@ -26,8 +29,16 @@ public class StartMinigameButton : BaseButton, IInteractable
         if (idleFlashRoutine != null)
             StopCoroutine(idleFlashRoutine);
 
+        StartCoroutine(StartMinigameAfterDelay());
+    }
+
+    private IEnumerator StartMinigameAfterDelay()
+    {
         minigame?.SoundConfig?.PlayStartMinigameAt(transform.position);
         Flash(flashTime);
+
+        yield return new WaitForSeconds(startDelay);
+
         minigame.StartMinigame();
     }
 

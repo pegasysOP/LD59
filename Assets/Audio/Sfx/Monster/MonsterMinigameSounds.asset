@@ -30,7 +30,7 @@ MonoBehaviour:
     clips:
     - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
       _volume: 1
-      _delay: 0
+      _delay: 0.15
     pitchMin: 0.95
     pitchMax: 1.05
     gain: 1

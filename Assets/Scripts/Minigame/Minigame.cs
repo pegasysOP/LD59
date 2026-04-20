@@ -35,6 +35,36 @@ public class Minigame : MonoBehaviour
     public Animator rightHandAnimator;
     public string rightHandClickState = "Hand R Click";
 
+    [Serializable]
+    public class DialoguePair
+    {
+        [TextArea] public string question;
+        [TextArea] public string response;
+    }
+
+    [Header("Dialogue")]
+    public CanvasGroup alienTextBox;
+    public CanvasGroup playerTextBox;
+    public TextMeshProUGUI alienTextLabel;
+    public TextMeshProUGUI playerTextLabel;
+    public DialoguePair[] dialoguePairs;
+    public string[] wrongAnswerWords;
+    public string gibberishChars = "!@#$%^&*?+~<>/\\|=";
+    public float calculatingDelay = 1.4f;
+    public string calculatingText = "Calculating response...";
+    public int wrongAnswerWordCount = 6;
+    public float gibberishScrambleInterval = 0.05f;
+    public float playerTypeCps = 35f;
+    public float titleFlashInterval = 0.5f;
+    [ColorUsage(true, true)] public Color titleDefaultColor = Color.white;
+    [ColorUsage(true, true)] public Color titleSuccessColor = new Color(0.07450979f, 0.10457513f, 0.9764706f, 1f);
+    [ColorUsage(true, true)] public Color titleFailureColor = new Color(0.9764706f, 0.07450979f, 0.07450979f, 1f);
+    public float translatingHoldDuration = 1.2f;
+    public float failureDisplayDuration = 2.8f;
+    public float waveformPreviewDelay = 0.6f;
+    public float postResponseDelay = 3f;
+    public float introDelay = 1.5f;
+
     [Header("Tuning")]
     public float hitTolerance = 0.18f;
     public int minPlayerClicks = 3;
@@ -91,6 +121,11 @@ public class Minigame : MonoBehaviour
     private Animator monster3DAnimator;
     private bool strayMissThisRound;
     private Coroutine idleVocalsRoutine;
+    private DialoguePair currentPair;
+    private int lastPairIndex = -1;
+    private readonly HashSet<int> usedPairIndices = new HashSet<int>();
+    private Coroutine alienRevealCo;
+    private Tweener titleFlashTween;
 
     private void Start()
     {
@@ -116,6 +151,8 @@ public class Minigame : MonoBehaviour
         if (state != State.Idle) return;
 
         failCount = 0;
+        usedPairIndices.Clear();
+        lastPairIndex = -1;
         UpdateFailCounter();
         monster.localScale = monsterBaseScale;
         monster.localPosition = monsterBasePosition;
@@ -153,19 +190,22 @@ public class Minigame : MonoBehaviour
             titleText.text = string.Empty;
             yield return new WaitForSecondsRealtime(settle);
         }
+        yield return new WaitForSecondsRealtime(introDelay);
 
         while (true)
         {
             state = State.AlienPlaying;
-            titleText.text = "Listen...";
+            SetTitleColor(titleDefaultColor);
+            titleText.text = "Translating...";
             ClearRound();
             ResetSeeker();
 
             yield return PlayAlienPattern();
+            yield return new WaitForSecondsRealtime(translatingHoldDuration);
 
             state = State.PlayerPrepare;
-            titleText.text = "Your turn!";
-            yield return new WaitForSecondsRealtime(0.6f);
+            titleText.text = calculatingText;
+            yield return new WaitForSecondsRealtime(calculatingDelay);
 
             currentDuration = UnityEngine.Random.Range(minPatternDuration, maxPatternDuration);
             int clicks = UnityEngine.Random.Range(minPlayerClicks, maxPlayerClicks + 1);
@@ -173,18 +213,30 @@ public class Minigame : MonoBehaviour
             ResetSeeker();
             strayMissThisRound = false;
 
+            yield return new WaitForSecondsRealtime(waveformPreviewDelay);
+
+            titleText.text = "Your turn!";
             state = State.PlayerInput;
             yield return RunPlayerInput();
 
             state = State.RoundResolved;
-            if (RoundWon())
+            bool won = RoundWon();
+            titleText.text = won ? "Response success" : "Response failure";
+            SetTitleColor(won ? titleSuccessColor : titleFailureColor);
+            string playerLine = won ? (currentPair != null ? currentPair.response : string.Empty) : BuildWrongAnswer();
+            ShowTextBox(playerTextBox, true);
+            yield return TypewriterPlayerText(playerLine, playerTypeCps);
+
+            if (won)
             {
-                yield return new WaitForSecondsRealtime(1f);
+                yield return new WaitForSecondsRealtime(1.5f);
                 EndSession(true);
                 yield break;
             }
 
             failCount++;
+            yield return new WaitForSecondsRealtime(failureDisplayDuration);
+
             UpdateFailCounter();
             monster.localScale *= alienGrowthPerFail;
             monster.localPosition += Vector3.down * monsterDropPerFail;
@@ -198,7 +250,6 @@ public class Minigame : MonoBehaviour
             {
                 WalkMonster3DToFailStep();
             }
-            yield return new WaitForSecondsRealtime(0.8f);
 
             if (failCount >= maxFails)
             {
@@ -208,6 +259,8 @@ public class Minigame : MonoBehaviour
                 EndSession(false);
                 yield break;
             }
+
+            yield return new WaitForSecondsRealtime(postResponseDelay);
         }
     }
 
@@ -257,6 +310,14 @@ public class Minigame : MonoBehaviour
         int count = UnityEngine.Random.Range(minAlienClicks, maxAlienClicks + 1);
         float duration = UnityEngine.Random.Range(minAlienDuration, maxAlienDuration);
         List<float> times = GeneratePattern(count, duration);
+
+        currentPair = PickPair();
+        if (currentPair != null)
+        {
+            ShowTextBox(alienTextBox, true);
+            if (alienRevealCo != null) StopCoroutine(alienRevealCo);
+            alienRevealCo = StartCoroutine(RevealAlienText(currentPair.question, duration));
+        }
 
         float t = 0f;
         int idx = 0;
@@ -339,6 +400,7 @@ public class Minigame : MonoBehaviour
 
     private void ClearRound()
     {
+        ClearDialogue();
         foreach (GameObject go in spawned)
             if (go != null) Destroy(go);
         spawned.Clear();
@@ -382,6 +444,120 @@ public class Minigame : MonoBehaviour
     {
         if (rightHandAnimator == null || string.IsNullOrEmpty(rightHandClickState)) return;
         rightHandAnimator.Play(rightHandClickState, 0, 0f);
+    }
+
+    private void ShowTextBox(CanvasGroup box, bool visible)
+    {
+        if (box == null) return;
+        box.gameObject.SetActive(true);
+        box.alpha = visible ? 1f : 0f;
+    }
+
+    private void ClearDialogue()
+    {
+        if (alienRevealCo != null)
+        {
+            StopCoroutine(alienRevealCo);
+            alienRevealCo = null;
+        }
+        if (alienTextLabel != null) alienTextLabel.text = string.Empty;
+        if (playerTextLabel != null) playerTextLabel.text = string.Empty;
+        ShowTextBox(alienTextBox, false);
+        ShowTextBox(playerTextBox, false);
+    }
+
+    private DialoguePair PickPair()
+    {
+        if (dialoguePairs == null || dialoguePairs.Length == 0) return null;
+        if (usedPairIndices.Count >= dialoguePairs.Length)
+            usedPairIndices.Clear();
+
+        List<int> pool = new List<int>();
+        for (int i = 0; i < dialoguePairs.Length; i++)
+            if (!usedPairIndices.Contains(i) && i != lastPairIndex)
+                pool.Add(i);
+        if (pool.Count == 0)
+            for (int i = 0; i < dialoguePairs.Length; i++)
+                if (!usedPairIndices.Contains(i))
+                    pool.Add(i);
+
+        int idx = pool[UnityEngine.Random.Range(0, pool.Count)];
+        usedPairIndices.Add(idx);
+        lastPairIndex = idx;
+        return dialoguePairs[idx];
+    }
+
+    private string MakeGibberish(int len)
+    {
+        if (len <= 0 || string.IsNullOrEmpty(gibberishChars)) return string.Empty;
+        char[] buf = new char[len];
+        for (int i = 0; i < len; i++)
+            buf[i] = gibberishChars[UnityEngine.Random.Range(0, gibberishChars.Length)];
+        return new string(buf);
+    }
+
+    private IEnumerator RevealAlienText(string target, float duration)
+    {
+        if (alienTextLabel == null || string.IsNullOrEmpty(target))
+        {
+            alienRevealCo = null;
+            yield break;
+        }
+
+        float t = 0f;
+        float scrambleTimer = 0f;
+        string tail = MakeGibberish(target.Length);
+        alienTextLabel.text = tail;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            scrambleTimer += Time.deltaTime;
+
+            int locked = Mathf.Clamp(Mathf.FloorToInt(t / Mathf.Max(0.0001f, duration) * target.Length), 0, target.Length);
+            int remaining = target.Length - locked;
+
+            if (scrambleTimer >= gibberishScrambleInterval || tail.Length != remaining)
+            {
+                tail = MakeGibberish(remaining);
+                scrambleTimer = 0f;
+            }
+
+            alienTextLabel.text = target.Substring(0, locked) + tail;
+            yield return null;
+        }
+
+        alienTextLabel.text = target;
+        alienRevealCo = null;
+    }
+
+    private IEnumerator TypewriterPlayerText(string target, float cps)
+    {
+        if (playerTextLabel == null || string.IsNullOrEmpty(target)) yield break;
+        playerTextLabel.text = string.Empty;
+        float interval = cps > 0f ? 1f / cps : 0f;
+        for (int i = 0; i < target.Length; i++)
+        {
+            playerTextLabel.text = target.Substring(0, i + 1);
+            if (interval > 0f) yield return new WaitForSecondsRealtime(interval);
+        }
+    }
+
+    private string BuildWrongAnswer()
+    {
+        if (wrongAnswerWords == null || wrongAnswerWords.Length == 0) return "...";
+        int n = Mathf.Min(Mathf.Max(1, wrongAnswerWordCount), wrongAnswerWords.Length);
+        List<string> pool = new List<string>(wrongAnswerWords);
+        string[] picks = new string[n];
+        for (int i = 0; i < n; i++)
+        {
+            int idx = UnityEngine.Random.Range(0, pool.Count);
+            picks[i] = pool[idx];
+            pool.RemoveAt(idx);
+        }
+        string joined = string.Join(" ", picks);
+        if (joined.Length > 0) joined = char.ToUpper(joined[0]) + joined.Substring(1);
+        return joined + ".";
     }
 
     private void PlayMonsterHop()
@@ -591,6 +767,7 @@ public class Minigame : MonoBehaviour
         panelGroup.blocksRaycasts = true;
         if (monster3D != null) monster3D.gameObject.SetActive(true);
         HideHudHelpers();
+        StartTitleFlash();
     }
 
     private void HidePanel()
@@ -600,6 +777,33 @@ public class Minigame : MonoBehaviour
         panelGroup.blocksRaycasts = false;
         if (monster3D != null) monster3D.gameObject.SetActive(false);
         RestoreHudHelpers();
+        StopTitleFlash();
+    }
+
+    private void SetTitleColor(Color c)
+    {
+        if (titleText == null) return;
+        titleText.color = c;
+    }
+
+    private void StartTitleFlash()
+    {
+        if (titleText == null) return;
+        StopTitleFlash();
+        SetTitleColor(titleDefaultColor);
+        titleText.alpha = 1f;
+        titleFlashTween = titleText.DOFade(0f, titleFlashInterval)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetEase(Ease.Linear)
+            .SetUpdate(true);
+    }
+
+    private void StopTitleFlash()
+    {
+        if (titleFlashTween != null && titleFlashTween.IsActive())
+            titleFlashTween.Kill();
+        titleFlashTween = null;
+        if (titleText != null) titleText.alpha = 1f;
     }
 
     private void HideHudHelpers()
