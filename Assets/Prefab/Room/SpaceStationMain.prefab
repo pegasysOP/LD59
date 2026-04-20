@@ -35291,8 +35291,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.3462219, y: 2.7948632, z: 0.9144783}
-  m_Center: {x: 0.5228181, y: 0.18249631, z: -9.723133}
+  m_Size: {x: 0.3462215, y: 4.9642024, z: 1.1477573}
+  m_Center: {x: 0.5228185, y: 1.2671587, z: -9.351505}
 --- !u!4 &4167241464902244161 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d830871bfb88146ca9712bded6bf3df6, type: 3}
