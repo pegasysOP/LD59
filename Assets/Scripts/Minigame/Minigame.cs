@@ -329,7 +329,8 @@ public class Minigame : MonoBehaviour
 
             bool clicked = clickAction != null && clickAction.WasPressedThisFrame();
             bool spaced = Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame;
-            if (clicked || spaced)
+            bool eKey = Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame;
+            if (clicked || spaced || eKey)
             {
                 PlayRightHandClick();
                 PlayPlayerSnap();
