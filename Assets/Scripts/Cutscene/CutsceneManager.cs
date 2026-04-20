@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CutsceneManager : MonoBehaviour
@@ -7,6 +8,15 @@ public class CutsceneManager : MonoBehaviour
     private PlayerController controller;
 
     public static CutsceneManager Instance;
+
+    [SerializeField] private float wakeDuration = 5f;
+    [SerializeField] private float powerdownDuration = 14f;
+    [SerializeField] private float escapePodDuration = 6f;
+
+    [SerializeField] private CanvasGroup fadeCanvasGroup;
+
+    [SerializeField] private float fadeDuration = 1f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -26,7 +36,7 @@ public class CutsceneManager : MonoBehaviour
                 PlayWakeCutscene();
                 break;
             case 1:
-                PlayPowerdownCutscene();
+                StartCoroutine(PowerdownCutsceneRoutine());
                 break;
             case 2:
                 PlayEscapePodCutscene();
@@ -43,14 +53,46 @@ public class CutsceneManager : MonoBehaviour
         
     }
 
-    private void PlayPowerdownCutscene()
+    private IEnumerator PowerdownCutsceneRoutine()
     {
         Debug.Log("Playing powerdown cutscene");
-        //GameManager.Instance.LOCKED = true;
+
+        GameManager.Instance?.SetLocked(true);
+
+        //Fade out at start of power down cutscene
+        yield return StartCoroutine(Fade(1f, fadeDuration));
+
+        //TODO: Play powerdown visual effects here 
+
+        yield return new WaitForSeconds(powerdownDuration);
+
+        //Fade back in after power down is complete
+        yield return StartCoroutine(Fade(0f, fadeDuration));
+
+        GameManager.Instance?.SetLocked(false);
+
+        Debug.Log("Powerdown cutscene finished");
     }
 
     private void PlayEscapePodCutscene()
     {
         Debug.Log("Playing Escape cutscene");
+    }
+
+    private IEnumerator Fade(float target, float duration)
+    {
+        float start = fadeCanvasGroup.alpha;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            float t = time / duration;
+            fadeCanvasGroup.alpha = Mathf.Lerp(start, target, t);
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        fadeCanvasGroup.alpha = target;
     }
 }
