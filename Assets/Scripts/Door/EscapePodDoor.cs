@@ -97,6 +97,8 @@ public class EscapePodDoor : DoorBase
 
         t.localPosition = target;
 
+        meshRenderer.material = redMaterial;
+
         StateTracker.Instance?.NotifyStartingDoorOpened();
     }
 
@@ -118,7 +120,7 @@ public class EscapePodDoor : DoorBase
         //    StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
         //}
 
-        if (StateTracker.Instance.AllTasksComplete)
+        if (StateTracker.Instance.AllTasksComplete && isClosed)
         {
             meshRenderer.material = greenMaterial;
         }

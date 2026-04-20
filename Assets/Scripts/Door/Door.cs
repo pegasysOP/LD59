@@ -139,6 +139,8 @@ public class Door : DoorBase
 
         t.localPosition = target;
 
+        meshRenderer.material = redMaterial;
+
         StateTracker.Instance?.NotifyStartingDoorOpened();
     }
 
