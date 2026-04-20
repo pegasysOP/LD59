@@ -18,6 +18,9 @@ using UnityEngine.SceneManagement;
 ///
 /// Priority ladder (first rule that matches wins):
 /// <list type="number">
+///   <item><description>Victory latched (player has reached the escape pod,
+///   <see cref="StateTracker.CurrentEndState"/> == <see cref="EndState.Victory"/>)
+///   -> Victory track. Holds until the scene changes.</description></item>
 ///   <item><description>Monster Minigame active with at least
 ///   <see cref="PanicStrikeThreshold"/> strikes accumulated -> peak track
 ///   (the about-to-kill-you cue).</description></item>
@@ -53,6 +56,7 @@ public class GameMusicGuy : MonoBehaviour
     private const MusicTrack PeakTrack = MusicTrack.MonsterAboutToKill;
     private const MusicTrack MinigameTrack = MusicTrack.MonsterNear;
     private const MusicTrack PostEscapeTrack = MusicTrack.GotAway;
+    private const MusicTrack VictoryTrack = MusicTrack.Victory;
 
     // Name of the MusicLibrary ScriptableObject under any Resources folder.
     private const string MusicLibraryResourcePath = "MusicLibrary";
@@ -60,6 +64,11 @@ public class GameMusicGuy : MonoBehaviour
     // Crossfade length (seconds) used when the Monster Minigame begins.
     // Intentionally short so the monster cue lands like a stinger.
     private const float MonsterEncounterCrossfade = 0.3f;
+
+    // Crossfade length (seconds) used when the Victory latch flips on (player
+    // steps into the escape pod). Short-ish so the triumphant cue lands
+    // promptly but doesn't feel as abrupt as the monster stinger.
+    private const float VictoryCrossfade = 1.5f;
 
     // Strike count at which the Monster Minigame music escalates from the
     // minigame track to the peak track. 2 means the final (third) attempt
@@ -160,6 +169,19 @@ public class GameMusicGuy : MonoBehaviour
         {
             lastRequestedClip = null;
             return;
+        }
+
+        // Victory latch wins over everything else on the ladder: once the player
+        // has stepped into the escape pod (StateTracker.TriggerVictory fires) the
+        // triumphant track plays and holds until the scene changes to credits.
+        if (StateTracker.Instance != null && StateTracker.Instance.CurrentEndState == EndState.Victory)
+        {
+            AudioClip victoryClip = library.Get(VictoryTrack);
+            if (victoryClip != null)
+            {
+                RequestClip(victoryClip, VictoryCrossfade);
+                return;
+            }
         }
 
         IntensityManager intensityManager = IntensityManager.Instance;

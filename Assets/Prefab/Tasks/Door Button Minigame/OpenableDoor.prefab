@@ -237,6 +237,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 770a2eae012a62d42a27e156ce04358e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Door
+  meshRenderer: {fileID: 5495838554613307765}
+  greenMaterial: {fileID: 2100000, guid: 7e74d6e9dac27476b8de1c3178ef4401, type: 2}
+  redMaterial: {fileID: 2100000, guid: 383ecf3b8286948b1b35613315050600, type: 2}
   doorPanel: {fileID: 3390350659155340455}
   triggerPowerDownOnInteract: 1
   powerDownSequence: {fileID: 0}
@@ -250,6 +253,7 @@ MonoBehaviour:
     pitchMax: 1.03
     gain: 1
     volumeJitter: 0
+    useFocusMixerGroup: 0
   doorOpen:
     clips:
     - _clip: {fileID: 8300000, guid: 2a460b78db95846daa29cd40a10f4261, type: 3}
@@ -259,10 +263,18 @@ MonoBehaviour:
     pitchMax: 1
     gain: 1
     volumeJitter: 0
+    useFocusMixerGroup: 0
   doorOpenSoundDelay: 0
-  meshRenderer: {fileID: 5495838554613307765}
-  greenMaterial: {fileID: 2100000, guid: 7e74d6e9dac27476b8de1c3178ef4401, type: 2}
-  redMaterial: {fileID: 2100000, guid: 383ecf3b8286948b1b35613315050600, type: 2}
+  rejectBeep:
+    clips:
+    - _clip: {fileID: 8300000, guid: 4df79109dc6944150b302d6d4b48c4ca, type: 3}
+      _volume: 0.5
+      _delay: 0
+    pitchMin: 1
+    pitchMax: 1
+    gain: 1
+    volumeJitter: 0
+    useFocusMixerGroup: 0
 --- !u!1 &7168782720487754459
 GameObject:
   m_ObjectHideFlags: 0

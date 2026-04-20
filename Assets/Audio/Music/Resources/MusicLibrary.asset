@@ -15,11 +15,10 @@ MonoBehaviour:
   mainMenu: {fileID: 8300000, guid: 5feebfb974a3f4b81b7a3f238afc5afc, type: 3}
   normalStation: {fileID: 8300000, guid: 5cd0f680123514f8f894e6485244fe97, type: 3}
   damagedStationLowAnxiety: {fileID: 8300000, guid: f8c5f9f7b3d5f43c0b5747792e9be360, type: 3}
-  pointOfInterest: {fileID: 0}
-  gotAway: {fileID: 0}
+  gotAway: {fileID: 8300000, guid: 5e0106dc0bb8847dc92983ed23885fd0, type: 3}
   monsterAround: {fileID: 8300000, guid: 460835750cc774b3bb297ef34c090cc2, type: 3}
   monsterNear: {fileID: 8300000, guid: 0aaeef8fcd6634ce9bcf4a96ffc695c3, type: 3}
   monsterAboutToKill: {fileID: 8300000, guid: c3ddf4dd2972147ed8edf06c0c522972, type: 3}
   gameOver: {fileID: 0}
-  victory: {fileID: 0}
+  victory: {fileID: 8300000, guid: 34b18928283e04053aea92ab69bfe277, type: 3}
   credits: {fileID: 8300000, guid: cae65c6b902634d409be80d14c5d8802, type: 3}

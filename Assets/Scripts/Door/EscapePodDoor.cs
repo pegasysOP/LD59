@@ -11,27 +11,72 @@ public class EscapePodDoor : DoorBase
     [SerializeField]
     private GameObject doorPanel;
 
+    [Header("Door SFX")]
+    [Tooltip("Played instantly when the player interacts with the door (button-thunk). " +
+             "Matches the main Door's button-press layer so the two doors feel like siblings.")]
+    [SerializeField]
+    private SfxBank buttonPress = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
+
+    [Tooltip("Single baked door-opening clip (motor + slide + thunk all in one, ~2 seconds). " +
+             "Fires once after doorOpenSoundDelay seconds.")]
+    [SerializeField]
+    private SfxBank doorOpen = new SfxBank { pitchMin = 1f, pitchMax = 1f };
+
+    [Tooltip("Seconds between the interact and the door-opening SFX firing. Lets the button-press " +
+             "breathe before the motor/slide/thunk kicks in.")]
+    [SerializeField, Min(0f)]
+    private float doorOpenSoundDelay = 0.5f;
+
+    [Tooltip("Rejection beep played when the player tries to open the escape pod before every task " +
+             "is complete. Different from buttonPress so the locked state reads unambiguously.")]
+    [SerializeField]
+    private SfxBank rejectBeep = new SfxBank { pitchMin = 1f, pitchMax = 1f };
+
     private const float OpenOffset = -1.45f;
 
-    private const float OpenDuration = 0.35f;
+    // Matches Door.cs so the escape pod opens at the same pace as the starting room door.
+    private const float OpenDuration = 2f;
 
     public override void Interact()
     {
         Debug.Log("Interacting with escape pod door");
-        if (isClosed && doorPanel != null)
+        if (!isClosed || doorPanel == null)
+            return;
+
+        // IsInteractable() stays true while the door is closed so the player's click lands here even
+        // when tasks are incomplete; the "locked" gate is enforced inside Interact so we can play a
+        // distinct reject beep instead of silently eating the input.
+        if (StateTracker.Instance != null && !StateTracker.Instance.AllTasksComplete)
         {
-            StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
+            PlayAtDoor(rejectBeep);
+            return;
         }
+
+        PlayAtDoor(buttonPress);
+        StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
+        StartCoroutine(PlayDoorOpenAfterDelay(doorOpenSoundDelay));
     }
 
     public override bool IsInteractable()
     {
-        //return true;
-
-        return StateTracker.Instance.AllTasksComplete;
+        // Always interactable while closed so the reject beep can fire on early clicks.
+        // The actual "can the door open?" gate is evaluated inside Interact().
+        return isClosed;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private IEnumerator PlayDoorOpenAfterDelay(float delay)
+    {
+        if (delay > 0f) yield return new WaitForSeconds(delay);
+        PlayAtDoor(doorOpen);
+    }
+
+    // Door sounds are diegetic world events; route them through the positional path
+    // so they pan/attenuate relative to the player and pick up the room's reverb zone.
+    private void PlayAtDoor(SfxBank bank)
+    {
+        if (bank == null || !bank.HasAnyClip) return;
+        bank.PlayAt(transform.position);
+    }
 
     private IEnumerator MoveDoor(float deltaZ, float duration)
     {
