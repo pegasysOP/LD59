@@ -35,6 +35,35 @@ MonoBehaviour:
     pitchMax: 1.05
     gain: 1
     volumeJitter: 0
+  monsterHappyReaction:
+    clips:
+    - _clip: {fileID: 8300000, guid: b851818e1c1a84be896c89ffa10be40c, type: 3}
+      _volume: 0.8
+      _delay: 0
+    pitchMin: 0.97
+    pitchMax: 1.03
+    gain: 1
+    volumeJitter: 0
+  happyReactionHoldDuration: 2
+  monsterVanish:
+    clips:
+    - _clip: {fileID: 8300000, guid: 56f99dd006218445f9c6cba1477a8110, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 0.97
+    pitchMax: 1.03
+    gain: 1
+    volumeJitter: 0
+  monsterUnhappyReaction:
+    clips:
+    - _clip: {fileID: 8300000, guid: 7580ad4513bef4103b0362929e6e0990, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 0.95
+    pitchMax: 1.05
+    gain: 1
+    volumeJitter: 0
+  unhappyReactionHoldDuration: 1
   monsterSyllables:
     clips:
     - _clip: {fileID: 8300000, guid: 21807278bfeb44c0c856ef4fcb4d64a5, type: 3}

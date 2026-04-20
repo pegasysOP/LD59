@@ -46,6 +46,34 @@ public class MonsterMinigameSounds : ScriptableObject
              "handled by the attack animation / game-over cue).")]
     public SfxBank monsterHop = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
 
+    [Header("Monster Happy Reaction (correct response)")]
+    [Tooltip("Pool of 'pleased/approving' creature vocalisations fired after the player nails the " +
+             "response, while the monster is still on-screen. Attached to the 3D monster so it reads " +
+             "as the creature reacting to the player before it departs.")]
+    public SfxBank monsterHappyReaction = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
+    [Tooltip("Seconds the game holds on the happy reaction after playing it, before the vanish cue " +
+             "fires and the monster is dismissed. Give the reaction room to breathe so the success " +
+             "beat lands emotionally.")]
+    [Min(0f)] public float happyReactionHoldDuration = 1.5f;
+
+    [Header("Monster Vanish (exit)")]
+    [Tooltip("Pool of 'poof/depart/teleport-away' cues fired at the monster's current world position " +
+             "the moment it disappears at the end of a winning session. Uses a baked world position " +
+             "(not attached) so the clip keeps ringing out after the monster GameObject is " +
+             "deactivated by the panel hide.")]
+    public SfxBank monsterVanish = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
+
+    [Header("Monster Unhappy Reaction (wrong response)")]
+    [Tooltip("Pool of 'displeased/frustrated' creature vocalisations fired after the player botches a " +
+             "response (non-lethal fail) and the monster has already taken its step closer. Attached to " +
+             "the 3D monster. Plays BEFORE the next round begins so the player can feel the monster's " +
+             "disapproval before being asked to try again.")]
+    public SfxBank monsterUnhappyReaction = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
+    [Tooltip("Seconds the game holds on the unhappy reaction after playing it, before the next round's " +
+             "'Translating...' phase begins. Stacks on top of the existing post-response delay so you " +
+             "can tune the reaction window independently of the round-restart pacing.")]
+    [Min(0f)] public float unhappyReactionHoldDuration = 1.0f;
+
     [Header("Monster Syllables (alien pattern beats)")]
     [Tooltip("Pool of monster syllable one-shots played for each beat of the alien-demonstrated pattern. " +
              "Plays attached to the 3D monster so syllables come from the creature as it moves.")]

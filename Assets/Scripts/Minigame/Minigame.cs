@@ -229,7 +229,10 @@ public class Minigame : MonoBehaviour
 
             if (won)
             {
-                yield return new WaitForSecondsRealtime(1.5f);
+                PlayMonsterHappyReaction();
+                float happyHold = sounds != null ? Mathf.Max(0f, sounds.happyReactionHoldDuration) : 1.5f;
+                yield return new WaitForSecondsRealtime(happyHold);
+                PlayMonsterVanish();
                 EndSession(true);
                 yield break;
             }
@@ -259,6 +262,11 @@ public class Minigame : MonoBehaviour
                 EndSession(false);
                 yield break;
             }
+
+            PlayMonsterUnhappyReaction();
+            float unhappyHold = sounds != null ? Mathf.Max(0f, sounds.unhappyReactionHoldDuration) : 0f;
+            if (unhappyHold > 0f)
+                yield return new WaitForSecondsRealtime(unhappyHold);
 
             yield return new WaitForSecondsRealtime(postResponseDelay);
         }
@@ -568,6 +576,38 @@ public class Minigame : MonoBehaviour
             sounds.monsterHop.PlayAttached(monster3D, Vector3.zero);
         else
             sounds.monsterHop.Play();
+    }
+
+    private void PlayMonsterHappyReaction()
+    {
+        if (sounds == null || sounds.monsterHappyReaction == null || !sounds.monsterHappyReaction.HasAnyClip)
+            return;
+        if (monster3D != null)
+            sounds.monsterHappyReaction.PlayAttached(monster3D, Vector3.zero);
+        else
+            sounds.monsterHappyReaction.Play();
+    }
+
+    private void PlayMonsterVanish()
+    {
+        if (sounds == null || sounds.monsterVanish == null || !sounds.monsterVanish.HasAnyClip)
+            return;
+        // Use a baked world position (not PlayAttached) so the vanish cue keeps ringing out
+        // after HidePanel() deactivates the monster3D GameObject a few lines below.
+        if (monster3D != null)
+            sounds.monsterVanish.PlayAt(monster3D.position);
+        else
+            sounds.monsterVanish.Play();
+    }
+
+    private void PlayMonsterUnhappyReaction()
+    {
+        if (sounds == null || sounds.monsterUnhappyReaction == null || !sounds.monsterUnhappyReaction.HasAnyClip)
+            return;
+        if (monster3D != null)
+            sounds.monsterUnhappyReaction.PlayAttached(monster3D, Vector3.zero);
+        else
+            sounds.monsterUnhappyReaction.Play();
     }
 
     private void PlayMonsterAppearRoar()
