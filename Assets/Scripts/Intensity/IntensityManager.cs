@@ -52,7 +52,7 @@ public class IntensityManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private IntensityLevel currentLevelDebug;
 
-    public float increasePerSecond = 0.0075f;
+    public float increasePerSecond = 0.006f;
 
     /// <summary>Raw intensity value in [0, 1].</summary>
     public float CurrentIntensity => intensity;
