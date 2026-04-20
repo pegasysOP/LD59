@@ -7,6 +7,9 @@ public class CutsceneManager : MonoBehaviour
     [SerializeField]
     private PlayerController controller;
 
+    [SerializeField]
+    private EscapePodDoor escapePodDoor;
+
     public static CutsceneManager Instance;
 
     [SerializeField] private float wakeDuration = 5f;
@@ -101,6 +104,9 @@ public class CutsceneManager : MonoBehaviour
         //Have creature run towards door
 
         //Close door 
+        escapePodDoor.OpenDoorEndCutscene();
+    
+        yield return new WaitForSeconds(1f);
 
         //Play rocket takeoff sound 
 

@@ -1,10 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 public class EscapePodDoor : MonoBehaviour, IInteractable
 {
     private bool isClosed = true;
+
+    private Keyboard keyboard = Keyboard.current;
 
     [SerializeField]
     private GameObject doorPanel;
@@ -52,6 +55,11 @@ public class EscapePodDoor : MonoBehaviour, IInteractable
         StateTracker.Instance?.NotifyStartingDoorOpened();
     }
 
+    public void OpenDoorEndCutscene()
+    {
+        StartCoroutine(MoveDoor(-OpenOffset, OpenDuration));
+    }
+
     private void Update()
     {
         //FIXME: We may want to replace this but for now just open escape hatch door after all tasks complete
@@ -59,6 +67,11 @@ public class EscapePodDoor : MonoBehaviour, IInteractable
         //{
         //    StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
         //}
+
+        if (keyboard.zKey.wasPressedThisFrame)
+        {
+            StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
+        }
     }
 
 }
