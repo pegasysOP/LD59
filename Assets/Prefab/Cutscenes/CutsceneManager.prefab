@@ -70,7 +70,7 @@ MonoBehaviour:
   shakeDuration: 0.4
   shakeMagnitude: 0.08
   postShakeDelay: 0.8
-  postFadeHoldDuration: 5
+  postFadeHoldDuration: 6
   endRotateDuration: 1
   endCutsceneStinger:
     _clip: {fileID: 8300000, guid: 955a002f64704452194025cb0e9f8624, type: 3}

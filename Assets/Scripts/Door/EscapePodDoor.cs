@@ -32,6 +32,13 @@ public class EscapePodDoor : DoorBase
     [SerializeField]
     private SfxBank rejectBeep = new SfxBank { pitchMin = 1f, pitchMax = 1f };
 
+    [Header("Music")]
+    [Tooltip("When the escape pod door successfully opens, fade all game music out over this many " +
+             "seconds and latch the suspension flag so nothing restarts music until the scene ends. " +
+             "Gives the end-of-run beat a clean audio bed for door SFX / cutscene.")]
+    [SerializeField, Min(0f)]
+    private float musicFadeOutDuration = 2.5f;
+
     private const float OpenOffset = -1.45f;
 
     // Matches Door.cs so the escape pod opens at the same pace as the starting room door.
@@ -55,6 +62,14 @@ public class EscapePodDoor : DoorBase
         PlayAtDoor(buttonPress);
         StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
         StartCoroutine(PlayDoorOpenAfterDelay(doorOpenSoundDelay));
+
+        // Fade all game music out and latch suspension so nothing pops back in while the
+        // escape sequence plays out. ResumeGameMusic is intentionally never called here —
+        // the door opening is a one-way narrative beat.
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.SuspendGameMusic(musicFadeOutDuration);
+        }
     }
 
     public override bool IsInteractable()
