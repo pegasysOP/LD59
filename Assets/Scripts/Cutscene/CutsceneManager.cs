@@ -25,6 +25,8 @@ public class CutsceneManager : MonoBehaviour
 
     [SerializeField] private float postIntroLightingIntensity = 0.15f;
 
+    [SerializeField] private GameObject[] decalsToSpawnAfterIntro;
+
     public enum CutsceneType
     {
         Wake,
@@ -44,6 +46,14 @@ public class CutsceneManager : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    private void Start()
+    {
+        foreach (var decal in decalsToSpawnAfterIntro)
+        {
+            decal.SetActive(false);
+        }
     }
 
     public void PlayCutscene(CutsceneType type)
@@ -80,7 +90,12 @@ public class CutsceneManager : MonoBehaviour
         yield return StartCoroutine(Fade(1f, fadeDuration));
 
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
-        RenderSettings.ambientIntensity = postIntroLightingIntensity; 
+        RenderSettings.ambientIntensity = postIntroLightingIntensity;
+
+        foreach (var decal in decalsToSpawnAfterIntro)
+        {
+            decal.SetActive(true);
+        }
 
         //TODO: Play powerdown visual effects here 
 

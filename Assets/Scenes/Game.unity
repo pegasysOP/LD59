@@ -246,6 +246,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &97294978 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3495598289712680530, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+  m_PrefabInstance: {fileID: 2995168048089533735}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &133640701 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3850312466175203117, guid: 5e297cd06d7bbeb4b98e4e9097cc661f, type: 3}
@@ -427,6 +432,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3302878c10d45a479d33493a7bdb3aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &471240533 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6056972011912765899, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+  m_PrefabInstance: {fileID: 2995168048089533735}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &509958707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -947,6 +957,11 @@ Transform:
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 4308917437472382467, guid: a34e1607a4be5f341841353b60deda1d, type: 3}
   m_PrefabInstance: {fileID: 6714545931915746168}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1028500480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 605312409395146142, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+  m_PrefabInstance: {fileID: 2995168048089533735}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1053535322
 PrefabInstance:
@@ -1763,6 +1778,22 @@ PrefabInstance:
       propertyPath: fadeCanvasGroup
       value: 
       objectReference: {fileID: 964068900}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: decalsToSpawnAfterIntro.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: 'decalsToSpawnAfterIntro.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1028500480}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: 'decalsToSpawnAfterIntro.Array.data[1]'
+      value: 
+      objectReference: {fileID: 471240533}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: 'decalsToSpawnAfterIntro.Array.data[2]'
+      value: 
+      objectReference: {fileID: 97294978}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
