@@ -85,7 +85,15 @@ public class GameManager : MonoBehaviour
         if (hudController == null)
             return;
 
+#if !UNITY_WEBGL || UNITY_EDITOR
         if (escapeAction != null && escapeAction.triggered)
+        {
+            TogglePauseMenu();
+            return;
+        }
+#endif
+
+        if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
         {
             TogglePauseMenu();
         }

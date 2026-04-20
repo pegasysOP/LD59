@@ -125,6 +125,8 @@ public class CutsceneManager : MonoBehaviour
     {
         GameManager.Instance?.SetLocked(true);
 
+        IntensityManager.Instance.increasePerSecond = 0f;
+
         yield return new WaitForSeconds(lossPreFadeDelay);
 
         if (fadeCanvasGroup != null)
@@ -227,11 +229,9 @@ public class CutsceneManager : MonoBehaviour
     {
         Debug.Log("Playing Escape cutscene");
 
-        // Flip the Victory latch as soon as the player steps into the escape pod
-        // trigger zone so GameMusicGuy crossfades to the Victory track (track 09,
-        // "Escape in Rescue Ship") for the duration of the cutscene before the
-        // credits scene takes over.
+
         StateTracker.Instance?.TriggerVictory();
+        IntensityManager.Instance.increasePerSecond = 0f;
 
         //Immobilise Player
         GameManager.Instance?.SetLocked(true);
