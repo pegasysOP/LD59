@@ -35,6 +35,10 @@ public class CutsceneManager : MonoBehaviour
 
     [SerializeField] private float fadeDuration = 1f;
 
+    [Tooltip("Seconds to wait after a minigame loss before starting the fade-to-black. " +
+             "Gives the monster time to play its attack animation.")]
+    [SerializeField] private float lossPreFadeDelay = 1f;
+
     [SerializeField] private float postIntroLightingIntensity = 0.15f;
 
     [SerializeField] private GameObject[] decalsToSpawnAfterIntro;
@@ -70,6 +74,41 @@ public class CutsceneManager : MonoBehaviour
         {
             decal.SetActive(false);
         }
+
+        if (StateTracker.Instance != null)
+            StateTracker.Instance.OnEndStateChanged += HandleEndStateChanged;
+    }
+
+    private void OnDestroy()
+    {
+        if (StateTracker.Instance != null)
+            StateTracker.Instance.OnEndStateChanged -= HandleEndStateChanged;
+
+        if (Instance == this)
+            Instance = null;
+    }
+
+    private bool lossRoutineStarted;
+
+    private void HandleEndStateChanged(EndState state)
+    {
+        if (state != EndState.Lost) return;
+        if (lossRoutineStarted) return;
+        lossRoutineStarted = true;
+        StartCoroutine(LossRoutine());
+    }
+
+    private IEnumerator LossRoutine()
+    {
+        GameManager.Instance?.SetLocked(true);
+
+        yield return new WaitForSeconds(lossPreFadeDelay);
+
+        if (fadeCanvasGroup != null)
+            fadeCanvasGroup.alpha = 1f;
+
+        // Hold on black. Player stays locked (movement frozen) with cursor unlocked
+        // via GameManager.SetLocked, so no further action needed.
     }
 
     public void PlayCutscene(CutsceneType type)
