@@ -49,7 +49,7 @@ public class Door : MonoBehaviour, IInteractable
     private const float OpenDuration = 2f;
 
     private float initialDelay = 10f;
-    private float initialTimer = 5f;
+    private float initialTimer = 0f;
 
     [SerializeField]
     private MeshRenderer meshRenderer;
