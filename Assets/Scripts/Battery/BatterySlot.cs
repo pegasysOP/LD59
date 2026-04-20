@@ -92,7 +92,6 @@ public class BatterySlot : MonoBehaviour, IInteractable
             PlayWithCooldown(sounds?.acceptFeedback, slotPos);
             GameManager.Instance.CollectBattery(slotPos);
             StartCoroutine(AnimatePlacedBattery(battery));
-            battery = null;
         }
     }
 
