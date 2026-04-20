@@ -355,7 +355,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SIlas
+  m_text: TheoConfidor
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e014c43c2419164d8b67b1b4aa82b59, type: 2}
   m_sharedMaterial: {fileID: -7508050909945857759, guid: 0e014c43c2419164d8b67b1b4aa82b59, type: 2}
@@ -866,7 +866,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Audio
+  m_text: Music + Sound
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0e014c43c2419164d8b67b1b4aa82b59, type: 2}
   m_sharedMaterial: {fileID: -7508050909945857759, guid: 0e014c43c2419164d8b67b1b4aa82b59, type: 2}
