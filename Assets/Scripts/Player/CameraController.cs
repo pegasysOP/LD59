@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,10 @@ public class CameraController : MonoBehaviour
     public float pitch;
     public float mouseSensitivity;
     public float maxLookAngle;
+
+    private Vector3 cameraBaseLocalPos;
+    private bool cameraBaseCached;
+    private bool shaking;
 
     [Header("Minigame aim")]
     public Transform lookAtTarget;
@@ -58,6 +63,30 @@ public class CameraController : MonoBehaviour
     public void UpdateSensitivity(float value)
     {
         sensitivitySetting = value;
+    }
+
+    public IEnumerator Shake(float duration, float magnitude)
+    {
+        if (playerCamera == null || duration <= 0f) yield break;
+
+        if (!cameraBaseCached)
+        {
+            cameraBaseLocalPos = playerCamera.transform.localPosition;
+            cameraBaseCached = true;
+        }
+        Vector3 basePos = cameraBaseLocalPos;
+
+        shaking = true;
+        float time = 0f;
+        while (time < duration)
+        {
+            float decay = 1f - (time / duration);
+            playerCamera.transform.localPosition = basePos + Random.insideUnitSphere * magnitude * decay;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        playerCamera.transform.localPosition = basePos;
+        shaking = false;
     }
 
     private void AimAt(Vector3 worldPoint)

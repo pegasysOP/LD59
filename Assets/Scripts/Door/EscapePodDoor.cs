@@ -102,7 +102,12 @@ public class EscapePodDoor : DoorBase
 
     public void OpenDoorEndCutscene()
     {
-        StartCoroutine(MoveDoor(-OpenOffset, OpenDuration));
+        OpenDoorEndCutscene(OpenDuration);
+    }
+
+    public void OpenDoorEndCutscene(float duration)
+    {
+        StartCoroutine(MoveDoor(-OpenOffset, duration));
     }
 
     private void Update()

@@ -50,6 +50,26 @@ public class CutsceneManager : MonoBehaviour
 
     [SerializeField] private GameObject[] decalsToSpawnAfterIntro;
 
+    [Header("End Sequence")]
+    [Tooltip("Where the player is gently walked to before the alien charge. Its Y yaw is used for the facing rotation; position raycasts down to the floor.")]
+    [SerializeField] private EndStandPoint endStandPoint;
+    [Tooltip("Scene-placed alien marker that spawns and runs toward the player.")]
+    [SerializeField] private EndCutsceneAlien endAlien;
+    [Tooltip("Seconds the alien takes to cover its approach distance.")]
+    [SerializeField] private float alienRunDuration = 2.5f;
+    [Tooltip("Delay between the alien reaching its approach point and the camera shake firing. Keep small; door timing is controlled separately.")]
+    [SerializeField] private float postAlienHitDoorDelay = 0.15f;
+    [Tooltip("Seconds before the alien finishes its run to start closing the door. Tune so the door finishes closing just before the alien arrives.")]
+    [SerializeField] private float doorCloseLeadTime = 0.7f;
+    [Tooltip("How long the door takes to slam shut during the end cutscene. Overrides the normal open/close duration for this sequence.")]
+    [SerializeField] private float endDoorCloseDuration = 0.6f;
+    [SerializeField] private float shakeDuration = 0.4f;
+    [SerializeField] private float shakeMagnitude = 0.08f;
+    [Tooltip("Delay between the camera shake finishing and the fade-to-black starting.")]
+    [SerializeField] private float postShakeDelay = 0.8f;
+    [Tooltip("Seconds to smoothly rotate the player to face down the hallway.")]
+    [SerializeField] private float endRotateDuration = 1f;
+
     public enum CutsceneType
     {
         Wake,
@@ -229,38 +249,78 @@ public class CutsceneManager : MonoBehaviour
     {
         Debug.Log("Playing Escape cutscene");
 
-
         StateTracker.Instance?.TriggerVictory();
         IntensityManager.Instance.increasePerSecond = 0f;
 
-        //Immobilise Player
+        // Kill minigame if somehow still running — safety net so the HUD doesn't
+        // linger and StateTracker doesn't get a Lost flip from a racing EndSession.
+        if (minigame != null)
+            minigame.ForceStopForEndSequence();
+
+        // Immobilise player (blocks input) + hide cursor for cinematic lock-in.
         GameManager.Instance?.SetLocked(true);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
-        //Rotate to face escape door 
+        // Hide the centre-dot reticle so it doesn't sit over the cinematic.
+        HudController hud = GameManager.Instance != null ? GameManager.Instance.hudController : null;
+        if (hud != null && hud.centreDot != null)
+            hud.centreDot.SetActive(false);
+
+        // Spawn the alien immediately so it's visible at the far end of the hallway
+        // by the time the player has walked to the stand point and rotated.
+        if (endAlien != null)
+            endAlien.Activate();
+
+        // Walk player gently to the designated stand point at their normal moveSpeed.
+        controller.SetInCutscene(true);
+        if (endStandPoint != null)
+            yield return StartCoroutine(controller.WalkTo(endStandPoint.Position));
+
+        // Rotate to face down the hallway (yaw taken from stand point).
         Quaternion current = controller.transform.rotation;
-        Quaternion target = Quaternion.Euler(current.eulerAngles.x, 90f, current.eulerAngles.z);
+        float targetYaw = endStandPoint != null ? endStandPoint.FacingYaw : 90f;
+        Quaternion target = Quaternion.Euler(current.eulerAngles.x, targetYaw, current.eulerAngles.z);
+        yield return StartCoroutine(RotateTo(controller.transform, target, endRotateDuration));
 
-        yield return StartCoroutine(RotateTo(controller.transform, target, 1f));
+        // Alien (already spawned at trigger time) starts charging. Kick off without awaiting
+        // so we can schedule the door close mid-run — the door should finish slamming just
+        // before the alien arrives and the shake fires.
+        Coroutine alienRun = null;
+        if (endAlien != null)
+            alienRun = StartCoroutine(endAlien.RunTowardPlayer(controller.transform, alienRunDuration));
 
-        //TODO: We also want to move the camera view towards the 0 in the vertical incase they are looking at the floor or ceiling 
+        if (alienRun != null)
+        {
+            float lead = Mathf.Clamp(doorCloseLeadTime, 0f, alienRunDuration);
+            float waitBeforeDoor = Mathf.Max(0f, alienRunDuration - lead);
+            if (waitBeforeDoor > 0f)
+                yield return new WaitForSeconds(waitBeforeDoor);
 
-        //minigame.PlayFinalMonsterApproach();
+            if (escapePodDoor != null)
+                escapePodDoor.OpenDoorEndCutscene(endDoorCloseDuration);
 
-        yield return new WaitForSeconds(2f);
+            yield return alienRun;
+        }
+        else if (escapePodDoor != null)
+        {
+            escapePodDoor.OpenDoorEndCutscene(endDoorCloseDuration);
+        }
 
-        //Have creature run towards door
+        // Beat between alien arrival and the hit-effect shake.
+        if (postAlienHitDoorDelay > 0f)
+            yield return new WaitForSeconds(postAlienHitDoorDelay);
 
-        //Close door 
-        escapePodDoor.OpenDoorEndCutscene();
-    
-        yield return new WaitForSeconds(1f);
+        // Quick shake as if the alien slammed into the door.
+        CameraController cam = GameManager.Instance != null ? GameManager.Instance.cameraController : null;
+        if (cam != null)
+            yield return StartCoroutine(cam.Shake(shakeDuration, shakeMagnitude));
 
-        //Play rocket takeoff sound 
+        if (postShakeDelay > 0f)
+            yield return new WaitForSeconds(postShakeDelay);
 
-        //Fade to black 
+        // Fade to black, load credits (unchanged).
         yield return StartCoroutine(Fade(1f, fadeDuration));
-
-        //Load credits scene 
         SceneUtils.LoadCreditScene();
     }
 
