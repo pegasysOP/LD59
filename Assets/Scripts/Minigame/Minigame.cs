@@ -78,6 +78,10 @@ public class Minigame : MonoBehaviour
     public float minAlienDuration = 3f;
     public float maxAlienDuration = 4f;
     public int maxFails = 3;
+    [Tooltip("Seeker speed multiplier indexed by failCount at the start of the round. " +
+             "Round 0 (no fails yet) uses index 0, after 1 fail uses index 1, etc. " +
+             "Clamped to the last entry once failCount exceeds the array length.")]
+    public float[] seekerSpeedByFailCount = { 1f, 0.85f, 0.70f };
     public float alienGrowthPerFail = 1.25f;
     public float monsterDropPerFail = 0.25f;
     [Tooltip("Distance in front of the player the monster reaches on the final fail step.")]
@@ -307,10 +311,11 @@ public class Minigame : MonoBehaviour
         float seekerTime = 0f;
         float width = waveformContainer.rect.width;
         float endTime = currentDuration + hitTolerance;
+        float speedMul = GetSeekerSpeedMultiplier();
 
         while (seekerTime < endTime)
         {
-            seekerTime += Time.deltaTime;
+            seekerTime += Time.deltaTime * speedMul;
             seeker.anchoredPosition = new Vector2(TimeToX(seekerTime, width), 0f);
 
             foreach (Peak p in peaks)
@@ -449,6 +454,14 @@ public class Minigame : MonoBehaviour
     private void ResetSeeker()
     {
         seeker.anchoredPosition = Vector2.zero;
+    }
+
+    private float GetSeekerSpeedMultiplier()
+    {
+        if (seekerSpeedByFailCount == null || seekerSpeedByFailCount.Length == 0)
+            return 1f;
+        int idx = Mathf.Clamp(failCount, 0, seekerSpeedByFailCount.Length - 1);
+        return Mathf.Max(0.01f, seekerSpeedByFailCount[idx]);
     }
 
     private void EvaluateClick(float seekerTime)
