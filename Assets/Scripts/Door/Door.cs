@@ -2,9 +2,8 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Door : MonoBehaviour, IInteractable
+public class Door : DoorBase
 {
-    private bool isClosed = true;
 
     [SerializeField]
     private GameObject doorPanel;
@@ -49,16 +48,9 @@ public class Door : MonoBehaviour, IInteractable
     private const float OpenDuration = 2f;
 
     private float initialDelay = 10f;
-    private float initialTimer = 0f;
 
-    [SerializeField]
-    private MeshRenderer meshRenderer;
-    [SerializeField]
-    private Material greenMaterial;
-    [SerializeField]
-    private Material redMaterial;
-
-    public void Interact()
+    
+    public override void Interact()
     {
         Debug.Log("Interacting with door");
         if (isClosed && doorPanel != null)
@@ -104,15 +96,6 @@ public class Door : MonoBehaviour, IInteractable
         else
             Debug.LogWarning($"{nameof(Door)} on '{name}' wanted to fire the PowerDownSequence but none " +
                              $"was found in the scene. Assign one in the inspector or add the component.");
-    }
-
-    public bool IsInteractable()
-    {
-        if((isClosed && initialTimer <= 0) == true)
-        {
-            meshRenderer.material = redMaterial;
-        }
-        return isClosed && initialTimer <= 0;
     }
 
     private IEnumerator MoveDoor(float deltaZ, float duration)
