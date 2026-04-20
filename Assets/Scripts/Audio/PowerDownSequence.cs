@@ -126,6 +126,18 @@ public class PowerDownSequence : MonoBehaviour
     [Tooltip("Fade-in duration for the residual ambient loop.")]
     [Min(0.01f)] public float residualFadeIn = 1.5f;
 
+    // ---------- Minigame Ducking ----------
+
+    [Header("Minigame Ducking")]
+    [Tooltip("While GameManager.MinigameActive is true, the pre-collapse and low-power ambience loops " +
+             "fade down to silence so they don't compete with the minigame's own audio bed. They fade back " +
+             "up to their target volumes once the minigame ends.")]
+    public bool duckAmbienceDuringMinigame = true;
+    [Tooltip("Seconds to fade ambience down to silence when a minigame begins.")]
+    [Min(0.01f)] public float minigameDuckOutDuration = 0.35f;
+    [Tooltip("Seconds to fade ambience back up to its target volume once the minigame ends.")]
+    [Min(0.01f)] public float minigameDuckInDuration = 1.0f;
+
     // ---------- Debug / Triggering ----------
 
     [Header("Debug")]
@@ -144,6 +156,9 @@ public class PowerDownSequence : MonoBehaviour
     private Coroutine _runningStinger;
     private AudioSource _lowPowerAmbienceSource;
     private AudioSource _preCollapseAmbienceSource;
+    private Coroutine _lowPowerFadeCoroutine;
+    private Coroutine _preCollapseFadeCoroutine;
+    private bool _minigameDucked;
     private bool _hasFired;
     private Transform _listenerCached;
 
@@ -163,7 +178,37 @@ public class PowerDownSequence : MonoBehaviour
     private void OnDisable()
     {
         Stop();
+        StopFade(ref _preCollapseFadeCoroutine);
         KillLoop(ref _preCollapseAmbienceSource);
+    }
+
+    private void Update()
+    {
+        if (!duckAmbienceDuringMinigame) return;
+        bool shouldDuck = GameManager.Instance != null && GameManager.Instance.MinigameActive;
+        if (shouldDuck == _minigameDucked) return;
+
+        _minigameDucked = shouldDuck;
+        ApplyDuck(_preCollapseAmbienceSource, preCollapseAmbienceVolume, ref _preCollapseFadeCoroutine);
+        ApplyDuck(_lowPowerAmbienceSource, lowPowerAmbienceVolume, ref _lowPowerFadeCoroutine);
+    }
+
+    // Drives a live ambience source toward 0 (duck-out) or its restore volume (duck-in),
+    // cancelling any fade currently in flight on that source so the two don't race.
+    private void ApplyDuck(AudioSource src, float restoreVolume, ref Coroutine fadeHandle)
+    {
+        if (src == null) return;
+        StopFade(ref fadeHandle);
+        float to = _minigameDucked ? 0f : AudioVolume.ToLinear(Mathf.Clamp01(restoreVolume));
+        float duration = _minigameDucked ? minigameDuckOutDuration : minigameDuckInDuration;
+        fadeHandle = StartCoroutine(FadeVolume(src, src.volume, to, duration));
+    }
+
+    private void StopFade(ref Coroutine handle)
+    {
+        if (handle == null) return;
+        StopCoroutine(handle);
+        handle = null;
     }
 
     /// <summary>
@@ -189,6 +234,7 @@ public class PowerDownSequence : MonoBehaviour
     {
         if (_runningSequence != null) { StopCoroutine(_runningSequence); _runningSequence = null; }
         if (_runningStinger != null) { StopCoroutine(_runningStinger); _runningStinger = null; }
+        StopFade(ref _lowPowerFadeCoroutine);
         KillLoop(ref _lowPowerAmbienceSource);
     }
 
@@ -212,6 +258,7 @@ public class PowerDownSequence : MonoBehaviour
         // --- Phase 3: Power Collapse ---
         yield return WaitTo(ref cursor, powerCollapseStartTime);
         TryPlay(powerDropout);
+        StopFade(ref _preCollapseFadeCoroutine);
         StartFadeOutAndDestroy(ref _preCollapseAmbienceSource, preCollapseAmbienceFadeOut);
         if (MusicManager.Instance != null)
             MusicManager.Instance.SuspendGameMusic(musicFadeOutDuration);
@@ -228,7 +275,7 @@ public class PowerDownSequence : MonoBehaviour
         // --- Phase 6: Residual State ---
         yield return WaitTo(ref cursor, residualStartTime);
         if (!IsCreditsOrMenuScene())
-            _lowPowerAmbienceSource = StartLoop(lowPowerAmbienceLoop, lowPowerAmbienceVolume, fadeInDuration: residualFadeIn, loop: true);
+            _lowPowerAmbienceSource = StartLoop(lowPowerAmbienceLoop, lowPowerAmbienceVolume, fadeInDuration: residualFadeIn, loop: true, out _lowPowerFadeCoroutine);
         // Re-open the gate on GameMusicGuy; it will crossfade the post-intro track
         // back in over MusicManager.crossfadeDuration.
         if (MusicManager.Instance != null)
@@ -345,8 +392,11 @@ public class PowerDownSequence : MonoBehaviour
     // Spawns a dedicated AudioSource parented under this component, routed through the
     // same mixer group as AudioManager.sfxSource so master-volume changes apply. Returns
     // null when the clip is missing, so callers can still store the result unconditionally.
-    private AudioSource StartLoop(AudioClip clip, float perceivedVolume, float fadeInDuration, bool loop)
+    // `fadeHandle` receives the in-flight fade-in coroutine (if any) so callers can cancel
+    // it when ducking overrides the scheduled fade.
+    private AudioSource StartLoop(AudioClip clip, float perceivedVolume, float fadeInDuration, bool loop, out Coroutine fadeHandle)
     {
+        fadeHandle = null;
         if (clip == null) return null;
 
         GameObject go = new GameObject($"PowerDownLoop_{clip.name}");
@@ -368,14 +418,19 @@ public class PowerDownSequence : MonoBehaviour
         }
 
         float target = AudioVolume.ToLinear(Mathf.Clamp01(perceivedVolume));
-        if (fadeInDuration <= 0f)
+        if (duckAmbienceDuringMinigame && _minigameDucked)
+        {
+            // Minigame is already running: start silent. We'll fade up when the minigame ends.
+            src.volume = 0f;
+        }
+        else if (fadeInDuration <= 0f)
         {
             src.volume = target;
         }
         else
         {
             src.volume = 0f;
-            StartCoroutine(FadeVolume(src, 0f, target, fadeInDuration));
+            fadeHandle = StartCoroutine(FadeVolume(src, 0f, target, fadeInDuration));
         }
         src.Play();
         return src;
@@ -397,7 +452,8 @@ public class PowerDownSequence : MonoBehaviour
             preCollapseAmbienceLoop,
             preCollapseAmbienceVolume,
             fadeInDuration: preCollapseAmbienceFadeIn,
-            loop: true);
+            loop: true,
+            out _preCollapseFadeCoroutine);
     }
 
     // Detaches ownership of `src` (clears the ref) and starts a coroutine that fades it
