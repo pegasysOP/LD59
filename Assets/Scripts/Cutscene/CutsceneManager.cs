@@ -18,9 +18,11 @@ public class CutsceneManager : MonoBehaviour
 
     public static CutsceneManager Instance;
 
+    [Header("Timings")]
     [SerializeField] private float wakeDuration = 5f;
     [SerializeField] private float powerdownDuration = 14f;
     [SerializeField] private float escapePodDuration = 6f;
+    [SerializeField] private float lockedDuration = 5.5f;
 
     [SerializeField] private CanvasGroup fadeCanvasGroup;
 
@@ -87,9 +89,12 @@ public class CutsceneManager : MonoBehaviour
     {
         Debug.Log("Playing powerdown cutscene");
 
+        //yield return new WaitForSeconds(1f);
+
         GameManager.Instance?.SetLocked(true);
 
         yield return new WaitForSeconds(5.5f);
+
 
         //Fade out at start of power down cutscene
         yield return StartCoroutine(Fade(1.0f, fadeDuration + 0.5f));
@@ -106,7 +111,7 @@ public class CutsceneManager : MonoBehaviour
 
         //TODO: Play powerdown visual effects here 
 
-        yield return new WaitForSeconds(powerdownDuration - 6f);
+        //yield return new WaitForSeconds(powerdownDuration - 6f);
 
         //Fade back in after power down is complete
         yield return StartCoroutine(Fade(0f, fadeDuration));
