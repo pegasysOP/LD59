@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public GroundDetector groundDetector;
     public float jumpForce;
     public float airAcceleration;
+    public float jumpCooldown = 0.30f;
 
     [Header("Audio")]
     public PlayerMovementSounds movementSounds;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private bool wasGrounded;
     private float airTime;
     private float firstGroundedTime = -1f;
+    private float lastJumpTime = -999f;
 
     private bool inCutscene = false;
 
@@ -60,9 +62,10 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJumping()
     {
-        if (jumpAction.triggered && groundDetector.IsGrounded)
+        if (jumpAction.triggered && groundDetector.IsGrounded && Time.time - lastJumpTime >= jumpCooldown)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            lastJumpTime = Time.time;
             if (movementSounds != null)
             {
                 Vector3 pos = transform.position;

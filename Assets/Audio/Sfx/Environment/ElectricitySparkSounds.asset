@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d8c69148b197475a879f99bc171d3f3, type: 3}
+  m_Name: ElectricitySparkSounds
+  m_EditorClassIdentifier: Assembly-CSharp::ElectricitySparkSounds
+  bedLoop: {fileID: 8300000, guid: 4c5555ca607964ca2b520daf4ae63bd4, type: 3}
+  bedPerceivedVolume: 0.3
+  bedMinDistance: 0.5
+  bedMaxDistance: 6
+  crackles:
+    clips:
+    - _clip: {fileID: 8300000, guid: 21bbff49b6e824397937c4c1b652558a, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 33b8301612dc64a30bb87be1fc88af91, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 17ac4f43dbb414e219b7dce994e04ced, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 4c3c085a47946403fbe8aea06754d014, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: c3484c4ed79354ef8b489e667e0c1534, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 0.85
+    pitchMax: 1.15
+    gain: 0.52
+    volumeJitter: 0.2
+    useFocusMixerGroup: 0
+  crackleMinInterval: 0.25
+  crackleMaxInterval: 1.1
+  crackleScatterRadius: 0.75
+  crackleMinDistance: 0.5
+  crackleMaxDistance: 6
+  crackleStartupDelayMax: 1

@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public HudController hudController;
 
     [SerializeField]
-    private Minigame minigame;
+    public Minigame minigame;
 
     [SerializeField]
     private float minigameStartDelay = 7f;
