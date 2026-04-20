@@ -520,4 +520,55 @@ public class Minigame : MonoBehaviour
         state = State.Idle;
         OnMinigameEnded?.Invoke(won);
     }
+
+    /*public void PlayFinalMonsterApproach()
+    {
+        StartCoroutine(FinalMonsterApproachRoutine());
+    }
+
+    IEnumerator FinalMonsterApproachRoutine()
+    {
+        if (monster3D == null) yield break;
+
+        //ShowPanel();
+
+        KillMonster3DWalk();
+
+        SetupMonster3DWaypoints();
+        monster3D.position = monster3DSpawnPos;
+
+        FaceMonster3DAtPlayer();
+        PlayMonster3DAnim(monster3DWalkState);
+
+        Transform player = GameManager.Instance != null && GameManager.Instance.playerController != null
+            ? GameManager.Instance.playerController.transform
+            : null;
+
+        if (player == null)
+            yield break;
+
+        float speed = 1.2f;
+
+        while (Vector3.Distance(monster3D.position, player.position) > 0.6f)
+        {
+            Vector3 target = player.position;
+            target.y = monster3D.position.y;
+
+            monster3D.position = Vector3.MoveTowards(
+                monster3D.position,
+                target,
+                speed * Time.deltaTime
+            );
+
+            
+            FaceMonster3DAtPlayer();
+
+            yield return null;
+        }
+
+        FaceMonster3DAtPlayer();
+        PlayMonster3DAnim(monster3DAttackState);
+
+        Debug.Log("Monster reached player (final cutscene)");
+    }*/
 }

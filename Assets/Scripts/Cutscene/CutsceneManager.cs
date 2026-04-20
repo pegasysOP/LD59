@@ -10,6 +10,9 @@ public class CutsceneManager : MonoBehaviour
     [SerializeField]
     private EscapePodDoor escapePodDoor;
 
+    [SerializeField]
+    private Minigame minigame;
+
     public static CutsceneManager Instance;
 
     [SerializeField] private float wakeDuration = 5f;
@@ -100,6 +103,8 @@ public class CutsceneManager : MonoBehaviour
         yield return StartCoroutine(RotateTo(controller.transform, target, 1f));
 
         //TODO: We also want to move the camera view towards the 0 in the vertical incase they are looking at the floor or ceiling 
+
+        //minigame.PlayFinalMonsterApproach();
 
         yield return new WaitForSeconds(2f);
 

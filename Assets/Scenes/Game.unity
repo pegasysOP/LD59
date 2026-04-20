@@ -1318,6 +1318,10 @@ PrefabInstance:
       value: CutsceneManager
       objectReference: {fileID: 0}
     - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
+      propertyPath: minigame
+      value: 
+      objectReference: {fileID: 405899022}
+    - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
       propertyPath: controller
       value: 
       objectReference: {fileID: 468647773}
