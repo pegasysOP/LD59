@@ -3,7 +3,7 @@ using UnityEngine;
 public class CutsceneTrigger : MonoBehaviour
 {
     [SerializeField]
-    private int cutsceneIndex;
+    private CutsceneManager.CutsceneType cutsceneType;
     private bool hasPlayed = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,7 +21,7 @@ public class CutsceneTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && !hasPlayed)
         {
-            CutsceneManager.Instance.PlayCutscene(cutsceneIndex);
+            CutsceneManager.Instance.PlayCutscene(cutsceneType);
             hasPlayed = true;
         }
     }
