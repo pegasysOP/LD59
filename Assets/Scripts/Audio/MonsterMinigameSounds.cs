@@ -98,6 +98,23 @@ public class MonsterMinigameSounds : ScriptableObject
              "idle pool from overlapping the appearance stinger on session start.")]
     [Min(0f)] public float idleVocalsInitialDelay = 1.5f;
 
+    [Header("Monster Death (final fail — monster kills player)")]
+    [Tooltip("2D one-shot stinger fired the moment the monster lands its killing blow on the final fail. " +
+             "Mirrors the appearance stinger: non-spatial, sits on top of everything as a signature beat.")]
+    public AudioClipVolume monsterDeathStinger;
+
+    [Tooltip("Seconds the BGM (MusicManager) takes to fade to silence once the death sequence starts. " +
+             "Music is suspended for the rest of the game-over beat — subsequent calls to " +
+             "PlayGameMusic are ignored until the scene reloads / session restarts.")]
+    [Min(0f)] public float deathMusicFadeOutDuration = 1.5f;
+
+    [Tooltip("Array of one-shots triggered simultaneously at the moment of death. Each clip's per-entry " +
+             "Delay (positive = wait before play, negative = start partway in) is what staggers the " +
+             "sequence — the manager fires the whole array in one call and lets the delays do the timing. " +
+             "Played 2D (non-spatialised) so the death moment reads as a cinematic beat regardless of " +
+             "where the monster ends up relative to the camera.")]
+    public AudioClipVolume[] monsterDeathSounds;
+
     [Header("Player Snap / Click")]
     [Tooltip("Pool of player finger-snap/click one-shots fired on every player input (hit OR stray miss). " +
              "Played 2D — this is a non-diegetic 'you clicked' feedback, not a sound emitting from the world.")]
@@ -114,11 +131,44 @@ public class MonsterMinigameSounds : ScriptableObject
     /// </summary>
     public void PlayMonsterAppearStinger()
     {
-        if (monsterAppearStinger == null || monsterAppearStinger.Clip == null || AudioManager.Instance == null)
+        PlayStinger2D(monsterAppearStinger);
+    }
+
+    /// <summary>
+    /// Fires the 2D death stinger through the shared SFX pipe on the final fail. Safe to
+    /// call even if the clip is unassigned (no-op).
+    /// </summary>
+    public void PlayMonsterDeathStinger()
+    {
+        PlayStinger2D(monsterDeathStinger);
+    }
+
+    /// <summary>
+    /// Triggers every entry in <see cref="monsterDeathSounds"/> as a 2D one-shot in a single call.
+    /// Per-entry <see cref="AudioClipVolume.Delay"/> values stagger the sequence — positive delays
+    /// wait before playing; negative delays start partway into the clip. Safe to call with an
+    /// empty / null array (no-op).
+    /// </summary>
+    public void PlayMonsterDeathSounds()
+    {
+        if (monsterDeathSounds == null || AudioManager.Instance == null)
             return;
 
-        float linear = AudioVolume.ToLinear(monsterAppearStinger.Volume);
-        AudioClipVolume shaped = new AudioClipVolume(monsterAppearStinger.Clip, linear, monsterAppearStinger.Delay);
-        AudioManager.Instance.PlaySfxWithPitchShifting(shaped, 1f, 1f);
+        for (int i = 0; i < monsterDeathSounds.Length; i++)
+            PlayStinger2D(monsterDeathSounds[i]);
+    }
+
+    // Shared 2D one-shot path used by every signature stinger / cue on this ScriptableObject:
+    // treats the authored volume as perceived loudness (matches SfxBank) and routes through the
+    // ISOLATED-source pipeline so no concurrent pitch-jittered bank can bleed pitch onto the
+    // still-ringing stinger by mutating the shared AudioSource's pitch mid-playback.
+    private static void PlayStinger2D(AudioClipVolume entry)
+    {
+        if (entry == null || entry.Clip == null || AudioManager.Instance == null)
+            return;
+
+        float linear = AudioVolume.ToLinear(entry.Volume);
+        AudioClipVolume shaped = new AudioClipVolume(entry.Clip, linear, entry.Delay);
+        AudioManager.Instance.PlaySfxIsolated2D(shaped);
     }
 }

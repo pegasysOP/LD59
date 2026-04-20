@@ -111,6 +111,36 @@ MonoBehaviour:
   idleVocalsMinInterval: 2.5
   idleVocalsMaxInterval: 6
   idleVocalsInitialDelay: 1.5
+  monsterDeathStinger:
+    _clip: {fileID: 8300000, guid: 38e6b85c605584dc5bc8e5e2d1b826c1, type: 3}
+    _volume: 1
+    _delay: 0
+  deathMusicFadeOutDuration: 1.5
+  monsterDeathSounds:
+  - _clip: {fileID: 8300000, guid: 8febacfe898524c7bbedefa4f910c553, type: 3}
+    _volume: 1
+    _delay: 0
+  - _clip: {fileID: 8300000, guid: 0bf79ff489cf546548b87476bcd785de, type: 3}
+    _volume: 1
+    _delay: 0.5
+  - _clip: {fileID: 8300000, guid: 5a0299b04511348c7a128532b6619a20, type: 3}
+    _volume: 1
+    _delay: 1.5
+  - _clip: {fileID: 8300000, guid: 675974e4c5046471293fc92472f2e99f, type: 3}
+    _volume: 1
+    _delay: 3
+  - _clip: {fileID: 8300000, guid: 0bf79ff489cf546548b87476bcd785de, type: 3}
+    _volume: 1
+    _delay: 2.8
+  - _clip: {fileID: 8300000, guid: 675974e4c5046471293fc92472f2e99f, type: 3}
+    _volume: 1
+    _delay: 3.8
+  - _clip: {fileID: 8300000, guid: e3917687e19cd46378f172935c2a2038, type: 3}
+    _volume: 1
+    _delay: 4.2
+  - _clip: {fileID: 8300000, guid: 675974e4c5046471293fc92472f2e99f, type: 3}
+    _volume: 1
+    _delay: 4.4
   playerSnap:
     clips:
     - _clip: {fileID: 8300000, guid: 96ba3c610a76b498db20472082448efa, type: 3}
