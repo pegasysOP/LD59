@@ -60,7 +60,6 @@ public class StateTracker : MonoBehaviour
         {
             foreach (KeyValuePair<TaskType, bool> kvp in tasks)
             {
-                Debug.Log(kvp.Key + " " + kvp.Value);
                 if (!kvp.Value) return false;
             }
                 
