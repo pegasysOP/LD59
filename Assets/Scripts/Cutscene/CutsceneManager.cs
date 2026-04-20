@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CutsceneManager : MonoBehaviour
 {
@@ -39,6 +40,12 @@ public class CutsceneManager : MonoBehaviour
              "Gives the monster time to play its attack animation.")]
     [SerializeField] private float lossPreFadeDelay = 1f;
 
+    [Header("Loss UI")]
+    [SerializeField] private CanvasGroup tryAgainCanvasGroup;
+    [SerializeField] private Button tryAgainButton;
+    [SerializeField] private float tryAgainAppearDelay = 1f;
+    [SerializeField] private float tryAgainFadeDuration = 1f;
+
     [SerializeField] private float postIntroLightingIntensity = 0.15f;
 
     [SerializeField] private GameObject[] decalsToSpawnAfterIntro;
@@ -77,12 +84,28 @@ public class CutsceneManager : MonoBehaviour
 
         if (StateTracker.Instance != null)
             StateTracker.Instance.OnEndStateChanged += HandleEndStateChanged;
+
+        if (tryAgainCanvasGroup != null)
+        {
+            tryAgainCanvasGroup.alpha = 0f;
+            tryAgainCanvasGroup.interactable = false;
+            tryAgainCanvasGroup.blocksRaycasts = false;
+        }
+
+        if (tryAgainButton != null)
+        {
+            tryAgainButton.onClick.RemoveListener(OnTryAgainClicked);
+            tryAgainButton.onClick.AddListener(OnTryAgainClicked);
+        }
     }
 
     private void OnDestroy()
     {
         if (StateTracker.Instance != null)
             StateTracker.Instance.OnEndStateChanged -= HandleEndStateChanged;
+
+        if (tryAgainButton != null)
+            tryAgainButton.onClick.RemoveListener(OnTryAgainClicked);
 
         if (Instance == this)
             Instance = null;
@@ -109,6 +132,35 @@ public class CutsceneManager : MonoBehaviour
 
         // Hold on black. Player stays locked (movement frozen) with cursor unlocked
         // via GameManager.SetLocked, so no further action needed.
+
+        if (tryAgainCanvasGroup != null)
+        {
+            yield return new WaitForSeconds(tryAgainAppearDelay);
+
+            yield return StartCoroutine(FadeCanvasGroup(tryAgainCanvasGroup, 0f, 1f, tryAgainFadeDuration));
+            tryAgainCanvasGroup.interactable = true;
+            tryAgainCanvasGroup.blocksRaycasts = true;
+        }
+    }
+
+    private IEnumerator FadeCanvasGroup(CanvasGroup group, float from, float to, float duration)
+    {
+        float time = 0f;
+        group.alpha = from;
+
+        while (time < duration)
+        {
+            group.alpha = Mathf.Lerp(from, to, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        group.alpha = to;
+    }
+
+    private void OnTryAgainClicked()
+    {
+        SceneUtils.LoadGameScene();
     }
 
     public void PlayCutscene(CutsceneType type)

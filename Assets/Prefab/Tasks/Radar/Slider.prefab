@@ -53,6 +53,7 @@ MonoBehaviour:
   inputAxis: 0
   mouseSensitivity: 0.005
   startValue: 0.5
+  valueRateSmoothing: 25
 --- !u!65 &998645479619159962
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -230,7 +231,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4a3472ad2ad6e4411b44b641859611cc, type: 2}
+  - {fileID: 2100000, guid: f70229ed52c842d4690b6cf9b5b25a9a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -92,6 +92,11 @@ public class Minigame : MonoBehaviour
     public string monster3DAttackState = "attack 1";
     public float monster3DAnimCrossfade = 0.15f;
     public Key debugStartKey = Key.M;
+    [Tooltip("Editor-only cheat key that auditions the full death sequence in place: fires the death " +
+             "stinger, fades the BGM via MusicManager, and triggers the death-sounds array (each entry's " +
+             "Delay staggers the layers). Fires regardless of minigame state so you can chain rapid " +
+             "listens without having to lose the minigame. Debug builds / shipped builds ignore it.")]
+    public Key debugDeathSequenceKey = Key.K;
 
     public event Action<bool> OnMinigameEnded;
 
@@ -148,8 +153,26 @@ public class Minigame : MonoBehaviour
             && Keyboard.current != null
             && Keyboard.current[debugStartKey].wasPressedThisFrame)
             StartMinigame();
+
+        if (Keyboard.current != null
+            && Keyboard.current[debugDeathSequenceKey].wasPressedThisFrame)
+            DebugAuditionDeathSequence();
 #endif
     }
+
+#if UNITY_EDITOR
+    // Dev audition for the death sequence: fires the full beat (stinger + BGM fade + death
+    // sounds array), then immediately clears the MusicManager suspension flag so GameMusicGuy
+    // can push music back in and subsequent presses re-audition cleanly. The actual death
+    // path keeps music suspended (handled by PlayMonsterDeathSequence) — that latch only
+    // matters outside the editor cheat.
+    private void DebugAuditionDeathSequence()
+    {
+        PlayMonsterDeathSequence();
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.ResumeGameMusic();
+    }
+#endif
 
     public void StartMinigame()
     {
@@ -255,6 +278,7 @@ public class Minigame : MonoBehaviour
                 KillMonster3DWalk();
                 FaceMonster3DAtPlayer();
                 PlayMonster3DAnim(monster3DAttackState);
+                PlayMonsterDeathSequence();
             }
             else
             {
@@ -605,6 +629,21 @@ public class Minigame : MonoBehaviour
             sounds.monsterVanish.PlayAt(monster3D.position);
         else
             sounds.monsterVanish.Play();
+    }
+
+    // Final-fail death beat: one stinger, fade the BGM out so the stinger and death sound
+    // layers have the full mix, then trigger the whole death-sound array at once (the
+    // MonsterMinigameSounds entries' per-clip Delay fields handle the timing within the array).
+    private void PlayMonsterDeathSequence()
+    {
+        if (sounds == null) return;
+
+        sounds.PlayMonsterDeathStinger();
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.SuspendGameMusic(sounds.deathMusicFadeOutDuration);
+
+        sounds.PlayMonsterDeathSounds();
     }
 
     private void PlayMonsterUnhappyReaction()

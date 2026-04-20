@@ -27,6 +27,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip buttonHoverClip;
     public AudioClip pauseMenuOpenClip;
     public AudioClip pauseMenuClosedClip;
+    public AudioClip sliderDownClip;
+    public AudioClip sliderReleaseClip;
+    public AudioClip sliderMoveLoopClip;
 
     [Header("Interaction")]
     public AudioClip selectClip;
@@ -120,6 +123,43 @@ public class AudioManager : MonoBehaviour
             return;
 
         PlayOneShotInternal(clipVolume.Clip, clipVolume.Volume, Random.Range(minPitch, maxPitch), clipVolume.Delay, mixerGroupOverride);
+    }
+
+    /// <summary>
+    /// Plays a 2D one-shot at neutral pitch on a <b>dedicated throwaway AudioSource</b> so the
+    /// clip is completely isolated from the shared <see cref="sfxSource"/>. The shared path
+    /// mutates <see cref="AudioSource.pitch"/> every time a pitch-jittered bank plays and
+    /// <see cref="AudioSource.PlayOneShot"/> is asynchronous — so any still-ringing one-shot on
+    /// the shared source gets pitch-bent by whatever fires next. Signature stingers (death,
+    /// reveal, etc.) that must ring out at their authored pitch should go through this path.
+    /// <para>Respects <see cref="AudioClipVolume.Delay"/>: positive = wait before playing,
+    /// negative = start partway into the clip.</para>
+    /// </summary>
+    public void PlaySfxIsolated2D(AudioClipVolume clipVolume)
+    {
+        if (sfxSource == null || clipVolume == null || clipVolume.Clip == null)
+            return;
+
+        float delay = clipVolume.Delay;
+        if (delay > 0f)
+        {
+            StartCoroutine(PlayIsolated2DAfterDelay(clipVolume.Clip, clipVolume.Volume, delay));
+        }
+        else
+        {
+            float startTime = delay < 0f
+                ? Mathf.Clamp(-delay, 0f, Mathf.Max(0f, clipVolume.Clip.length - 0.01f))
+                : 0f;
+            PlayOneShotAtOffset(clipVolume.Clip, clipVolume.Volume, 1f, startTime, null);
+        }
+    }
+
+    private IEnumerator PlayIsolated2DAfterDelay(AudioClip clip, float volume, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (sfxSource == null || clip == null)
+            yield break;
+        PlayOneShotAtOffset(clip, volume, 1f, 0f, null);
     }
 
     //==================== Positional 3D One-Shots ====================
@@ -327,6 +367,20 @@ public class AudioManager : MonoBehaviour
 
         float remaining = (clip.length - startTime) / Mathf.Max(0.01f, Mathf.Abs(pitch));
         Destroy(go, remaining + 0.1f);
+    }
+
+    //==================== UI ====================
+
+    /// <summary>
+    /// Plays a 2D UI one-shot on the dedicated <see cref="uiSfxSource"/> so menu/UI
+    /// feedback is isolated from gameplay SFX (different mixer routing, not affected by
+    /// gameplay-side pitch jitter on <see cref="sfxSource"/>).
+    /// </summary>
+    public void PlayUiSfx(AudioClip clip, float volume = 1f)
+    {
+        if (uiSfxSource == null || clip == null)
+            return;
+        uiSfxSource.PlayOneShot(clip, Mathf.Clamp01(volume));
     }
 
     //==================== Volume ====================

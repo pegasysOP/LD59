@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1464031999137279167}
   - component: {fileID: 2026161893796005655}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spawn Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,9 +60,9 @@ GameObject:
   - component: {fileID: 2967473981520820903}
   - component: {fileID: 4321745213198967264}
   - component: {fileID: 8045058478673150814}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Alien Zone
-  m_TagString: Untagged
+  m_TagString: AlienZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

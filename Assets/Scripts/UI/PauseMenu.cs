@@ -19,6 +19,9 @@ public class PauseMenu : MonoBehaviour
         sensitivitySlider.onValueChanged.AddListener(OnSensitivityValueChanged);
         volumeSlider.onValueChanged.AddListener(OnVolumeValueChanged);
         quitButton.onClick.AddListener(OnQuitButtonClick);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayUiSfx(AudioManager.Instance.pauseMenuOpenClip);
     }
 
     private void OnDisable()
@@ -27,6 +30,9 @@ public class PauseMenu : MonoBehaviour
         sensitivitySlider.onValueChanged.RemoveListener(OnSensitivityValueChanged);
         volumeSlider.onValueChanged.RemoveListener(OnVolumeValueChanged);
         quitButton.onClick.RemoveListener(OnQuitButtonClick);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayUiSfx(AudioManager.Instance.pauseMenuClosedClip);
     }
 
     public void SetOpen(bool open)

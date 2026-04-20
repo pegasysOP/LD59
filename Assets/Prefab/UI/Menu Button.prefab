@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1286971080595699374}
   - component: {fileID: 1649144145289548581}
   - component: {fileID: 2567345485918218177}
+  - component: {fileID: 1114409871823418764}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -67,15 +68,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: START
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e014c43c2419164d8b67b1b4aa82b59, type: 2}
+  m_sharedMaterial: {fileID: -7508050909945857759, guid: 0e014c43c2419164d8b67b1b4aa82b59, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4279499102
+  m_fontColor: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -92,15 +93,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 8192
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -137,6 +138,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1114409871823418764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2334888709876182938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c366d8b9fe9f54aaa8ddc0f8c605ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HDRColorBoost
+  hdrColor: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
 --- !u!1 &6078895358876009029
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,6 +163,8 @@ GameObject:
   - component: {fileID: 1326530027288736106}
   - component: {fileID: 3741092339807915888}
   - component: {fileID: 2797616858211725412}
+  - component: {fileID: 2016316590080848532}
+  - component: {fileID: 8887000000000000001}
   m_Layer: 5
   m_Name: Menu Button
   m_TagString: Untagged
@@ -197,14 +213,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.363, g: 0.363, b: 0.363, a: 1}
+  m_Color: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 53e82fd5fdec7644b9078c98e5c9bcac, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -254,7 +270,32 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 3741092339807915888}
+  m_TargetGraphic: {fileID: 2567345485918218177}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2016316590080848532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6078895358876009029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c366d8b9fe9f54aaa8ddc0f8c605ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HDRColorBoost
+  hdrColor: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
+--- !u!114 &8887000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6078895358876009029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c337ffc82c414c808644595a2cc301b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiButtonSounds

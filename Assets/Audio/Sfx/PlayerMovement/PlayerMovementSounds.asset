@@ -42,6 +42,7 @@ MonoBehaviour:
     pitchMax: 1.08
     gain: 0.6
     volumeJitter: 0
+    useFocusMixerGroup: 0
   footstepInterval: 0.6
   jumpAir:
     clips:
@@ -55,6 +56,7 @@ MonoBehaviour:
     pitchMax: 1.05
     gain: 0.9
     volumeJitter: 0
+    useFocusMixerGroup: 0
   jumpStep:
     clips:
     - _clip: {fileID: 8300000, guid: 9abacfce9abe740d7a376180ba93a276, type: 3}
@@ -85,6 +87,7 @@ MonoBehaviour:
     pitchMax: 1.05
     gain: 0.8
     volumeJitter: 0
+    useFocusMixerGroup: 0
   landing:
     clips:
     - _clip: {fileID: 8300000, guid: b690ef5a010004f45aebc249b44a3b03, type: 3}
@@ -95,6 +98,7 @@ MonoBehaviour:
       _delay: -0.22
     pitchMin: 0.95
     pitchMax: 1.05
-    gain: 0.85
+    gain: 0.7
     volumeJitter: 0
+    useFocusMixerGroup: 0
   minAirTimeForLanding: 0.1
