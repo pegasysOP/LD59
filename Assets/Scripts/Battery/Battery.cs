@@ -9,6 +9,8 @@ public class Battery : MonoBehaviour, IInteractable
     [SerializeField]
     private Rigidbody rb;
 
+    public bool hasTriggeredIntensityIncrease = false;
+
     //TODO: Replace with Actions
     private Mouse mouse = Mouse.current;
 

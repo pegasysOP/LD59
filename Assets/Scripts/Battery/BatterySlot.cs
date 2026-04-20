@@ -79,7 +79,12 @@ public class BatterySlot : MonoBehaviour, IInteractable
         {
             PlayWithCooldown(sounds?.rejectFeedback, slotPos);
             PlayWithCooldown(sounds?.rejectStaticZap, slotPos);
-            IntensityManager.Instance.AddIntensity(intensityIncreaseOnFail);
+            if (!battery.hasTriggeredIntensityIncrease)
+            {
+                battery.hasTriggeredIntensityIncrease = true;
+                IntensityManager.Instance.AddIntensity(intensityIncreaseOnFail);
+            }
+
             EjectBattery();
         }
         else
@@ -146,8 +151,14 @@ public class BatterySlot : MonoBehaviour, IInteractable
 
     private void OnTriggerEnter(Collider other)
     {
+        if (battery != null)
+            return;
+
         Battery otherBattery = other.GetComponent<Battery>();
         if (otherBattery == null)
+            return;
+
+        if (otherBattery.isInCorrectSlot)
             return;
 
         battery = otherBattery;
