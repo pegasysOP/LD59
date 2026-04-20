@@ -358,6 +358,7 @@ MonoBehaviour:
   sfxSource: {fileID: 927135461875543107}
   uiSfxSource: {fileID: 2943396259719583481}
   audioMixer: {fileID: 24100000, guid: 40926198f5985694ab7a701dab4da26a, type: 2}
+  focusMixerGroup: {fileID: 1668216675390786927, guid: 40926198f5985694ab7a701dab4da26a, type: 2}
   buttonPressClip: {fileID: 0}
   buttonHoverClip: {fileID: 0}
   pauseMenuOpenClip: {fileID: 0}
@@ -404,10 +405,14 @@ MonoBehaviour:
   backgroundMultiplier: 0.4
   smoothEnvelope: 1
   fullVolumeMultiplier: 1
+  prewarmLibrary: {fileID: 0}
+  prewarmLibraryResourcePath: MusicLibrary
+  prewarmPrimeDecoder: 1
   currentClipDebug: {fileID: 0}
   currentPerceivedMultiplierDebug: 0
   currentModeDebug: 0
   phaseDebug: Idle
+  prewarmCompleteDebug: 0
 --- !u!114 &7819260440794906913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,18 +425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d4181a8c4133497ab7221f08b4beda4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameMusicGuy
-  library: {fileID: 11400000, guid: ba33c03d53fce4810a5de766e8c49e48, type: 2}
-  menuSceneNames:
-  - Menu
-  menuTrack: 0
-  track: 2
-  mediumTrack: 3
-  intenseTrack: 4
-  peakTrack: 10
-  minigameTrack: 4
-  monsterEncounterCrossfade: 0.3
-  panicStrikeThreshold: 2
-  postEscapeTrack: 5
 --- !u!1 &5071249589341514211
 GameObject:
   m_ObjectHideFlags: 0

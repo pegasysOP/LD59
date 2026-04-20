@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 /// <summary>
 /// A named pool of clips with a shared pitch range; picks one at random and plays it through <see cref="AudioManager"/>.
@@ -23,6 +24,12 @@ public class SfxBank
              "0 = off. 0.10 = +/-10% perceived loudness variation per trigger.")]
     [Range(0f, 0.5f)] public float volumeJitter = 0f;
 
+    [Tooltip("When true, this bank's one-shots are routed through AudioManager.focusMixerGroup instead of " +
+             "the default SFX mixer group. Intended for signature sounds (player snap, monster syllables) " +
+             "that need their own post-fader gain / EQ / sidechain without rebalancing the whole SFX bus. " +
+             "No-op if AudioManager.focusMixerGroup is unassigned (bank falls back to the default path).")]
+    public bool useFocusMixerGroup = false;
+
     public bool HasAnyClip
     {
         get
@@ -43,6 +50,7 @@ public class SfxBank
 
         float pMin = Mathf.Min(pitchMin, pitchMax);
         float pMax = Mathf.Max(pitchMin, pitchMax);
+        AudioMixerGroup groupOverride = ResolveMixerGroupOverride();
 
         int start = Random.Range(0, clips.Count);
         for (int i = 0; i < clips.Count; i++)
@@ -59,7 +67,7 @@ public class SfxBank
             float shapedAmp = AudioVolume.ToLinear(perceived);
 
             AudioClipVolume shapedEntry = new AudioClipVolume(entry.Clip, shapedAmp, entry.Delay);
-            AudioManager.Instance.PlaySfxWithPitchShifting(shapedEntry, pMin, pMax);
+            AudioManager.Instance.PlaySfxWithPitchShifting(shapedEntry, pMin, pMax, groupOverride);
             return;
         }
     }
@@ -75,6 +83,7 @@ public class SfxBank
 
         float pMin = Mathf.Min(pitchMin, pitchMax);
         float pMax = Mathf.Max(pitchMin, pitchMax);
+        AudioMixerGroup groupOverride = ResolveMixerGroupOverride();
 
         int start = Random.Range(0, clips.Count);
         for (int i = 0; i < clips.Count; i++)
@@ -91,7 +100,7 @@ public class SfxBank
             float shapedAmp = AudioVolume.ToLinear(perceived);
 
             AudioClipVolume shapedEntry = new AudioClipVolume(entry.Clip, shapedAmp, entry.Delay);
-            AudioManager.Instance.PlaySfxAtPoint(shapedEntry, Random.Range(pMin, pMax), worldPosition);
+            AudioManager.Instance.PlaySfxAtPoint(shapedEntry, Random.Range(pMin, pMax), worldPosition, groupOverride);
             return;
         }
     }
@@ -110,6 +119,7 @@ public class SfxBank
 
         float pMin = Mathf.Min(pitchMin, pitchMax);
         float pMax = Mathf.Max(pitchMin, pitchMax);
+        AudioMixerGroup groupOverride = ResolveMixerGroupOverride();
 
         int start = Random.Range(0, clips.Count);
         for (int i = 0; i < clips.Count; i++)
@@ -126,7 +136,7 @@ public class SfxBank
             float shapedAmp = AudioVolume.ToLinear(perceived);
 
             AudioClipVolume shapedEntry = new AudioClipVolume(entry.Clip, shapedAmp, entry.Delay);
-            AudioManager.Instance.PlaySfxAttached(shapedEntry, Random.Range(pMin, pMax), parent, localOffset);
+            AudioManager.Instance.PlaySfxAttached(shapedEntry, Random.Range(pMin, pMax), parent, localOffset, groupOverride);
             return;
         }
     }
@@ -140,6 +150,18 @@ public class SfxBank
     /// so callers can pass an envelope value in perceived space and get correct amplitude shaping.
     /// Clip <c>Delay</c> is intentionally ignored on this path (the heartbeat is scheduled externally).
     /// </summary>
+    /// <summary>
+    /// Resolves the mixer group override that every Play* path should pass to AudioManager.
+    /// Returns the configured focus group when <see cref="useFocusMixerGroup"/> is true AND
+    /// the AudioManager has one assigned; otherwise null (default SFX routing).
+    /// </summary>
+    private AudioMixerGroup ResolveMixerGroupOverride()
+    {
+        if (!useFocusMixerGroup) return null;
+        if (AudioManager.Instance == null) return null;
+        return AudioManager.Instance.focusMixerGroup;
+    }
+
     public float PlayOnSource(AudioSource src, float perceivedMultiplier = 1f)
     {
         if (src == null || clips == null || clips.Count == 0)
