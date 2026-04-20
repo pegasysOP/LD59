@@ -67,8 +67,31 @@ public class CutsceneManager : MonoBehaviour
     [SerializeField] private float shakeMagnitude = 0.08f;
     [Tooltip("Delay between the camera shake finishing and the fade-to-black starting.")]
     [SerializeField] private float postShakeDelay = 0.8f;
+    [Tooltip("Seconds to hold on the fully-black screen after the end-cutscene fade completes, " +
+             "before loading the credits scene. Gives the final beat room to breathe.")]
+    [SerializeField] private float postFadeHoldDuration = 3f;
     [Tooltip("Seconds to smoothly rotate the player to face down the hallway.")]
     [SerializeField] private float endRotateDuration = 1f;
+
+    [Header("End Cutscene Audio Sequence")]
+    [Tooltip("2D signature stinger fired the moment the end cutscene begins. Mirrors the monster-death " +
+             "stinger: non-spatial, sits on top of everything as a cinematic beat. Leave the clip unassigned " +
+             "to skip (no-op).")]
+    [SerializeField] private AudioClipVolume endCutsceneStinger;
+
+    [Tooltip("Seconds the BGM (MusicManager) takes to fade to silence once the end cutscene begins. Music " +
+             "stays suspended for the rest of the beat — the credits scene starts its own music from scratch " +
+             "so there's no need to resume here.")]
+    [Min(0f)]
+    [SerializeField] private float endCutsceneMusicFadeOutDuration = 1.5f;
+
+    [Tooltip("Array of one-shots triggered simultaneously at the start of the end cutscene. Each clip's " +
+             "per-entry Delay (positive = wait before play, negative = start partway into the clip) is what " +
+             "staggers the sequence across the ~10s cutscene — this method fires the whole array in one call " +
+             "and lets the delays do the timing. Played as 3D sources parented to the end-cutscene alien so " +
+             "they track the creature as it charges (panning/attenuating correctly); falls back to 2D if the " +
+             "alien reference is missing.")]
+    [SerializeField] private AudioClipVolume[] endCutsceneSounds;
 
     public enum CutsceneType
     {
@@ -78,6 +101,10 @@ public class CutsceneManager : MonoBehaviour
     }
 
     public CutsceneType type;
+
+    // Tracks the active intro (powerdown) coroutine so editor cheats / skip hooks
+    // can abort it mid-play and snap straight to the post-intro state.
+    private Coroutine powerdownRoutine;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -192,7 +219,7 @@ public class CutsceneManager : MonoBehaviour
                 PlayWakeCutscene();
                 break;
             case CutsceneType.Powerdown:
-                StartCoroutine(PowerdownCutsceneRoutine());
+                powerdownRoutine = StartCoroutine(PowerdownCutsceneRoutine());
                 break;
             case CutsceneType.EscapePod:
                 StartCoroutine(EscapePodCutsceneRoutine());
@@ -242,7 +269,49 @@ public class CutsceneManager : MonoBehaviour
 
         IntroComplete = true;
 
+        powerdownRoutine = null;
+
         Debug.Log("Powerdown cutscene finished");
+    }
+
+    /// <summary>
+    /// Aborts the intro (powerdown) cutscene if it's mid-play and snaps the world straight
+    /// to the post-intro state: ambient lighting dimmed, torch on, after-intro decals active,
+    /// fade cleared, player unlocked, and <see cref="IntroComplete"/> set so ambient systems
+    /// gated on it start running. Safe to call if the intro has already finished or never
+    /// ran — does nothing harmful in those cases.
+    /// </summary>
+    public void SkipIntroCutscene()
+    {
+        if (IntroComplete && powerdownRoutine == null)
+            return;
+
+        if (powerdownRoutine != null)
+        {
+            StopCoroutine(powerdownRoutine);
+            powerdownRoutine = null;
+        }
+
+        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
+        RenderSettings.ambientIntensity = postIntroLightingIntensity;
+
+        foreach (var decal in decalsToSpawnAfterIntro)
+        {
+            if (decal != null)
+                decal.SetActive(true);
+        }
+
+        if (torch != null)
+            torch.SetActive(true);
+
+        if (fadeCanvasGroup != null)
+            fadeCanvasGroup.alpha = 0f;
+
+        GameManager.Instance?.SetLocked(false);
+
+        IntroComplete = true;
+
+        Debug.Log("[CutsceneManager] Intro cutscene skipped.");
     }
 
     private IEnumerator EscapePodCutsceneRoutine()
@@ -251,6 +320,11 @@ public class CutsceneManager : MonoBehaviour
 
         StateTracker.Instance?.TriggerVictory();
         IntensityManager.Instance.increasePerSecond = 0f;
+
+        // Fire the signature end-cutscene audio sequence (stinger + staggered clips) at t=0
+        // so per-clip Delay values sculpt the layers across the full cutscene timeline —
+        // matches the PlayMonsterDeathSequence pattern used by Minigame.
+        PlayEndCutsceneAudioSequence();
 
         // Kill minigame if somehow still running — safety net so the HUD doesn't
         // linger and StateTracker doesn't get a Lost flip from a racing EndSession.
@@ -319,9 +393,63 @@ public class CutsceneManager : MonoBehaviour
         if (postShakeDelay > 0f)
             yield return new WaitForSeconds(postShakeDelay);
 
-        // Fade to black, load credits (unchanged).
+        // Fade to black, hold for a beat, then load credits.
         yield return StartCoroutine(Fade(1f, fadeDuration));
+
+        if (postFadeHoldDuration > 0f)
+            yield return new WaitForSeconds(postFadeHoldDuration);
+
         SceneUtils.LoadCreditScene();
+    }
+
+    // End-cutscene signature beat: one 2D stinger, fade the BGM out so the stinger and layered
+    // one-shots have the full mix, then trigger the whole sounds array at once parented to the
+    // alien (so the layers track the creature as it charges). Per-entry Delay fields stagger
+    // the sequence. Mirrors Minigame.PlayMonsterDeathSequence but 3D-attached for the layers.
+    private void PlayEndCutsceneAudioSequence()
+    {
+        PlayEndCutsceneStinger2D(endCutsceneStinger);
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.SuspendGameMusic(endCutsceneMusicFadeOutDuration);
+
+        if (endCutsceneSounds == null)
+            return;
+
+        Transform alienTransform = endAlien != null && endAlien.alien != null ? endAlien.alien : null;
+        for (int i = 0; i < endCutsceneSounds.Length; i++)
+            PlayEndCutsceneLayerOnAlien(endCutsceneSounds[i], alienTransform);
+    }
+
+    // Routes the stinger through the isolated 2D pipeline so no concurrent pitch-jittered
+    // bank can bleed pitch onto the still-ringing clip by mutating the shared sfxSource's pitch.
+    // Treats the authored volume as perceived loudness to match the rest of the audio stack.
+    private static void PlayEndCutsceneStinger2D(AudioClipVolume entry)
+    {
+        if (entry == null || entry.Clip == null || AudioManager.Instance == null)
+            return;
+
+        float linear = AudioVolume.ToLinear(entry.Volume);
+        AudioClipVolume shaped = new AudioClipVolume(entry.Clip, linear, entry.Delay);
+        AudioManager.Instance.PlaySfxIsolated2D(shaped);
+    }
+
+    // Plays a layer as a 3D one-shot parented to the alien so it pans/attenuates with the
+    // creature as it charges. Converts perceived-loudness volume to linear amplitude before
+    // handing to the attached one-shot path (which treats volume as linear). Falls back to
+    // the 2D isolated pipe when the alien transform is missing so layers still fire.
+    private static void PlayEndCutsceneLayerOnAlien(AudioClipVolume entry, Transform alien)
+    {
+        if (entry == null || entry.Clip == null || AudioManager.Instance == null)
+            return;
+
+        float linear = AudioVolume.ToLinear(entry.Volume);
+        AudioClipVolume shaped = new AudioClipVolume(entry.Clip, linear, entry.Delay);
+
+        if (alien != null)
+            AudioManager.Instance.PlaySfxAttached(shaped, 1f, alien, Vector3.zero);
+        else
+            AudioManager.Instance.PlaySfxIsolated2D(shaped);
     }
 
     private IEnumerator Fade(float target, float duration)
