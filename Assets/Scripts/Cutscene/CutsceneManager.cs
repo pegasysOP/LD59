@@ -89,8 +89,10 @@ public class CutsceneManager : MonoBehaviour
 
         GameManager.Instance?.SetLocked(true);
 
+        yield return new WaitForSeconds(5.5f);
+
         //Fade out at start of power down cutscene
-        yield return StartCoroutine(Fade(1f, fadeDuration));
+        yield return StartCoroutine(Fade(1.0f, fadeDuration + 0.5f));
 
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
         RenderSettings.ambientIntensity = postIntroLightingIntensity;
@@ -104,7 +106,7 @@ public class CutsceneManager : MonoBehaviour
 
         //TODO: Play powerdown visual effects here 
 
-        yield return new WaitForSeconds(powerdownDuration);
+        yield return new WaitForSeconds(powerdownDuration - 6f);
 
         //Fade back in after power down is complete
         yield return StartCoroutine(Fade(0f, fadeDuration));
