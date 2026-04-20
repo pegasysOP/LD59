@@ -46,7 +46,7 @@ public class Door : MonoBehaviour, IInteractable
 
     private const float OpenOffset = -1.45f;
 
-    private const float OpenDuration = 1.7f;
+    private const float OpenDuration = 2f;
 
     private float initialDelay = 10f;
     private float initialTimer = 5f;
