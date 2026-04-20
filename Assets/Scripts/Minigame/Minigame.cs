@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class Minigame : MonoBehaviour
 {
+    [SerializeField] private TorchController torchController;
+
     [Header("UI")]
     public CanvasGroup panelGroup;
     public Transform monster;
@@ -152,6 +154,8 @@ public class Minigame : MonoBehaviour
     public void StartMinigame()
     {
         if (state != State.Idle) return;
+
+        torchController.enableEnemyFlicker = true;
 
         failCount = 0;
         usedPairIndices.Clear();
@@ -872,6 +876,7 @@ public class Minigame : MonoBehaviour
 
     private void EndSession(bool won)
     {
+        torchController.enableEnemyFlicker = false;
         StopIdleVocalsRoutine();
         KillMonster3DWalk();
         ClearRound();
