@@ -120,6 +120,7 @@ public class Minigame : MonoBehaviour
     private bool strayMissThisRound;
     private DialoguePair currentPair;
     private int lastPairIndex = -1;
+    private readonly HashSet<int> usedPairIndices = new HashSet<int>();
     private Coroutine alienRevealCo;
     private Tweener titleFlashTween;
 
@@ -147,6 +148,8 @@ public class Minigame : MonoBehaviour
         if (state != State.Idle) return;
 
         failCount = 0;
+        usedPairIndices.Clear();
+        lastPairIndex = -1;
         UpdateFailCounter();
         monster.localScale = monsterBaseScale;
         monster.localPosition = monsterBasePosition;
@@ -451,10 +454,20 @@ public class Minigame : MonoBehaviour
     private DialoguePair PickPair()
     {
         if (dialoguePairs == null || dialoguePairs.Length == 0) return null;
-        if (dialoguePairs.Length == 1) { lastPairIndex = 0; return dialoguePairs[0]; }
-        int idx;
-        do { idx = UnityEngine.Random.Range(0, dialoguePairs.Length); }
-        while (idx == lastPairIndex);
+        if (usedPairIndices.Count >= dialoguePairs.Length)
+            usedPairIndices.Clear();
+
+        List<int> pool = new List<int>();
+        for (int i = 0; i < dialoguePairs.Length; i++)
+            if (!usedPairIndices.Contains(i) && i != lastPairIndex)
+                pool.Add(i);
+        if (pool.Count == 0)
+            for (int i = 0; i < dialoguePairs.Length; i++)
+                if (!usedPairIndices.Contains(i))
+                    pool.Add(i);
+
+        int idx = pool[UnityEngine.Random.Range(0, pool.Count)];
+        usedPairIndices.Add(idx);
         lastPairIndex = idx;
         return dialoguePairs[idx];
     }
