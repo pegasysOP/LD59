@@ -2,20 +2,16 @@ using UnityEngine;
 
 public class EndTrigger : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private bool hasPlayed;
 
     private void OnTriggerEnter(Collider other)
     {
-        SceneUtils.LoadCreditScene();
+        if (hasPlayed) return;
+        if (!other.CompareTag("Player")) return;
+
+        hasPlayed = true;
+
+        if (CutsceneManager.Instance != null)
+            CutsceneManager.Instance.PlayCutscene(CutsceneManager.CutsceneType.EscapePod);
     }
 }

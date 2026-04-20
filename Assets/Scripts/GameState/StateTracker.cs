@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEngine.InputSystem;
+#endif
 
 public enum TaskType
 {
@@ -31,6 +34,12 @@ public class StateTracker : MonoBehaviour
     [SerializeField] private int encounterCountDebug;
     [SerializeField] private bool lastEncounterWonDebug;
     [SerializeField] private float lastEncounterTimeDebug = -1f;
+
+#if UNITY_EDITOR
+    [Header("Editor Cheats")]
+    [Tooltip("Editor-only hotkey that marks every task complete. Fires OnTaskCompleted for each task still pending.")]
+    [SerializeField] private Key debugCompleteAllTasksKey = Key.P;
+#endif
 
     private readonly Dictionary<TaskType, bool> tasks = new Dictionary<TaskType, bool>
     {
@@ -80,6 +89,25 @@ public class StateTracker : MonoBehaviour
         if (subscribedMinigame != null)
             subscribedMinigame.OnMinigameEnded += HandleMinigameEnded;
     }
+
+#if UNITY_EDITOR
+    private void Update()
+    {
+        if (Keyboard.current == null) return;
+        if (Keyboard.current[debugCompleteAllTasksKey].wasPressedThisFrame)
+            DebugCompleteAllTasks();
+    }
+
+    private void DebugCompleteAllTasks()
+    {
+        foreach (TaskType task in new List<TaskType>(tasks.Keys))
+        {
+            if (!tasks[task])
+                CompleteTask(task);
+        }
+        Debug.Log("[StateTracker] Debug cheat: all tasks marked complete.");
+    }
+#endif
 
     private void OnDestroy()
     {

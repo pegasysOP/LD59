@@ -922,6 +922,11 @@ public class Minigame : MonoBehaviour
 
     private void EndSession(bool won)
     {
+        EndSession(won, fireEvent: true, releaseLock: true);
+    }
+
+    private void EndSession(bool won, bool fireEvent, bool releaseLock)
+    {
         torchController.enableEnemyFlicker = false;
         StopIdleVocalsRoutine();
         KillMonster3DWalk();
@@ -936,13 +941,22 @@ public class Minigame : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.MinigameActive = false;
-            GameManager.Instance.SetLocked(false);
+            if (releaseLock)
+                GameManager.Instance.SetLocked(false);
         }
 
-        IntensityManager.Instance.SetIntensity(0); 
+        IntensityManager.Instance.SetIntensity(0);
 
         state = State.Idle;
-        OnMinigameEnded?.Invoke(won);
+        if (fireEvent)
+            OnMinigameEnded?.Invoke(won);
+    }
+
+    public void ForceStopForEndSequence()
+    {
+        if (state == State.Idle) return;
+        StopAllCoroutines();
+        EndSession(won: false, fireEvent: false, releaseLock: false);
     }
 
     /*public void PlayFinalMonsterApproach()
