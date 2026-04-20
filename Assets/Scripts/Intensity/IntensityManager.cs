@@ -52,6 +52,8 @@ public class IntensityManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private IntensityLevel currentLevelDebug;
 
+    public float increasePerSecond = 0.0075f;
+
     /// <summary>Raw intensity value in [0, 1].</summary>
     public float CurrentIntensity => intensity;
 
@@ -97,7 +99,7 @@ public class IntensityManager : MonoBehaviour
     {
         if (StateTracker.Instance.StartingDoorOpened)
         {
-            SetIntensity(intensity + 0.0075f * Time.deltaTime);
+            SetIntensity(intensity + increasePerSecond * Time.deltaTime);
         }
         
         if (decayPerSecond <= 0f || intensity <= 0f)
