@@ -48,7 +48,7 @@ public class CutsceneManager : MonoBehaviour
                 StartCoroutine(PowerdownCutsceneRoutine());
                 break;
             case CutsceneType.EscapePod:
-                PlayEscapePodCutscene();
+                StartCoroutine(EscapePodCutsceneRoutine());
                 break;
             default:
                 Debug.LogError("Invalid cutscene type: " + type);
@@ -83,9 +83,32 @@ public class CutsceneManager : MonoBehaviour
         Debug.Log("Powerdown cutscene finished");
     }
 
-    private void PlayEscapePodCutscene()
+    private IEnumerator EscapePodCutsceneRoutine()
     {
         Debug.Log("Playing Escape cutscene");
+
+        //Immobilise Player
+        GameManager.Instance?.SetLocked(true);
+
+        //Rotate to face escape door 
+        Quaternion current = controller.transform.rotation;
+        Quaternion target = Quaternion.Euler(current.eulerAngles.x, 90f, current.eulerAngles.z);
+
+        yield return StartCoroutine(RotateTo(controller.transform, target, 1f));
+
+        yield return new WaitForSeconds(2f);
+
+        //Have creature run towards door
+
+        //Close door 
+
+        //Play rocket takeoff sound 
+
+        //Fade to black 
+        yield return StartCoroutine(Fade(1f, fadeDuration));
+
+        //Load credits scene 
+        SceneUtils.LoadCreditScene();
     }
 
     private IEnumerator Fade(float target, float duration)
@@ -103,5 +126,26 @@ public class CutsceneManager : MonoBehaviour
         }
 
         fadeCanvasGroup.alpha = target;
+    }
+
+    private IEnumerator RotateTo(Transform target, Quaternion targetRotation, float duration)
+    {
+        Quaternion startRotation = target.rotation;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            float t = time / duration;
+
+            // smoother feel than linear
+            t = Mathf.SmoothStep(0f, 1f, t);
+
+            target.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        target.rotation = targetRotation;
     }
 }
