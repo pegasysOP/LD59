@@ -106,6 +106,41 @@ public class SfxBank
     }
 
     /// <summary>
+    /// Positional variant of <see cref="Play"/> that lets the caller tighten (or widen) the 3D
+    /// rolloff envelope beyond the AudioManager's default stinger range. Useful for ambient point
+    /// sources -- e.g. an electricity arc's crackle transients -- that should fall off to silence
+    /// within a few meters so they don't carry across the whole level.
+    /// </summary>
+    public void PlayAt(Vector3 worldPosition, float minDistance, float maxDistance)
+    {
+        if (clips == null || clips.Count == 0 || AudioManager.Instance == null)
+            return;
+
+        float pMin = Mathf.Min(pitchMin, pitchMax);
+        float pMax = Mathf.Max(pitchMin, pitchMax);
+        AudioMixerGroup groupOverride = ResolveMixerGroupOverride();
+
+        int start = Random.Range(0, clips.Count);
+        for (int i = 0; i < clips.Count; i++)
+        {
+            int idx = (start + i) % clips.Count;
+            AudioClipVolume entry = clips[idx];
+            if (entry == null || entry.Clip == null)
+                continue;
+
+            float perceived = entry.Volume * gain;
+            if (volumeJitter > 0f)
+                perceived *= 1f + Random.Range(-volumeJitter, volumeJitter);
+
+            float shapedAmp = AudioVolume.ToLinear(perceived);
+
+            AudioClipVolume shapedEntry = new AudioClipVolume(entry.Clip, shapedAmp, entry.Delay);
+            AudioManager.Instance.PlaySfxAtPoint(shapedEntry, Random.Range(pMin, pMax), worldPosition, minDistance, maxDistance, groupOverride);
+            return;
+        }
+    }
+
+    /// <summary>
     /// Listener-followed variant of <see cref="PlayAt"/>: picks a clip, applies the same perceived-loudness
     /// shaping and jitter, and spawns a 3D AudioSource parented to <paramref name="parent"/> at the given
     /// <paramref name="localOffset"/>. The source moves/rotates with the parent for the clip's lifetime,
