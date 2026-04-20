@@ -83,6 +83,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
         {
             PlayWithCooldown(sounds?.acceptFeedback, slotPos);
             GameManager.Instance.CollectBattery(slotPos);
+            StartCoroutine(AnimatePlacedBattery(battery));
             battery = null;
         }
     }
@@ -108,6 +109,36 @@ public class BatterySlot : MonoBehaviour, IInteractable
         AudioManager.Instance?.batterySounds?.drop.PlayAt(battery.transform.position);
 
         battery = null;
+    }
+
+    private IEnumerator AnimatePlacedBattery(Battery placedBattery)
+    {
+        Transform batteryPosition = placedBattery.transform;
+
+        Rigidbody rb = placedBattery.GetComponent<Rigidbody>();
+        
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
+        Vector3 startPos = batteryPosition.position;
+
+        float bobHeight = 0.05f;     
+        float bobSpeed = 2f;        
+        float rotationSpeed = 60f; 
+
+        while (true)
+        {
+            
+            batteryPosition.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.World);
+
+            float bobOffset = Mathf.Sin(Time.time * bobSpeed) * bobHeight;
+            batteryPosition.position = startPos + new Vector3(0f, bobOffset, 0f);
+
+            yield return null;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
