@@ -42,6 +42,8 @@ public class RepeatMinigame : MonoBehaviour
 
     public event Action<bool> OnMinigameEnded;
 
+    private bool intensityIncreasedThisRound = false;
+
     private enum State { Idle, ShowingSequence, PlayerInput, RoundResolved, GameOver }
     private State state = State.Idle;
 
@@ -129,6 +131,7 @@ public class RepeatMinigame : MonoBehaviour
             round++;
             sequenceLength++;
             SetButtonInteractible(false);
+            intensityIncreasedThisRound = false;
 
             if (round == 3)
             {
@@ -201,7 +204,11 @@ public class RepeatMinigame : MonoBehaviour
             playerIndex = 0;
             isReplaying = true;
             state = State.ShowingSequence;
-            IntensityManager.Instance.AddIntensity(intensityOnFail);
+            if(intensityIncreasedThisRound == false)
+            {
+                    IntensityManager.Instance.AddIntensity(intensityOnFail);
+                    intensityIncreasedThisRound = true;
+            }
             StartCoroutine(ReplaySequence());
         }
     }
