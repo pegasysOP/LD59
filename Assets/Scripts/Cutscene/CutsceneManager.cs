@@ -8,6 +8,9 @@ public class CutsceneManager : MonoBehaviour
     private PlayerController controller;
 
     [SerializeField]
+    private GameObject torch;
+
+    [SerializeField]
     private EscapePodDoor escapePodDoor;
 
     [SerializeField]
@@ -96,6 +99,8 @@ public class CutsceneManager : MonoBehaviour
         {
             decal.SetActive(true);
         }
+
+        torch.SetActive(true);
 
         //TODO: Play powerdown visual effects here 
 
