@@ -115,8 +115,15 @@ public class RepeatMinigame : MonoBehaviour
             //If we get here then they won so set the next SOS character and increment the rounds
             //TODO: We may want to replace this with an animation or different visual effects
             if (SOSCharacters.Length > round)
+            {
+                foreach(GameObject character in SOSCharacters)
+                {
+                    character.SetActive(false);
+                    loginText[1].SetActive(false);
+                }
                 SOSCharacters[round].SetActive(true);
-
+            }
+               
             round++;
             sequenceLength++;
             SetButtonInteractible(false);
