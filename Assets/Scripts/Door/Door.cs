@@ -48,6 +48,16 @@ public class Door : MonoBehaviour, IInteractable
 
     private const float OpenDuration = 1.7f;
 
+    private float initialDelay = 10f;
+    private float initialTimer = 10f;
+
+    [SerializeField]
+    private MeshRenderer meshRenderer;
+    [SerializeField]
+    private Material greenMaterial;
+    [SerializeField]
+    private Material redMaterial;
+
     public void Interact()
     {
         Debug.Log("Interacting with door");
@@ -97,7 +107,11 @@ public class Door : MonoBehaviour, IInteractable
 
     public bool IsInteractable()
     {
-        return isClosed;
+        if((isClosed && initialTimer <= 0) == true)
+        {
+            meshRenderer.material = redMaterial;
+        }
+        return isClosed && initialTimer <= 0;
     }
 
     private IEnumerator MoveDoor(float deltaZ, float duration)
@@ -120,5 +134,15 @@ public class Door : MonoBehaviour, IInteractable
         t.localPosition = target;
 
         StateTracker.Instance?.NotifyStartingDoorOpened();
+    }
+
+    private void Update()
+    {
+        initialTimer -= Time.deltaTime;
+
+        if (initialTimer <= 0 && isClosed)
+        {
+            meshRenderer.material = greenMaterial;
+        }
     }
 }

@@ -158,7 +158,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7e74d6e9dac27476b8de1c3178ef4401, type: 2}
+  - {fileID: 2100000, guid: 383ecf3b8286948b1b35613315050600, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -238,6 +238,9 @@ MonoBehaviour:
     gain: 1
     volumeJitter: 0
   doorOpenSoundDelay: 0
+  meshRenderer: {fileID: 5495838554613307765}
+  greenMaterial: {fileID: 2100000, guid: 7e74d6e9dac27476b8de1c3178ef4401, type: 2}
+  redMaterial: {fileID: 2100000, guid: 383ecf3b8286948b1b35613315050600, type: 2}
 --- !u!1 &7168782720487754459
 GameObject:
   m_ObjectHideFlags: 0
