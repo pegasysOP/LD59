@@ -13,6 +13,8 @@ public class BatterySlot : MonoBehaviour, IInteractable
 
     private Battery battery;
 
+    private float intensityIncreaseOnFail = 0.25f;
+
     [SerializeField]
     private float ejectForce = 2.5f;
 
@@ -77,6 +79,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
         {
             PlayWithCooldown(sounds?.rejectFeedback, slotPos);
             PlayWithCooldown(sounds?.rejectStaticZap, slotPos);
+            IntensityManager.Instance.AddIntensity(intensityIncreaseOnFail);
             EjectBattery();
         }
         else

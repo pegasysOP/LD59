@@ -73,6 +73,7 @@ public class IntensityManager : MonoBehaviour
 
     private float lastAddTime = float.NegativeInfinity;
 
+    //private float minimumTriggerDelay = 10f;
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -94,6 +95,11 @@ public class IntensityManager : MonoBehaviour
 
     private void Update()
     {
+        if (StateTracker.Instance.StartingDoorOpened)
+        {
+            SetIntensity(intensity + 0.0075f * Time.deltaTime);
+        }
+        
         if (decayPerSecond <= 0f || intensity <= 0f)
             return;
 
@@ -117,6 +123,12 @@ public class IntensityManager : MonoBehaviour
             CurrentLevel = nextLevel;
             currentLevelDebug = nextLevel;
             OnLevelChanged?.Invoke(previous, nextLevel);
+        }
+        if((intensity >= 0.5f) && !GameManager.Instance.MinigameActive)
+        {
+            intensity = 0.99f;
+            GameManager.Instance.minigame.StartMinigame();
+            GameManager.Instance.MinigameActive = true;
         }
 
         if (valueChanged)

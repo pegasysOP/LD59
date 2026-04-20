@@ -38,6 +38,8 @@ public class RepeatMinigame : MonoBehaviour
 
     public int sequenceLength = 3;
 
+    private float intensityOnFail = 0.25f;
+
     public event Action<bool> OnMinigameEnded;
 
     private enum State { Idle, ShowingSequence, PlayerInput, RoundResolved, GameOver }
@@ -127,6 +129,12 @@ public class RepeatMinigame : MonoBehaviour
             round++;
             sequenceLength++;
             SetButtonInteractible(false);
+
+            if (round == 3)
+            {
+                Vector3 successPos = approved != null ? approved.transform.position : transform.position;
+                PlayMinigameSuccessAt(successPos);
+            }
             yield return new WaitForSeconds(roundGapTime);
         }
 
@@ -193,6 +201,7 @@ public class RepeatMinigame : MonoBehaviour
             playerIndex = 0;
             isReplaying = true;
             state = State.ShowingSequence;
+            IntensityManager.Instance.AddIntensity(intensityOnFail);
             StartCoroutine(ReplaySequence());
         }
     }
@@ -239,7 +248,7 @@ public class RepeatMinigame : MonoBehaviour
             StateTracker.Instance?.CompleteTask(TaskType.SimonSays);
 
             Vector3 successPos = approved != null ? approved.transform.position : transform.position;
-            PlayMinigameSuccessAt(successPos);
+            
 
             approved.SetActive(true);
         }
@@ -281,7 +290,7 @@ public class RepeatMinigame : MonoBehaviour
     {
         if (button == null)
             return;
-        PlaySfxPositional(sounds?.successfulEntry, button.transform.position);
+        //PlaySfxPositional(sounds?.successfulEntry, button.transform.position);
     }
 
     private void PlayMinigameSuccessAt(Vector3 worldPosition)

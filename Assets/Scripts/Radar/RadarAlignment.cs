@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class RadarAlignment : MonoBehaviour
@@ -129,6 +130,15 @@ public class RadarAlignment : MonoBehaviour
         positionSlider.Lock();
         angleSlider.Lock();
         lightRenderer.material = lightOnMaterial;
+        
         StateTracker.Instance?.CompleteTask(TaskType.RadarAlignment);
+
+        StartCoroutine(DelayedIntensityIncrease());
+    }
+
+    private IEnumerator DelayedIntensityIncrease()
+    {
+        yield return new WaitForSeconds(1f);
+        IntensityManager.Instance.SetIntensity(1.0f);
     }
 }
