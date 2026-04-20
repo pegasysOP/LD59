@@ -3,9 +3,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
-public class EscapePodDoor : MonoBehaviour, IInteractable
+public class EscapePodDoor : DoorBase
 {
-    private bool isClosed = true;
 
     private Keyboard keyboard = Keyboard.current;
 
@@ -16,7 +15,7 @@ public class EscapePodDoor : MonoBehaviour, IInteractable
 
     private const float OpenDuration = 0.35f;
 
-    public void Interact()
+    public override void Interact()
     {
         Debug.Log("Interacting with escape pod door");
         if (isClosed && doorPanel != null)
@@ -25,9 +24,10 @@ public class EscapePodDoor : MonoBehaviour, IInteractable
         }
     }
 
-    public bool IsInteractable()
+    public override bool IsInteractable()
     {
         //return true;
+
         return StateTracker.Instance.AllTasksComplete;
     }
 
@@ -67,6 +67,11 @@ public class EscapePodDoor : MonoBehaviour, IInteractable
         //{
         //    StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
         //}
+
+        if (StateTracker.Instance.AllTasksComplete)
+        {
+            meshRenderer.material = greenMaterial;
+        }
 
         if (keyboard.zKey.wasPressedThisFrame)
         {
