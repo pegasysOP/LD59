@@ -359,10 +359,13 @@ MonoBehaviour:
   uiSfxSource: {fileID: 2943396259719583481}
   audioMixer: {fileID: 24100000, guid: 40926198f5985694ab7a701dab4da26a, type: 2}
   focusMixerGroup: {fileID: 1668216675390786927, guid: 40926198f5985694ab7a701dab4da26a, type: 2}
-  buttonPressClip: {fileID: 0}
-  buttonHoverClip: {fileID: 0}
-  pauseMenuOpenClip: {fileID: 0}
-  pauseMenuClosedClip: {fileID: 0}
+  buttonPressClip: {fileID: 8300000, guid: 8fd590d4e02864e628c0b6c53ad36263, type: 3}
+  buttonHoverClip: {fileID: 8300000, guid: bf65ba27e71104d7795d9182cdd774e9, type: 3}
+  pauseMenuOpenClip: {fileID: 8300000, guid: 5eba6d1f49b814750ba3e9d45e313a6f, type: 3}
+  pauseMenuClosedClip: {fileID: 8300000, guid: 64dd6db47136e41788ab1988297c6ead, type: 3}
+  sliderDownClip: {fileID: 8300000, guid: 2db106e06ad1d489ba5ec03f42db5f29, type: 3}
+  sliderReleaseClip: {fileID: 8300000, guid: f7aad90a2b05b469eae836585abebc19, type: 3}
+  sliderMoveLoopClip: {fileID: 8300000, guid: 354df066d81a944d9bd2e7fd0e57c17e, type: 3}
   selectClip: {fileID: 0}
   selectBlockedClip: {fileID: 0}
   batterySounds: {fileID: 11400000, guid: 2eec6ef95640c48fab89e5dd4a408969, type: 2}

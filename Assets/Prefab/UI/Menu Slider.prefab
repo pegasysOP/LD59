@@ -46,6 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4502823178693952493}
   - component: {fileID: 186605829752836794}
+  - component: {fileID: 8887000000000000002}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -125,6 +126,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8887000000000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2549625587604801212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463a8f3bf9b9412280dbbde05b8c31e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiSliderSounds
+  moveLoopIdleCooldown: 0.12
+  moveLoopVolume: 1
 --- !u!1 &3700896874967400450
 GameObject:
   m_ObjectHideFlags: 0

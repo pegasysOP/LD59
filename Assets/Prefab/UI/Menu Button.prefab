@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 3741092339807915888}
   - component: {fileID: 2797616858211725412}
   - component: {fileID: 2016316590080848532}
+  - component: {fileID: 8887000000000000001}
   m_Layer: 5
   m_Name: Menu Button
   m_TagString: Untagged
@@ -286,3 +287,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HDRColorBoost
   hdrColor: {r: 0.36862746, g: 0.9764706, b: 0.07450981, a: 1}
+--- !u!114 &8887000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6078895358876009029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c337ffc82c414c808644595a2cc301b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiButtonSounds

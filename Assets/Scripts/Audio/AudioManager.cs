@@ -27,6 +27,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip buttonHoverClip;
     public AudioClip pauseMenuOpenClip;
     public AudioClip pauseMenuClosedClip;
+    public AudioClip sliderDownClip;
+    public AudioClip sliderReleaseClip;
+    public AudioClip sliderMoveLoopClip;
 
     [Header("Interaction")]
     public AudioClip selectClip;
@@ -364,6 +367,20 @@ public class AudioManager : MonoBehaviour
 
         float remaining = (clip.length - startTime) / Mathf.Max(0.01f, Mathf.Abs(pitch));
         Destroy(go, remaining + 0.1f);
+    }
+
+    //==================== UI ====================
+
+    /// <summary>
+    /// Plays a 2D UI one-shot on the dedicated <see cref="uiSfxSource"/> so menu/UI
+    /// feedback is isolated from gameplay SFX (different mixer routing, not affected by
+    /// gameplay-side pitch jitter on <see cref="sfxSource"/>).
+    /// </summary>
+    public void PlayUiSfx(AudioClip clip, float volume = 1f)
+    {
+        if (uiSfxSource == null || clip == null)
+            return;
+        uiSfxSource.PlayOneShot(clip, Mathf.Clamp01(volume));
     }
 
     //==================== Volume ====================
