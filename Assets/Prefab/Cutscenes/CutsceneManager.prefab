@@ -45,3 +45,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CutsceneManager
   controller: {fileID: 0}
+  torch: {fileID: 0}
+  escapePodDoor: {fileID: 0}
+  minigame: {fileID: 0}
+  wakeDuration: 5
+  powerdownDuration: 14
+  escapePodDuration: 6
+  lockedDuration: 5.5
+  fadeCanvasGroup: {fileID: 0}
+  fadeDuration: 1
+  lossPreFadeDelay: 0.35
+  postIntroLightingIntensity: 0.15
+  decalsToSpawnAfterIntro: []
+  type: 0

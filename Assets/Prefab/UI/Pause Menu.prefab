@@ -270,11 +270,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 186605829752836794, guid: 263ae8a86b60e75428de5dc600308146, type: 3}
       propertyPath: m_MaxValue
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 186605829752836794, guid: 263ae8a86b60e75428de5dc600308146, type: 3}
       propertyPath: m_MinValue
-      value: 0.5
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1070016537949512056, guid: 263ae8a86b60e75428de5dc600308146, type: 3}
       propertyPath: m_Pivot.x

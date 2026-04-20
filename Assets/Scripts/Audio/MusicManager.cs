@@ -241,6 +241,19 @@ public class MusicManager : MonoBehaviour
         IsGameMusicSuspended = false;
     }
 
+    /// <summary>
+    /// Rescale the active music source to match the current master-volume setting.
+    /// Call after <see cref="SettingsUtils.SetMasterVolume"/> so the slider applies
+    /// live to music that would otherwise hold its pre-change volume (menu music
+    /// and game music that has settled into the Background phase).
+    /// </summary>
+    public void RefreshMasterVolume()
+    {
+        if (activeSource == null) return;
+        if (currentModeDebug == Mode.None) return;
+        activeSource.volume = TargetLinear(currentPerceivedMultiplierDebug);
+    }
+
     //==================== Internals ====================
 
     private bool IsAlreadyPlaying(AudioClip clip)

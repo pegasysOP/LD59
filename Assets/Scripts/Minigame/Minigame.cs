@@ -78,7 +78,8 @@ public class Minigame : MonoBehaviour
     public int maxFails = 3;
     public float alienGrowthPerFail = 1.25f;
     public float monsterDropPerFail = 0.25f;
-    public float monster3DApproachDistance = 0.5f;
+    [Tooltip("Distance in front of the player the monster reaches on the final fail step.")]
+    public float monster3DApproachDistance = 1f;
     public const float monster3DApproachDistanceFloor = 0.5f;
     public float monster3DWalkDuration = 0.5f;
     public Ease monster3DWalkEase = Ease.InOutSine;
@@ -140,10 +141,12 @@ public class Minigame : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
         if (state == State.Idle
             && Keyboard.current != null
             && Keyboard.current[debugStartKey].wasPressedThisFrame)
             StartMinigame();
+#endif
     }
 
     public void StartMinigame()
@@ -719,24 +722,26 @@ public class Minigame : MonoBehaviour
             monster3DSpawnPos = monster3D != null ? monster3D.position : Vector3.zero;
         }
 
-        Camera cam = GameManager.Instance != null && GameManager.Instance.cameraController != null
-            ? GameManager.Instance.cameraController.playerCamera
-            : null;
-        if (cam != null)
+        if (player != null)
         {
-            Vector3 camForward = cam.transform.forward; camForward.y = 0f;
-            if (camForward.sqrMagnitude < 0.0001f) camForward = Vector3.forward;
-            camForward.Normalize();
-            monster3DApproachPos = cam.transform.position + camForward * Mathf.Max(monster3DApproachDistanceFloor, monster3DApproachDistance);
-            monster3DApproachPos.y = monster3DSpawnPos.y;
-        }
-        else if (player != null)
-        {
-            Vector3 flat = player.forward; flat.y = 0f;
-            if (flat.sqrMagnitude < 0.0001f) flat = Vector3.forward;
-            flat.Normalize();
-            monster3DApproachPos = player.position + flat * Mathf.Max(monster3DApproachDistanceFloor, monster3DApproachDistance);
-            monster3DApproachPos.y = monster3DSpawnPos.y;
+            // End spot sits on the straight line between the monster's spawn and the
+            // player's position, monster3DApproachDistance metres shy of the player.
+            // Using player.forward here would drift to the side whenever the player
+            // isn't facing the spawn point.
+            Vector3 toPlayer = player.position - monster3DSpawnPos;
+            toPlayer.y = 0f;
+            float distance = toPlayer.magnitude;
+            float approach = Mathf.Max(monster3DApproachDistanceFloor, monster3DApproachDistance);
+            if (distance <= approach || distance < 0.0001f)
+            {
+                monster3DApproachPos = monster3DSpawnPos;
+            }
+            else
+            {
+                Vector3 dir = toPlayer / distance;
+                monster3DApproachPos = player.position - dir * approach;
+                monster3DApproachPos.y = monster3DSpawnPos.y;
+            }
         }
         else
         {
@@ -762,7 +767,11 @@ public class Minigame : MonoBehaviour
     private void WalkMonster3DToFailStep()
     {
         if (monster3D == null) return;
-        float t = maxFails > 0 ? Mathf.Clamp01((float)failCount / maxFails) : 1f;
+        // Reach monster3DApproachPos on the second-to-last fail so the final fail
+        // (attack + game over) triggers with the monster already right in front of
+        // the player. maxFails=3 → fail1=half, fail2=end. maxFails=2 → fail1=end.
+        int stepDenom = Mathf.Max(1, maxFails - 1);
+        float t = Mathf.Clamp01((float)failCount / stepDenom);
         Vector3 target = Vector3.Lerp(monster3DSpawnPos, monster3DApproachPos, t);
 
         KillMonster3DWalk();
@@ -810,12 +819,12 @@ public class Minigame : MonoBehaviour
         StartTitleFlash();
     }
 
-    private void HidePanel()
+    private void HidePanel(bool keepMonster3DVisible = false)
     {
         panelGroup.alpha = 0f;
         panelGroup.interactable = false;
         panelGroup.blocksRaycasts = false;
-        if (monster3D != null) monster3D.gameObject.SetActive(false);
+        if (monster3D != null && !keepMonster3DVisible) monster3D.gameObject.SetActive(false);
         RestoreHudHelpers();
         StopTitleFlash();
     }
@@ -866,7 +875,7 @@ public class Minigame : MonoBehaviour
         StopIdleVocalsRoutine();
         KillMonster3DWalk();
         ClearRound();
-        HidePanel();
+        HidePanel(keepMonster3DVisible: !won);
         monster.localScale = monsterBaseScale;
         monster.localPosition = monsterBasePosition;
 

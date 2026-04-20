@@ -98,7 +98,23 @@ public class GameManager : MonoBehaviour
 
     public void SetPaused(bool paused)
     {
-        SetLocked(paused);
+        // When a minigame is running, player movement stays locked regardless of the
+        // pause menu state. Closing the menu mid-minigame should only re-hide the
+        // cursor, not free the camera/movement.
+        if (paused)
+        {
+            SetLocked(true);
+        }
+        else if (MinigameActive)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            SetLocked(false);
+        }
+
         hudController.pauseMenu.SetOpen(paused);
     }
 

@@ -301,6 +301,9 @@ public class AudioManager : MonoBehaviour
     {
         sfxSource.volume = value / 3;
         uiSfxSource.volume = value / 3;
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.RefreshMasterVolume();
     }
 
     public void UpdateSfxVolume(float value)
