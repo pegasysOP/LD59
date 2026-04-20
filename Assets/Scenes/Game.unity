@@ -1925,6 +1925,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4308917437472382467, guid: a34e1607a4be5f341841353b60deda1d, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4308917437472382467, guid: a34e1607a4be5f341841353b60deda1d, type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6383205039207355623, guid: a34e1607a4be5f341841353b60deda1d, type: 3}
       propertyPath: m_Name
       value: FadeToBlack
