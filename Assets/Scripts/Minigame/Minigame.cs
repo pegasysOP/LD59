@@ -649,7 +649,10 @@ public class Minigame : MonoBehaviour
     {
         if (sounds == null || sounds.playerSnap == null || !sounds.playerSnap.HasAnyClip)
             return;
-        sounds.playerSnap.Play();
+
+        int instances = Mathf.Max(1, sounds.snapInstancesPerTrigger);
+        for (int i = 0; i < instances; i++)
+            sounds.playerSnap.Play();
     }
 
     private void StartIdleVocalsRoutine()

@@ -56,7 +56,8 @@ AudioMixerGroupController:
   m_Name: SFX
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: f88f39b46ed9f4043ade2f1e23ce71b4
-  m_Children: []
+  m_Children:
+  - {fileID: 1668216675390786927}
   m_Volume: 0eb912d9c3619412f8ef887d36112f6e
   m_Pitch: 36a1db54f64b447d1a2492e74cc1174f
   m_Send: 00000000000000000000000000000000
@@ -77,6 +78,20 @@ AudioMixerEffectController:
   m_EffectID: 48173be6e2d684c6baac7fc63c4b4bdf
   m_EffectName: Attenuation
   m_MixLevel: 61b09070a8d2a4f6ca5ff4097b01a87a
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &-1527326933696733372
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 9759b9c1d4af24136a798f8781202142
+  m_EffectName: Attenuation
+  m_MixLevel: 8751d03a8bb2c4985911d29008c5bc93
   m_Parameters: []
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
@@ -104,6 +119,7 @@ AudioMixerController:
     - 99f03cefad92e475783c31a9f10ce8e4
     - f88f39b46ed9f4043ade2f1e23ce71b4
     - 16405d549f0594e47a3ab7481f803237
+    - d0f0a6afcc52946e5a2febf32bc894e1
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -156,8 +172,10 @@ AudioMixerSnapshotController:
   m_FloatValues:
     81733ef29d2654bd59cb2d45152e60ea: -12.1
     65add405564d340fa8f6f4edf13908ff: 0.006
+    d5171ab5c123046efb76c0a7788b04c4: -12
     3dffd10818e0642c182cfa84c5125abc: 0.3
     4dd52249cc4c34eeea50123f7306f101: -1500
+    8b3cb86992e4541b398dd37f00f1d4e1: 5.6897116
     8c1d13ea98f9c474eb7ac80ed26151a2: 3500
     ed75209b39b584cee92553d92bb3f52d: -600
     006b294de61e747fa9a0db8f6a41a3bf: -800
@@ -208,6 +226,25 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &1668216675390786927
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SFX-Focus
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: d0f0a6afcc52946e5a2febf32bc894e1
+  m_Children: []
+  m_Volume: 8b3cb86992e4541b398dd37f00f1d4e1
+  m_Pitch: 98291e3ef026540b897d38282b05e733
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -1527326933696733372}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &3111571339142354338
 AudioMixerGroupController:
   m_ObjectHideFlags: 0

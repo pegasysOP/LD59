@@ -25,6 +25,7 @@ MonoBehaviour:
     pitchMax: 1
     gain: 1
     volumeJitter: 0
+    useFocusMixerGroup: 0
   entranceSettleDelay: 4
   monsterHop:
     clips:
@@ -35,6 +36,7 @@ MonoBehaviour:
     pitchMax: 1.05
     gain: 1
     volumeJitter: 0
+    useFocusMixerGroup: 0
   monsterHappyReaction:
     clips:
     - _clip: {fileID: 8300000, guid: b851818e1c1a84be896c89ffa10be40c, type: 3}
@@ -44,6 +46,7 @@ MonoBehaviour:
     pitchMax: 1.03
     gain: 1
     volumeJitter: 0
+    useFocusMixerGroup: 0
   happyReactionHoldDuration: 2
   monsterVanish:
     clips:
@@ -54,6 +57,7 @@ MonoBehaviour:
     pitchMax: 1.03
     gain: 1
     volumeJitter: 0
+    useFocusMixerGroup: 0
   monsterUnhappyReaction:
     clips:
     - _clip: {fileID: 8300000, guid: 7580ad4513bef4103b0362929e6e0990, type: 3}
@@ -63,6 +67,7 @@ MonoBehaviour:
     pitchMax: 1.05
     gain: 1
     volumeJitter: 0
+    useFocusMixerGroup: 0
   unhappyReactionHoldDuration: 1
   monsterSyllables:
     clips:
@@ -88,7 +93,8 @@ MonoBehaviour:
     pitchMax: 1.1
     gain: 1
     volumeJitter: 0
-  syllableInstancesPerTrigger: 3
+    useFocusMixerGroup: 1
+  syllableInstancesPerTrigger: 4
   monsterIdleVocals:
     clips:
     - _clip: {fileID: 8300000, guid: 7b33b6eb3a2bb424288242af474e55d7, type: 3}
@@ -101,6 +107,7 @@ MonoBehaviour:
     pitchMax: 1.05
     gain: 0.5
     volumeJitter: 0
+    useFocusMixerGroup: 0
   idleVocalsMinInterval: 2.5
   idleVocalsMaxInterval: 6
   idleVocalsInitialDelay: 1.5
@@ -113,3 +120,5 @@ MonoBehaviour:
     pitchMax: 1.05
     gain: 1
     volumeJitter: 0
+    useFocusMixerGroup: 1
+  snapInstancesPerTrigger: 1

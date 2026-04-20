@@ -81,8 +81,8 @@ public class MonsterMinigameSounds : ScriptableObject
     [Tooltip("How many syllable one-shots to stack per pattern beat. Each stacked instance re-rolls the " +
              "bank independently (random clip + random pitch), so raising this thickens the voice and " +
              "makes it louder/chorused without clipping any single AudioSource. 1 = vanilla single-shot, " +
-             "2-3 = layered creature vocalisation.")]
-    [Range(1, 6)] public int syllableInstancesPerTrigger = 2;
+             "2-3 = layered creature vocalisation, 6-8 = chorused roar that punches through the mix.")]
+    [Range(1, 8)] public int syllableInstancesPerTrigger = 2;
 
     [Header("Monster Idle Vocals (ambient between lines)")]
     [Tooltip("Pool of background creature vocalisations (generic idle grumbles/chatter) fired at random " +
@@ -102,6 +102,11 @@ public class MonsterMinigameSounds : ScriptableObject
     [Tooltip("Pool of player finger-snap/click one-shots fired on every player input (hit OR stray miss). " +
              "Played 2D — this is a non-diegetic 'you clicked' feedback, not a sound emitting from the world.")]
     public SfxBank playerSnap = new SfxBank { pitchMin = 0.95f, pitchMax = 1.05f };
+    [Tooltip("How many snap one-shots to stack per player input. Each stacked instance re-rolls the bank " +
+             "independently (random clip + random pitch), thickening the snap and pushing it above the mix " +
+             "ceiling without clipping any single AudioSource. 1 = vanilla single-shot, 2-3 = punchier feel, " +
+             "6-8 = really aggressive stack for when the snap needs to cut through.")]
+    [Range(1, 8)] public int snapInstancesPerTrigger = 1;
 
     /// <summary>
     /// Fires the 2D appearance stinger through the shared SFX pipe. Safe to call even if
