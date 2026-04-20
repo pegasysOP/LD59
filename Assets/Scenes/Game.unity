@@ -1793,7 +1793,7 @@ PrefabInstance:
       objectReference: {fileID: 964068900}
     - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
       propertyPath: decalsToSpawnAfterIntro.Array.size
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
       propertyPath: 'decalsToSpawnAfterIntro.Array.data[0]'
