@@ -3236,13 +3236,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1715810577752295386}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071069, y: -0.00000008195638, z: -0.00000007098397, w: 0.70710677}
-  m_LocalPosition: {x: 1.9890003, y: -1.197, z: -5.972}
+  m_LocalRotation: {x: -0.7071063, y: 0.00000007098406, z: -0.00000008195637, w: -0.70710737}
+  m_LocalPosition: {x: 1.9890003, y: -1.2394, z: -5.9074}
   m_LocalScale: {x: 0.07166558, y: 0.06707986, z: 0.10069179}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3235357199235052410}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -270, y: 0, z: 0}
 --- !u!212 &4085693639176878636
 SpriteRenderer:
   serializedVersion: 2
@@ -3269,7 +3269,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ac103c0f830a04d4bbea0fa78983b070, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17050,6 +17050,7 @@ Transform:
   - {fileID: 4277824152348611943}
   - {fileID: 3289242279116293116}
   - {fileID: 4262052691091376252}
+  - {fileID: 1952425029826281258}
   - {fileID: 519024860424697660}
   - {fileID: 2128836664581497308}
   - {fileID: 4133295213845759996}
@@ -17323,6 +17324,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &8900357511920423495
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1952425029826281258}
+  m_Layer: 0
+  m_Name: Keypad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1952425029826281258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8900357511920423495}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3793857824012487953}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8977520896188914545
 GameObject:
   m_ObjectHideFlags: 0

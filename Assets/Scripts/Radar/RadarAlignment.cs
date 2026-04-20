@@ -27,6 +27,7 @@ public class RadarAlignment : MonoBehaviour
     [SerializeField] private Renderer lightRenderer;
     [SerializeField] private Material lightOffMaterial;
     [SerializeField] private Material lightOnMaterial;
+    [SerializeField] private GameObject completeText;
 
     private float targetPosition;
     private float targetAngle;
@@ -56,6 +57,9 @@ public class RadarAlignment : MonoBehaviour
 
         ApplyLine(targetLine, targetPosition, targetAngle);
         lightRenderer.material = lightOffMaterial;
+
+        if (completeText != null)
+            completeText.SetActive(false);
     }
 
     private float RandomAwayFromCenter(float min, float max, float padding, float minFromCenter)
@@ -130,7 +134,10 @@ public class RadarAlignment : MonoBehaviour
         positionSlider.Lock();
         angleSlider.Lock();
         lightRenderer.material = lightOnMaterial;
-        
+
+        if (completeText != null)
+            completeText.SetActive(true);
+
         StateTracker.Instance?.CompleteTask(TaskType.RadarAlignment);
 
         StartCoroutine(DelayedIntensityIncrease());
