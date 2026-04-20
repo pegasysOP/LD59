@@ -18,6 +18,13 @@ public class CutsceneManager : MonoBehaviour
 
     public static CutsceneManager Instance;
 
+    /// <summary>
+    /// True once the opening power-down (intro) cutscene has finished playing.
+    /// Ambient/atmospheric systems that should stay silent during the scripted intro
+    /// (e.g. <see cref="MachineryAmbientPlayer"/>) gate their triggers on this flag.
+    /// </summary>
+    public static bool IntroComplete { get; private set; }
+
     [Header("Timings")]
     [SerializeField] private float wakeDuration = 5f;
     [SerializeField] private float powerdownDuration = 14f;
@@ -51,6 +58,10 @@ public class CutsceneManager : MonoBehaviour
         }
 
         Instance = this;
+
+        // Reset on fresh scene load in case domain reload was skipped and the flag
+        // from a previous play-mode session is still hanging around.
+        IntroComplete = false;
     }
 
     private void Start()
@@ -115,6 +126,8 @@ public class CutsceneManager : MonoBehaviour
         yield return StartCoroutine(Fade(0f, fadeDuration));
 
         GameManager.Instance?.SetLocked(false);
+
+        IntroComplete = true;
 
         Debug.Log("Powerdown cutscene finished");
     }

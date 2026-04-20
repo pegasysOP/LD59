@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669afc331bd044e97ba584941b2be953, type: 3}
+  m_Name: MachinerySounds
+  m_EditorClassIdentifier: Assembly-CSharp::MachinerySounds
+  bank:
+    clips:
+    - _clip: {fileID: 8300000, guid: f14cb20b0106f4a708fc59557b4c1f6c, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: e5d1dca9c178f4cfb8432196ab10bcc5, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 064aa415c23e64c98aea00e484be61ef, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: a64a6c06cc86d4586ac8ecfa22e9da6f, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 9e830821c86ea48b79cb9db89e2af23c, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 5fb3af4017fff434895937aa05c9ad42, type: 3}
+      _volume: 1
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: d98ce76b65b524041bc76f662c44c82a, type: 3}
+      _volume: 0.25
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: fccb15bd5bb9c450b8404a7a0509517d, type: 3}
+      _volume: 0.25
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 71e1e46ea6a6d4cf188ef08993a1ee98, type: 3}
+      _volume: 0.25
+      _delay: 0
+    - _clip: {fileID: 8300000, guid: 4dd7ab483470145b0bedc95fdfdf1e7c, type: 3}
+      _volume: 1
+      _delay: 0
+    pitchMin: 0.9
+    pitchMax: 1.1
+    gain: 1
+    volumeJitter: 0.08
