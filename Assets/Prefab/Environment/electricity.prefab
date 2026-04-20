@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8108788810242094202}
   - component: {fileID: 5654773991394326062}
   - component: {fileID: 1420751001956299818}
+  - component: {fileID: 5040313085807914115}
   m_Layer: 0
   m_Name: electricity
   m_TagString: Untagged
@@ -4895,6 +4896,20 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &5040313085807914115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1582244377660902864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4514eba38995d47cc80583435dd2d865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElectricitySparkSfxPlayer
+  sounds: {fileID: 11400000, guid: 85e572b64649a40df9d54760ca785022, type: 2}
+  emissionGate: {fileID: 0}
 --- !u!1 &2159842021853555347
 GameObject:
   m_ObjectHideFlags: 0

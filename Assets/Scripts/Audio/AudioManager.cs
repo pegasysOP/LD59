@@ -173,35 +173,53 @@ public class AudioManager : MonoBehaviour
         if (sfxSource == null || clipVolume == null || clipVolume.Clip == null)
             return;
 
-        PlayPositionalOneShotInternal(clipVolume.Clip, clipVolume.Volume, pitch, clipVolume.Delay, worldPosition, mixerGroupOverride);
+        PlayPositionalOneShotInternal(clipVolume.Clip, clipVolume.Volume, pitch, clipVolume.Delay, worldPosition, PositionalMinDistance, PositionalMaxDistance, mixerGroupOverride);
     }
 
-    private void PlayPositionalOneShotInternal(AudioClip clip, float volume, float pitch, float delay, Vector3 worldPosition, AudioMixerGroup mixerGroupOverride)
+    /// <summary>
+    /// Positional one-shot variant that lets the caller override the default
+    /// <see cref="PositionalMinDistance"/> / <see cref="PositionalMaxDistance"/> envelope. Use for
+    /// ambient point sources that should audibly fall off much sooner than the game's default
+    /// stinger range (e.g. individual electricity-arc crackles that should only be heard within
+    /// a few meters). Leave <paramref name="minDistance"/>/<paramref name="maxDistance"/> at their
+    /// defaults to inherit the standard envelope.
+    /// </summary>
+    public void PlaySfxAtPoint(AudioClipVolume clipVolume, float pitch, Vector3 worldPosition, float minDistance, float maxDistance, AudioMixerGroup mixerGroupOverride = null)
+    {
+        if (sfxSource == null || clipVolume == null || clipVolume.Clip == null)
+            return;
+
+        float clampedMin = Mathf.Max(0.01f, minDistance);
+        float clampedMax = Mathf.Max(clampedMin + 0.01f, maxDistance);
+        PlayPositionalOneShotInternal(clipVolume.Clip, clipVolume.Volume, pitch, clipVolume.Delay, worldPosition, clampedMin, clampedMax, mixerGroupOverride);
+    }
+
+    private void PlayPositionalOneShotInternal(AudioClip clip, float volume, float pitch, float delay, Vector3 worldPosition, float minDistance, float maxDistance, AudioMixerGroup mixerGroupOverride)
     {
         if (clip == null)
             return;
 
         if (delay > 0f)
         {
-            StartCoroutine(PlayPositionalAfterDelay(clip, volume, pitch, delay, worldPosition, mixerGroupOverride));
+            StartCoroutine(PlayPositionalAfterDelay(clip, volume, pitch, delay, worldPosition, minDistance, maxDistance, mixerGroupOverride));
         }
         else if (delay < 0f)
         {
             float startTime = Mathf.Clamp(-delay, 0f, Mathf.Max(0f, clip.length - 0.01f));
-            SpawnPositionalOneShot(clip, volume, pitch, worldPosition, startTime, mixerGroupOverride);
+            SpawnPositionalOneShot(clip, volume, pitch, worldPosition, startTime, minDistance, maxDistance, mixerGroupOverride);
         }
         else
         {
-            SpawnPositionalOneShot(clip, volume, pitch, worldPosition, 0f, mixerGroupOverride);
+            SpawnPositionalOneShot(clip, volume, pitch, worldPosition, 0f, minDistance, maxDistance, mixerGroupOverride);
         }
     }
 
-    private IEnumerator PlayPositionalAfterDelay(AudioClip clip, float volume, float pitch, float delay, Vector3 worldPosition, AudioMixerGroup mixerGroupOverride)
+    private IEnumerator PlayPositionalAfterDelay(AudioClip clip, float volume, float pitch, float delay, Vector3 worldPosition, float minDistance, float maxDistance, AudioMixerGroup mixerGroupOverride)
     {
         yield return new WaitForSeconds(delay);
         if (clip == null)
             yield break;
-        SpawnPositionalOneShot(clip, volume, pitch, worldPosition, 0f, mixerGroupOverride);
+        SpawnPositionalOneShot(clip, volume, pitch, worldPosition, 0f, minDistance, maxDistance, mixerGroupOverride);
     }
 
     //==================== Attached (listener-followed) 3D One-Shots ====================
@@ -279,7 +297,7 @@ public class AudioManager : MonoBehaviour
 
     //==================== Positional 3D One-Shots (baked world position) ====================
 
-    private void SpawnPositionalOneShot(AudioClip clip, float volume, float pitch, Vector3 worldPosition, float startTime, AudioMixerGroup mixerGroupOverride)
+    private void SpawnPositionalOneShot(AudioClip clip, float volume, float pitch, Vector3 worldPosition, float startTime, float minDistance, float maxDistance, AudioMixerGroup mixerGroupOverride)
     {
         GameObject go = new GameObject($"OneShot3D_{clip.name}");
         go.transform.SetParent(transform, false);
@@ -291,8 +309,8 @@ public class AudioManager : MonoBehaviour
         src.pitch = pitch;
         src.spatialBlend = 1f;
         src.rolloffMode = AudioRolloffMode.Logarithmic;
-        src.minDistance = PositionalMinDistance;
-        src.maxDistance = PositionalMaxDistance;
+        src.minDistance = minDistance;
+        src.maxDistance = maxDistance;
         src.bypassEffects = sfxSource.bypassEffects;
         src.bypassListenerEffects = sfxSource.bypassListenerEffects;
         src.bypassReverbZones = sfxSource.bypassReverbZones;
