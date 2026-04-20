@@ -140,10 +140,10 @@ public class SfxBank
     /// so callers can pass an envelope value in perceived space and get correct amplitude shaping.
     /// Clip <c>Delay</c> is intentionally ignored on this path (the heartbeat is scheduled externally).
     /// </summary>
-    public void PlayOnSource(AudioSource src, float perceivedMultiplier = 1f)
+    public float PlayOnSource(AudioSource src, float perceivedMultiplier = 1f)
     {
         if (src == null || clips == null || clips.Count == 0)
-            return;
+            return 0f;
 
         float pMin = Mathf.Min(pitchMin, pitchMax);
         float pMax = Mathf.Max(pitchMin, pitchMax);
@@ -162,9 +162,11 @@ public class SfxBank
 
             float shapedAmp = AudioVolume.ToLinear(perceived);
 
-            src.pitch = Random.Range(pMin, pMax);
+            float pitch = Random.Range(pMin, pMax);
+            src.pitch = pitch;
             src.PlayOneShot(entry.Clip, Mathf.Clamp01(shapedAmp));
-            return;
+            return entry.Clip.length / Mathf.Max(0.01f, Mathf.Abs(pitch));
         }
+        return 0f;
     }
 }

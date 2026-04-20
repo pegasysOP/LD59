@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Plays the heartbeat loop for the current <see cref="IntensityLevel"/>.
@@ -62,7 +63,11 @@ public class HeartbeatSoundPlayer : MonoBehaviour
 
         if (Time.time >= nextBeatTime)
         {
-            PlayBeat();
+            // Heartbeats are a gameplay tension device; suppress them entirely
+            // in non-gameplay scenes (Menu, Credits) while still advancing the
+            // cadence so we don't burst-play on scene return.
+            if (!IsNonGameplayScene())
+                PlayBeat();
             HeartbeatSoundConfig.LevelEntry entry = config.GetEntry(boundManager.CurrentLevel);
             float interval = entry != null ? Mathf.Max(0.05f, entry.secondsBetweenBeats) : 1f;
             nextBeatTime = Time.time + interval;
@@ -149,6 +154,12 @@ public class HeartbeatSoundPlayer : MonoBehaviour
     {
         t = Mathf.Clamp01(t);
         return config != null && config.smoothEnvelope ? Mathf.SmoothStep(0f, 1f, t) : t;
+    }
+
+    private static bool IsNonGameplayScene()
+    {
+        string n = SceneManager.GetActiveScene().name;
+        return n == SceneUtils.MENU_SCENE || n == SceneUtils.CREDIT_SCENE;
     }
 
     private void PlayBeat()
