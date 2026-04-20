@@ -1662,7 +1662,7 @@ MonoBehaviour:
   compensationStrength: 2.2
   raycastMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 59
   enableFlicker: 1
   minTimeBetweenFlickers: 2
   maxTimeBetweenFlickers: 8

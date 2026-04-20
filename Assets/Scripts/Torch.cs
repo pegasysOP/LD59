@@ -48,6 +48,14 @@ public class TorchController : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, lightSource.range, raycastMask))
         {
             float distance = hit.distance;
+            
+            if (distance < 0.5f)
+            {
+                Debug.LogWarning("Raycast hit very close object: " + hit.collider.gameObject.name
+                    + " on layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+                //return; // Skip compensation this frame
+            }
+
             float distanceRatio = distance / idealDistance;
 
             float compensation = Mathf.Pow(distanceRatio, compensationStrength);
