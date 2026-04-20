@@ -327,17 +327,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
---- !u!114 &258479549 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3187392846982147549, guid: 2d07a867d2368a64cadabec445b4c13a, type: 3}
-  m_PrefabInstance: {fileID: 378442721}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 940a87cf48d4745418131f211ac65468, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EscapePodDoor
 --- !u!1001 &378442721
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1541,6 +1530,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1684905182 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8996476880219678229, guid: 2d07a867d2368a64cadabec445b4c13a, type: 3}
+  m_PrefabInstance: {fileID: 378442721}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 940a87cf48d4745418131f211ac65468, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EscapePodDoor
 --- !u!4 &1771169011 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2041880231474312649, guid: c8e1ad696ecd1094c9d1bcf141904e7b, type: 3}
@@ -1797,63 +1797,6 @@ PrefabInstance:
       addedObject: {fileID: 509958708}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8e1ad696ecd1094c9d1bcf141904e7b, type: 3}
---- !u!1001 &790046310412187462
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 43108745138053399, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_Name
-      value: SoundZones
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8492806386836437481, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9fde59f09c9d04a57b5705afa90bc3df, type: 3}
 --- !u!1001 &2995168048089533735
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1989,7 +1932,7 @@ PrefabInstance:
     - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
       propertyPath: escapePodDoor
       value: 
-      objectReference: {fileID: 258479549}
+      objectReference: {fileID: 1684905182}
     - target: {fileID: 9012216085142528903, guid: 77bbaf88f11aae144a3adc4ae484aa35, type: 3}
       propertyPath: fadeCanvasGroup
       value: 
@@ -2398,4 +2341,3 @@ SceneRoots:
   - {fileID: 6714545931915746168}
   - {fileID: 558595442}
   - {fileID: 2995168048089533735}
-  - {fileID: 790046310412187462}
