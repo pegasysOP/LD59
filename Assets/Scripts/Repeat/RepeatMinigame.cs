@@ -129,6 +129,12 @@ public class RepeatMinigame : MonoBehaviour
             round++;
             sequenceLength++;
             SetButtonInteractible(false);
+
+            if (round == 3)
+            {
+                Vector3 successPos = approved != null ? approved.transform.position : transform.position;
+                PlayMinigameSuccessAt(successPos);
+            }
             yield return new WaitForSeconds(roundGapTime);
         }
 
@@ -242,7 +248,7 @@ public class RepeatMinigame : MonoBehaviour
             StateTracker.Instance?.CompleteTask(TaskType.SimonSays);
 
             Vector3 successPos = approved != null ? approved.transform.position : transform.position;
-            PlayMinigameSuccessAt(successPos);
+            
 
             approved.SetActive(true);
         }
@@ -284,7 +290,7 @@ public class RepeatMinigame : MonoBehaviour
     {
         if (button == null)
             return;
-        PlaySfxPositional(sounds?.successfulEntry, button.transform.position);
+        //PlaySfxPositional(sounds?.successfulEntry, button.transform.position);
     }
 
     private void PlayMinigameSuccessAt(Vector3 worldPosition)
