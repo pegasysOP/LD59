@@ -52,4 +52,13 @@ public class EscapePodDoor : MonoBehaviour, IInteractable
         StateTracker.Instance?.NotifyStartingDoorOpened();
     }
 
+    private void Update()
+    {
+        //FIXME: We may want to replace this but for now just open escape hatch door after all tasks complete
+        if (StateTracker.Instance.AllTasksComplete)
+        {
+            StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
+        }
+    }
+
 }
