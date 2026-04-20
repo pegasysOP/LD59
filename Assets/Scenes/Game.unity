@@ -1599,10 +1599,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TorchController
   baseIntensity: 5
-  minIntensity: 2
+  minIntensity: 0.01
   maxIntensity: 8
-  idealDistance: 8
-  compensationStrength: 0.6
+  idealDistance: 2.5
+  compensationStrength: 2.2
   raycastMask:
     serializedVersion: 2
     m_Bits: 4294967295

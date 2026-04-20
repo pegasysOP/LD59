@@ -6,7 +6,7 @@ public class TorchController : MonoBehaviour
 {
     [Header("Light Settings")]
     public float baseIntensity = 5f;
-    public float minIntensity = 0.3f;    
+    public float minIntensity = 0.01f;    
     public float maxIntensity = 8f;
 
     [Header("Distance Compensation")]
@@ -48,11 +48,14 @@ public class TorchController : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, lightSource.range, raycastMask))
         {
             float distance = hit.distance;
-            float distanceRatio = distance / idealDistance; 
+            float distanceRatio = distance / idealDistance;
 
             float compensation = Mathf.Pow(distanceRatio, compensationStrength);
+
+            //float closeRangeCrush = Mathf.Clamp01((distance - 0.2f) / 1.3f);
+
             targetIntensity = Mathf.Clamp(baseIntensity * compensation, minIntensity, maxIntensity);
-            Debug.Log("Target Intensity: " + targetIntensity + " (Distance: " + distance + ")"); 
+            Debug.Log("Target Intensity: " + targetIntensity + " (Distance: " + distance + ")");
         }
 
         if (enableFlicker)
@@ -85,6 +88,9 @@ public class TorchController : MonoBehaviour
             float noise = Mathf.PerlinNoise(Time.time * flickerSpeed, flickerOffset);
             targetIntensity += (noise - 0.5f) * flickerAmount;
         }
+
+        //TODO: Tweak this. Maybe slightly brighter? or distance based? 
+        targetIntensity = Mathf.Clamp(targetIntensity, minIntensity, maxIntensity);
 
         float lerpSpeed = targetIntensity < lightSource.intensity ? 25f : 10f;
         lightSource.intensity = Mathf.Lerp(lightSource.intensity, targetIntensity, Time.deltaTime * lerpSpeed);
