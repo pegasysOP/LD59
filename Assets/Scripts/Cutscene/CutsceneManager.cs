@@ -91,7 +91,7 @@ public class CutsceneManager : MonoBehaviour
 
         //yield return new WaitForSeconds(1f);
 
-        GameManager.Instance?.SetLocked(true);
+        //GameManager.Instance?.SetLocked(true);
 
         yield return new WaitForSeconds(5.5f);
 
@@ -110,8 +110,6 @@ public class CutsceneManager : MonoBehaviour
         torch.SetActive(true);
 
         //TODO: Play powerdown visual effects here 
-
-        //yield return new WaitForSeconds(powerdownDuration - 6f);
 
         //Fade back in after power down is complete
         yield return StartCoroutine(Fade(0f, fadeDuration));
