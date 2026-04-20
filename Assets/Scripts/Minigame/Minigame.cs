@@ -29,6 +29,10 @@ public class Minigame : MonoBehaviour
     [Header("Audio")]
     public AudioClip clickClip;
 
+    [Header("Player Hand")]
+    public Animator rightHandAnimator;
+    public string rightHandClickState = "Hand R Click";
+
     [Header("Tuning")]
     public float hitTolerance = 0.18f;
     public int minPlayerClicks = 3;
@@ -120,6 +124,8 @@ public class Minigame : MonoBehaviour
         {
             GameManager.Instance.MinigameActive = true;
             GameManager.Instance.SetLocked(true);
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
             if (GameManager.Instance.cameraController != null)
             {
                 GameManager.Instance.cameraController.lookAtTarget = monster3D;
@@ -212,7 +218,10 @@ public class Minigame : MonoBehaviour
             bool clicked = clickAction != null && clickAction.WasPressedThisFrame();
             bool spaced = Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame;
             if (clicked || spaced)
+            {
+                PlayRightHandClick();
                 EvaluateClick(seekerTime);
+            }
 
             yield return null;
         }
@@ -351,6 +360,12 @@ public class Minigame : MonoBehaviour
             strayMissThisRound = true;
             SpawnMarker(crossPrefab, seekerTime);
         }
+    }
+
+    private void PlayRightHandClick()
+    {
+        if (rightHandAnimator == null || string.IsNullOrEmpty(rightHandClickState)) return;
+        rightHandAnimator.Play(rightHandClickState, 0, 0f);
     }
 
     private void PlayClickSfx(float minPitch, float maxPitch)
