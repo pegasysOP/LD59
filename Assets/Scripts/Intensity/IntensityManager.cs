@@ -134,7 +134,15 @@ public class IntensityManager : MonoBehaviour
             {
                 if (battery.isHeld)
                 {
-                    //FIXME: Move this to after player is rotated to face the monster. 
+                    // Drop at player's x/z so battery doesn't get stuck in a wall
+                    // if the player was clipping it through geometry when minigame triggered.
+                    Transform player = battery.transform.parent;
+                    if (player != null)
+                    {
+                        Vector3 p = battery.transform.position;
+                        battery.transform.position = new Vector3(player.position.x, p.y, player.position.z);
+                    }
+                    //FIXME: Move this to after player is rotated to face the monster.
                     battery.ReleaseBattery();
                 }
             }
