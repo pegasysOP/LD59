@@ -9,6 +9,7 @@ public class EndStandPoint : MonoBehaviour
 
     public Vector3 Position => GetGroundedPosition();
     public float FacingYaw => transform.eulerAngles.y;
+    public float FacingPitch => transform.eulerAngles.x;
     public Quaternion FacingRotation => Quaternion.Euler(0f, FacingYaw, 0f);
 
     private Vector3 GetGroundedPosition()

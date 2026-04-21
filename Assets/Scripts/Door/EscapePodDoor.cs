@@ -139,11 +139,6 @@ public class EscapePodDoor : DoorBase
         {
             meshRenderer.material = greenMaterial;
         }
-
-        if (keyboard.zKey.wasPressedThisFrame)
-        {
-            StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
-        }
     }
 
 }
