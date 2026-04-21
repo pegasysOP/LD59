@@ -332,7 +332,10 @@ public class CutsceneManager : MonoBehaviour
             minigame.ForceStopForEndSequence();
 
         // Immobilise player (blocks input) + hide cursor for cinematic lock-in.
-        GameManager.Instance?.SetLocked(true);
+        // Skip SetLocked(true): its inverted semantics would exit pointer lock and
+        // the immediate re-acquire below would hit Chrome's pointer-lock throttle.
+        if (GameManager.Instance != null)
+            GameManager.Instance.LOCKED = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 

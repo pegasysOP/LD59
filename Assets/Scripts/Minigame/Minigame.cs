@@ -196,7 +196,12 @@ public class Minigame : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.MinigameActive = true;
-            GameManager.Instance.SetLocked(true);
+            // Don't route through SetLocked(true) here: its inverted semantics would
+            // exit pointer lock (CursorLockMode.None) and the direct re-acquire on the
+            // next line triggers Chrome's "Pointer lock cannot be acquired immediately
+            // after the user has exited the lock" throttle. MinigameActive=true already
+            // blocks player input; just freeze the cursor directly.
+            GameManager.Instance.LOCKED = true;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             if (GameManager.Instance.cameraController != null)
