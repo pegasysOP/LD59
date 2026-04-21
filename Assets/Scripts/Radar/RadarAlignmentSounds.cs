@@ -208,8 +208,17 @@ public class RadarAlignmentSounds : MonoBehaviour
     {
         if (_radarSource == null) return;
         _radarSource.pitch = _radarPitchCurrent;
-        _radarSource.volume = AudioVolume.ToLinear(
+        _radarSource.volume = MasterScale() * AudioVolume.ToLinear(
             Mathf.Clamp01(_radarPerceivedCurrent * sounds.radarLoop.Volume));
+    }
+
+    // Matches AudioManager's one-shot scaling (src.volume = sfxSource.volume * clipVolume).
+    // sfxSource.volume is master/3, kept in sync by AudioManager.UpdateVolume, so reading it
+    // every frame lets live pause-menu slider changes propagate to these loops.
+    private static float MasterScale()
+    {
+        AudioSource sfx = AudioManager.Instance != null ? AudioManager.Instance.sfxSource : null;
+        return sfx != null ? sfx.volume : 1f;
     }
 
     private void StartRadarFadeOut()
@@ -265,7 +274,7 @@ public class RadarAlignmentSounds : MonoBehaviour
         _movePerceivedCurrent = Mathf.MoveTowards(_movePerceivedCurrent, targetPerceived, speed * Time.deltaTime);
 
         _moveSource.pitch = sounds.movePitch;
-        _moveSource.volume = AudioVolume.ToLinear(
+        _moveSource.volume = MasterScale() * AudioVolume.ToLinear(
             Mathf.Clamp01(_movePerceivedCurrent * sounds.moveLoop.Volume));
     }
 
