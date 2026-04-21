@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5430684127875210089}
   - component: {fileID: 2964685304937606333}
   - component: {fileID: 2374246984522929613}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Battery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,6 +159,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Battery
   playerController: {fileID: 0}
   rb: {fileID: 2964685304937606333}
+  hasTriggeredIntensityIncrease: 0
+  holdDistance: 1
+  isHeld: 0
+  isInCorrectSlot: 0
+  colour: 0
 --- !u!1 &5671944621527548958
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,7 +176,7 @@ GameObject:
   - component: {fileID: 2949324193840585997}
   - component: {fileID: 8303735173938078409}
   - component: {fileID: 2241978249178484877}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,6 +349,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 600d9c0bd538443a3b5df3c383581a88, type: 3}
       propertyPath: m_Name
       value: battery
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 600d9c0bd538443a3b5df3c383581a88, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
