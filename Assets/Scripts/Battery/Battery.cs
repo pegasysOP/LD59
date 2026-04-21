@@ -91,8 +91,9 @@ public class Battery : MonoBehaviour, IInteractable
 
     void FollowMouse()
     {
-        Ray ray = Camera.main.ScreenPointToRay(mouse.position.ReadValue());
-        Vector3 targetPosition = ray.origin + ray.direction * holdDistance;
+        Transform cam = Camera.main.transform;
+
+        Vector3 targetPosition = cam.position + cam.forward * holdDistance;
 
         transform.position = targetPosition;
     }
