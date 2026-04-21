@@ -477,6 +477,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
+      propertyPath: torchController
+      value: 
+      objectReference: {fileID: 1922162418}
+    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 468647773}
@@ -1859,6 +1863,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
+      propertyPath: torchController
+      value: 
+      objectReference: {fileID: 1922162418}
+    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 468647773}
@@ -2526,6 +2534,10 @@ PrefabInstance:
       propertyPath: colour
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
+      propertyPath: torchController
+      value: 
+      objectReference: {fileID: 1922162418}
     - target: {fileID: 2374246984522929613, guid: b0faa8736a158e34a9cc695778b48f4c, type: 3}
       propertyPath: playerController
       value: 

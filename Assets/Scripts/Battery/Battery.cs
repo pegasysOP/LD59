@@ -21,6 +21,9 @@ public class Battery : MonoBehaviour, IInteractable
 
     public bool isInCorrectSlot = false;
 
+    [SerializeField]
+    private TorchController torchController;
+
     public enum BatteryColour
     {
         Yellow,
@@ -48,6 +51,7 @@ public class Battery : MonoBehaviour, IInteractable
         if (isHeld)
         {
             ReleaseBattery();
+            torchController.maxIntensity = 8;
             return;
         }
 
@@ -96,5 +100,7 @@ public class Battery : MonoBehaviour, IInteractable
         Vector3 targetPosition = cam.position + cam.forward * holdDistance;
 
         transform.position = targetPosition;
+
+        torchController.maxIntensity = 1.5f;
     }
 }
