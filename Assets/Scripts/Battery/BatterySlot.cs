@@ -19,6 +19,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
     private float ejectForce = 2.5f;
 
     bool isRotating = false;
+    bool isInteractable = true;
 
     // Minimum gap between plays of the same sound type on this slot.
     // Absorbs rapid-fire duplicate events (re-entering triggers, click + trigger races, etc.)
@@ -50,7 +51,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
     public bool IsInteractable()
     {
         //TODO: Maybe it should only be interactable if the player is holding a battery?
-        return battery != null;
+        return isInteractable;
     }
 
     private IEnumerator RotateBattery(Transform target, Quaternion targetRotation, float duration)
@@ -97,6 +98,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
         else
         {
             isRotating = true;
+            isInteractable = false;
             PlayWithCooldown(sounds?.acceptFeedback, slotPos);
             GameManager.Instance.CollectBattery(slotPos);
             StartCoroutine(AnimatePlacedBattery(battery));
