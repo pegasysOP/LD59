@@ -128,6 +128,17 @@ public class IntensityManager : MonoBehaviour
         }
         if((intensity >= 0.5f) && !GameManager.Instance.MinigameActive)
         {
+            Battery[] batteries = FindObjectsByType<Battery>(FindObjectsInactive.Exclude);
+
+            foreach (Battery battery in batteries)
+            {
+                if (battery.isHeld)
+                {
+                    //FIXME: Move this to after player is rotated to face the monster. 
+                    battery.ReleaseBattery();
+                }
+            }
+
             intensity = 0.99f;
             GameManager.Instance.minigame.StartMinigame();
             GameManager.Instance.MinigameActive = true;
