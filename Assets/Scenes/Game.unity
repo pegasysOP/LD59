@@ -1979,7 +1979,7 @@ MonoBehaviour:
     meshRenderer: {fileID: 156288728}
   redMaterial: {fileID: 2100000, guid: 383ecf3b8286948b1b35613315050600, type: 2}
   greenMaterial: {fileID: 2100000, guid: 7e74d6e9dac27476b8de1c3178ef4401, type: 2}
-  debugLogs: 1
+  debugLogs: 0
 --- !u!1 &1362721090 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 678169496055551052, guid: cd98f1b0e40fd4e049a93cd527c6efed, type: 3}
