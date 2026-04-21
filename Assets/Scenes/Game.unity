@@ -1949,7 +1949,7 @@ Transform:
   m_GameObject: {fileID: 1261030015}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -43.134, y: 0.262, z: 4.99845}
+  m_LocalPosition: {x: -43.134, y: -0.164, z: 4.99845}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2897,6 +2897,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1527000928327142312, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -20.581
+      objectReference: {fileID: 0}
+    - target: {fileID: 1527000928327142312, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.115
+      objectReference: {fileID: 0}
+    - target: {fileID: 1641764720032183422, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -21.592999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1641764720032183422, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.16299999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1641764720032183422, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -11.634
+      objectReference: {fileID: 0}
     - target: {fileID: 3793857824012487953, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -22.03678
@@ -2948,6 +2968,14 @@ PrefabInstance:
     - target: {fileID: 8763747035532958876, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
       propertyPath: m_Name
       value: Level stuff
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909050064977078976, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -21.054998
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909050064977078976, guid: 7c4a79e4d1e313e40a7a9f0504b17ea4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.17800003
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
