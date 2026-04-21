@@ -352,11 +352,19 @@ public class CutsceneManager : MonoBehaviour
             yield return StartCoroutine(controller.WalkTo(endStandPoint.Position));
 
         // Rotate to face down the hallway (yaw taken from stand point).
-        Quaternion current = controller.transform.rotation;
-        float targetYaw = endStandPoint != null ? endStandPoint.FacingYaw : 90f;
-        Quaternion target = Quaternion.Euler(current.eulerAngles.x, targetYaw, current.eulerAngles.z);
-        yield return StartCoroutine(RotateTo(controller.transform, target, endRotateDuration));
+        Quaternion currentBody = controller.transform.rotation;
+        Quaternion currentCam = controller.GetComponentInChildren<Camera>().transform.localRotation;
 
+        float targetYaw = endStandPoint != null ? endStandPoint.FacingYaw : 90f;
+        float targetPitch = endStandPoint != null ? endStandPoint.FacingPitch : 0f;
+
+        Quaternion targetBody = Quaternion.Euler(0f, targetYaw, 0f);
+        Quaternion targetCam = Quaternion.Euler(targetPitch, 0f, 0f);
+
+        yield return StartCoroutine(RotateBothTo(
+            controller.transform, targetBody,
+            controller.GetComponentInChildren<Camera>().transform, targetCam,
+            endRotateDuration));
         // Alien (already spawned at trigger time) starts charging. Kick off without awaiting
         // so we can schedule the door close mid-run — the door should finish slamming just
         // before the alien arrives and the shake fires.
@@ -469,24 +477,26 @@ public class CutsceneManager : MonoBehaviour
         fadeCanvasGroup.alpha = target;
     }
 
-    private IEnumerator RotateTo(Transform target, Quaternion targetRotation, float duration)
+    private IEnumerator RotateBothTo(
+    Transform body, Quaternion bodyTarget,
+    Transform camTransform, Quaternion camTarget,
+    float duration)
     {
-        Quaternion startRotation = target.rotation;
+        Quaternion bodyStart = body.rotation;
+        Quaternion camStart = camTransform.localRotation;
         float time = 0f;
 
         while (time < duration)
         {
             float t = time / duration;
-
-            // smoother feel than linear
             t = Mathf.SmoothStep(0f, 1f, t);
-
-            target.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
-
+            body.rotation = Quaternion.Slerp(bodyStart, bodyTarget, t);
+            camTransform.localRotation = Quaternion.Slerp(camStart, camTarget, t);
             time += Time.deltaTime;
             yield return null;
         }
 
-        target.rotation = targetRotation;
+        body.rotation = bodyTarget;
+        camTransform.localRotation = camTarget;
     }
 }
