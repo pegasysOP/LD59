@@ -18,6 +18,8 @@ public class BatterySlot : MonoBehaviour, IInteractable
     [SerializeField]
     private float ejectForce = 2.5f;
 
+    bool isRotating = false;
+
     // Minimum gap between plays of the same sound type on this slot.
     // Absorbs rapid-fire duplicate events (re-entering triggers, click + trigger races, etc.)
     // without relying on complex coroutine / state guards.
@@ -37,7 +39,12 @@ public class BatterySlot : MonoBehaviour, IInteractable
         battery.transform.parent = null;
         battery.transform.position = slotPosition.position;
 
-        StartCoroutine(RotateBattery(battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
+
+        if (!isRotating)
+        {
+            StartCoroutine(RotateBattery(battery.transform, Quaternion.Euler(0, 0, 0), 0.1f));
+        }
+        
     }
 
     public bool IsInteractable()
@@ -89,6 +96,7 @@ public class BatterySlot : MonoBehaviour, IInteractable
         }
         else
         {
+            isRotating = true;
             PlayWithCooldown(sounds?.acceptFeedback, slotPos);
             GameManager.Instance.CollectBattery(slotPos);
             StartCoroutine(AnimatePlacedBattery(battery));
