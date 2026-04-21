@@ -2038,6 +2038,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7084244580350637692, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
+      propertyPath: interactMask.m_Bits
+      value: 247
+      objectReference: {fileID: 0}
     - target: {fileID: 8535457319218612281, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.076

@@ -12,6 +12,9 @@ public class PlayerInteractions : MonoBehaviour
 
     private bool lookingAtInteractable;
 
+    [SerializeField]
+    private LayerMask interactMask;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -30,8 +33,13 @@ public class PlayerInteractions : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(mouse.position.ReadValue());
         IInteractable interactable = null;
-        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
+        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, interactMask))
+        {
             interactable = hit.collider.GetComponent<IInteractable>();
+            Debug.Log(this.gameObject.name);
+        }
+            
+
 
         bool canInteract = interactable != null && interactable.IsInteractable();
         SetLookingAtInteractable(canInteract);
