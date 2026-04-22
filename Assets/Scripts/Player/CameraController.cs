@@ -6,7 +6,6 @@ public class CameraController : MonoBehaviour
 {
     public Camera playerCamera;
     public Camera viewModelCamera;
-    public Camera UICamera;
     public float yaw;
     public float pitch;
     public float mouseSensitivity;
@@ -48,7 +47,6 @@ public class CameraController : MonoBehaviour
                 pitch = 0f;
                 playerCamera.transform.localEulerAngles = Vector3.zero;
                 viewModelCamera.transform.localEulerAngles = Vector3.zero;
-                UICamera.transform.localEulerAngles = Vector3.zero;
             }
             return;
         }
