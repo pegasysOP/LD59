@@ -1214,7 +1214,6 @@ GameObject:
   - component: {fileID: 643730307}
   - component: {fileID: 643730310}
   - component: {fileID: 643730308}
-  - component: {fileID: 643730311}
   m_Layer: 0
   m_Name: HandsCamera
   m_TagString: MainCamera
@@ -1332,19 +1331,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &643730311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643730306}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 675ada900948d4841a9c8f4f90b99847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  mainCamera: {fileID: 1403677657}
 --- !u!1001 &754842862
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2272,10 +2258,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 6374639003791134708, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
-      propertyPath: viewModelCamera
-      value: 
-      objectReference: {fileID: 643730310}
     - target: {fileID: 7067327678077921139, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 255
@@ -3586,10 +3568,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1403677657}
-    - target: {fileID: 4236111438276601289, guid: 5e297cd06d7bbeb4b98e4e9097cc661f, type: 3}
-      propertyPath: m_RenderMode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4736616427752993384, guid: 5e297cd06d7bbeb4b98e4e9097cc661f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
