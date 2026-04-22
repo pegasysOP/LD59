@@ -17,7 +17,15 @@ public class CutsceneManager : MonoBehaviour
     [SerializeField]
     private Minigame minigame;
 
+    [SerializeField]
+    private Camera uiCamera;
+    [SerializeField]
+    private Camera viewModelCamera;
+
+
     public static CutsceneManager Instance;
+
+    
 
     /// <summary>
     /// True once the opening power-down (intro) cutscene has finished playing.
@@ -178,6 +186,9 @@ public class CutsceneManager : MonoBehaviour
 
         if (fadeCanvasGroup != null)
             fadeCanvasGroup.alpha = 1f;
+
+        viewModelCamera.transform.localEulerAngles = Vector3.zero;
+        uiCamera.transform.localEulerAngles = Vector3.zero;
 
         // Hold on black. Player stays locked (movement frozen) with cursor unlocked
         // via GameManager.SetLocked, so no further action needed.
