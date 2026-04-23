@@ -121,6 +121,7 @@ public class Minigame : MonoBehaviour
 
     private State state = State.Idle;
     private InputAction clickAction;
+    private InputAction interactAction;
     private readonly List<Peak> peaks = new List<Peak>();
     private readonly List<GameObject> spawned = new List<GameObject>();
     private float currentDuration;
@@ -142,6 +143,7 @@ public class Minigame : MonoBehaviour
     private void Start()
     {
         clickAction = InputSystem.actions?.FindAction("Click");
+        interactAction = InputSystem.actions?.FindAction("Interact");
         monsterBaseScale = monster.localScale;
         monsterBasePosition = monster.localPosition;
         if (monster != null) monster.gameObject.SetActive(false);
@@ -332,10 +334,10 @@ public class Minigame : MonoBehaviour
                 }
             }
 
+            bool interacted = interactAction != null && interactAction.WasPressedThisFrame();
             bool clicked = clickAction != null && clickAction.WasPressedThisFrame();
             bool spaced = Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame;
-            bool eKey = Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame;
-            if (clicked || spaced || eKey)
+            if (clicked || spaced || interacted )
             {
                 PlayRightHandClick();
                 PlayPlayerSnap();
