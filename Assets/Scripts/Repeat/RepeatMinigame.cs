@@ -7,10 +7,10 @@ using UnityEngine;
 public class RepeatMinigame : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] SOSCharacters;
+    private GameObject[] ProgressTexts;
 
     [SerializeField]
-    private GameObject[] loginText;
+    private GameObject[] StartUpTexts;
 
     [SerializeField]
     private List<RepeatButton> buttons;
@@ -25,16 +25,12 @@ public class RepeatMinigame : MonoBehaviour
     public RepeatMinigameSounds SoundConfig => sounds;
 
     [Header("Timing")]
-    public float fastTime = 0.3f; // How long each button flashes in fast phase
-    public float slowTime = 1.0f; // How long each button flashes in slow phase
+    public float ButtonFlashTime = 1.0f; // How long each button flashes in slow phase
     public float flashGapTime = 0.25f; // Gap between flashes
-    public float wrongInputPause = 0.5f; //Pause after replaying on wrong guess
+    public float wrongInputWaitTime = 0.5f; //Pause after replaying on wrong guess
     public float roundGapTime = 4f; //Gap between rounds after correct sequence
 
-    // Delay before the first round begins when the minigame starts
-    public float initialDelay = 1f;
-
-    public int rounds = 3;
+    public int totalRounds = 3;
 
     public int sequenceLength = 3;
 
@@ -49,17 +45,17 @@ public class RepeatMinigame : MonoBehaviour
 
     private List<RepeatButton.Colour> sequence = new();
     private int playerIndex = 0;
-    private int round = 0;
+    private int currrentRound = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        foreach (GameObject character in SOSCharacters)
+        foreach (GameObject character in ProgressTexts)
         {
             character.SetActive(false);
         }
 
-        foreach (GameObject text in loginText)
+        foreach (GameObject text in StartUpTexts)
         {
             text.SetActive(false);
         }
@@ -74,7 +70,7 @@ public class RepeatMinigame : MonoBehaviour
 
     public void StartMinigame()
     {
-        foreach (GameObject text in loginText)
+        foreach (GameObject text in StartUpTexts)
         {
             text.SetActive(true);
         }
@@ -82,7 +78,7 @@ public class RepeatMinigame : MonoBehaviour
         if (state != State.Idle)
             return;
 
-        round = 0;
+        currrentRound = 0;
 
         SetButtonInteractible(true);
         StartCoroutine(RunSession());
@@ -90,11 +86,7 @@ public class RepeatMinigame : MonoBehaviour
 
     private IEnumerator RunSession()
     {
-        // Initial delay before first round so player has a moment to prepare
-        //if (initialDelay > 0f)
-        //    yield return new WaitForSeconds(initialDelay);
-
-        while (round < rounds)
+        while (currrentRound < totalRounds)
         {
             SetButtonInteractible(true);
             GenerateSequence();
@@ -118,22 +110,22 @@ public class RepeatMinigame : MonoBehaviour
 
             //If we get here then they won so set the next SOS character and increment the rounds
             //TODO: We may want to replace this with an animation or different visual effects
-            if (SOSCharacters.Length > round)
+            if (ProgressTexts.Length > currrentRound)
             {
-                foreach(GameObject character in SOSCharacters)
+                foreach(GameObject character in ProgressTexts)
                 {
                     character.SetActive(false);
-                    loginText[1].SetActive(false);
+                    StartUpTexts[1].SetActive(false);
                 }
-                SOSCharacters[round].SetActive(true);
+                ProgressTexts[currrentRound].SetActive(true);
             }
                
-            round++;
+            currrentRound++;
             sequenceLength++;
             SetButtonInteractible(false);
             intensityIncreasedThisRound = false;
 
-            if (round == 3)
+            if (currrentRound == totalRounds)
             {
                 Vector3 successPos = approved != null ? approved.transform.position : transform.position;
                 PlayMinigameSuccessAt(successPos);
@@ -165,8 +157,8 @@ public class RepeatMinigame : MonoBehaviour
             RepeatButton button = GetButtonByColour(colour);
 
             PlayButtonPressAtButton(button);
-            button.Flash(slowTime);
-            yield return new WaitForSeconds(slowTime + flashGapTime);
+            button.Flash(ButtonFlashTime);
+            yield return new WaitForSeconds(ButtonFlashTime + flashGapTime);
         }
         SetButtonInteractible(true);
     }
@@ -190,9 +182,6 @@ public class RepeatMinigame : MonoBehaviour
         if (sequence[playerIndex] == colour)
         {
             playerIndex++;
-
-            if (playerIndex < sequence.Count)
-                PlaySuccessfulEntryAtButton(pressed);
         }
         else
         {
@@ -217,7 +206,7 @@ public class RepeatMinigame : MonoBehaviour
 
     private IEnumerator ReplaySequence()
     {
-        yield return new WaitForSeconds(wrongInputPause);
+        yield return new WaitForSeconds(wrongInputWaitTime);
         yield return ShowSequence();
         state = State.PlayerInput;
 
@@ -291,13 +280,6 @@ public class RepeatMinigame : MonoBehaviour
         if (button == null)
             return;
         PlaySfxPositional(sounds?.sequenceFail, button.transform.position);
-    }
-
-    private void PlaySuccessfulEntryAtButton(RepeatButton button)
-    {
-        if (button == null)
-            return;
-        //PlaySfxPositional(sounds?.successfulEntry, button.transform.position);
     }
 
     private void PlayMinigameSuccessAt(Vector3 worldPosition)
