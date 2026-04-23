@@ -1248,11 +1248,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dfdaf30d46fa784f80eda1114946402, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RepeatMinigame
-  SOSCharacters:
+  ProgressTexts:
   - {fileID: 217596280172368191}
   - {fileID: 4588221246453989481}
   - {fileID: 8880060740474074992}
-  loginText:
+  StartUpTexts:
   - {fileID: 6423240361470590085}
   - {fileID: 5237962438339605037}
   buttons:
