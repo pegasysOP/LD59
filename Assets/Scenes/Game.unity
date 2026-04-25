@@ -2109,20 +2109,12 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 2447331142465673252, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
-      propertyPath: m_Range
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 2447331142465673252, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_InnerSpotAngle
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2447331142465673252, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2447331142465673252, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
-      propertyPath: m_BounceIntensity
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3641527905203374550, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
       propertyPath: m_IsActive
@@ -2175,10 +2167,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3641527905203374550, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1922162418}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
 --- !u!1001 &1498260852
 PrefabInstance:
@@ -2678,11 +2667,10 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3641527905203374550, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
   m_PrefabInstance: {fileID: 1403677656}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1922162418
+--- !u!114 &1922162418 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 8231753875077393281, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
+  m_PrefabInstance: {fileID: 1403677656}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1922162414}
   m_Enabled: 1
@@ -2690,22 +2678,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2eee7178ec9357c499d6202c3b158314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TorchController
-  baseIntensity: 5
-  minIntensity: 0.01
-  maxIntensity: 8
-  idealDistance: 2.5
-  compensationStrength: 2.2
-  raycastMask:
-    serializedVersion: 2
-    m_Bits: 59
-  enableFlicker: 1
-  minTimeBetweenFlickers: 2
-  maxTimeBetweenFlickers: 8
-  flickerDuration: 0.07
-  cutoutIntensity: 0.2
-  enableEnemyFlicker: 0
-  flickerSpeed: 8
-  flickerAmount: 80
 --- !u!95 &1940193902 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 3261407666262199783, guid: e80982a7c7f46e54bb667828d8aaae3f, type: 3}
