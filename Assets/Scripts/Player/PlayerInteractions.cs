@@ -36,11 +36,8 @@ public class PlayerInteractions : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, interactMask))
         {
             interactable = hit.collider.GetComponent<IInteractable>();
-            Debug.Log(this.gameObject.name);
         }
-            
-
-
+           
         bool canInteract = interactable != null && interactable.IsInteractable();
         SetLookingAtInteractable(canInteract);
 

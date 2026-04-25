@@ -599,6 +599,7 @@ GameObject:
   - component: {fileID: 257952187508175923}
   - component: {fileID: 2447331142465673252}
   - component: {fileID: 157484197044262736}
+  - component: {fileID: 8231753875077393281}
   m_Layer: 0
   m_Name: Torch
   m_TagString: Untagged
@@ -633,7 +634,7 @@ Light:
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
-  m_Range: 60
+  m_Range: 25
   m_SpotAngle: 60
   m_InnerSpotAngle: 20
   m_CookieSize2D: {x: 0.5, y: 0.5}
@@ -674,7 +675,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -715,6 +716,34 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &8231753875077393281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3641527905203374550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eee7178ec9357c499d6202c3b158314, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TorchController
+  baseIntensity: 5
+  minIntensity: 0.01
+  maxIntensity: 8
+  idealDistance: 2.5
+  compensationStrength: 2.2
+  raycastMask:
+    serializedVersion: 2
+    m_Bits: 59
+  enableFlicker: 1
+  minTimeBetweenFlickers: 2
+  maxTimeBetweenFlickers: 8
+  flickerDuration: 0.07
+  cutoutIntensity: 0.2
+  enableEnemyFlicker: 0
+  flickerSpeed: 8
+  flickerAmount: 80
 --- !u!1 &7845795982016253291
 GameObject:
   m_ObjectHideFlags: 0
