@@ -1,16 +1,9 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.Universal;
 
 public class EscapePodDoor : DoorBase
 {
-
-    private Keyboard keyboard = Keyboard.current;
-
-    [SerializeField]
-    private GameObject doorPanel;
-
     [Header("Door SFX")]
     [Tooltip("Played instantly when the player interacts with the door (button-thunk). " +
              "Matches the main Door's button-press layer so the two doors feel like siblings.")]
@@ -93,28 +86,9 @@ public class EscapePodDoor : DoorBase
         bank.PlayAt(transform.position);
     }
 
-    private IEnumerator MoveDoor(float deltaZ, float duration)
+    protected override void OnDoorOpened()
     {
-        isClosed = false;
-
-        Transform t = doorPanel.transform;
-        Vector3 start = t.localPosition;
-        Vector3 target = start + new Vector3(0f, 0f, deltaZ);
-
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float frac = Mathf.Clamp01(elapsed / duration);
-            t.localPosition = Vector3.Lerp(start, target, frac);
-            yield return null;
-        }
-
-        t.localPosition = target;
-
-        meshRenderer.material = redMaterial;
-
-        StateTracker.Instance?.NotifyStartingDoorOpened();
+        // Do nothing — overrides base behavior
     }
 
     public void OpenDoorEndCutscene()
@@ -129,11 +103,6 @@ public class EscapePodDoor : DoorBase
 
     private void Update()
     {
-        //FIXME: We may want to replace this but for now just open escape hatch door after all tasks complete
-        //if (StateTracker.Instance.AllTasksComplete)
-        //{
-        //    StartCoroutine(MoveDoor(OpenOffset, OpenDuration));
-        //}
 
         if (StateTracker.Instance.AllTasksComplete && isClosed)
         {

@@ -1,13 +1,8 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Door : DoorBase
 {
-
-    [SerializeField]
-    private GameObject doorPanel;
-
     [Header("Power-Down Sequence")]
     [Tooltip("If true, opening this door fires the PowerDownSequence (lights-out / creature reveal SFX) " +
              "after powerDownStartDelay seconds. Leave enabled for the starting-room door; disable for " +
@@ -120,28 +115,9 @@ public class Door : DoorBase
                              $"was found in the scene. Assign one in the inspector or add the component.");
     }
 
-    private IEnumerator MoveDoor(float deltaZ, float duration)
+    protected override void OnDoorOpened()
     {
-        isClosed = false;
-
-        Transform t = doorPanel.transform;
-        Vector3 start = t.localPosition;
-        Vector3 target = start + new Vector3(0f, 0f, deltaZ);
-
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float frac = Mathf.Clamp01(elapsed / duration);
-            t.localPosition = Vector3.Lerp(start, target, frac);
-            yield return null;
-        }
-
-        t.localPosition = target;
-
-        meshRenderer.material = redMaterial;
-
-        StateTracker.Instance?.NotifyStartingDoorOpened();
+        base.OnDoorOpened(); 
     }
 
     private void Update()
