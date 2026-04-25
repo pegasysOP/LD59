@@ -5,6 +5,10 @@ using UnityEngine;
 public class BaseButton : MonoBehaviour
 {
     private bool flashing = false;
+
+    [SerializeField]
+    protected float flashTime = 0.2f;
+
     public void Flash(float duration)
     {
         if (flashing)

@@ -9,9 +9,6 @@ public class StartMinigameButton : BaseButton, IInteractable
     private bool hasStarted = false;
 
     [SerializeField]
-    private float flashTime = 0.2f;
-
-    [SerializeField]
     private float startDelay = 1.75f;
 
     private Coroutine idleFlashRoutine;

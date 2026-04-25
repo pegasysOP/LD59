@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RepeatButton : BaseButton, IInteractable
 {
@@ -9,9 +7,6 @@ public class RepeatButton : BaseButton, IInteractable
 
     [SerializeField]
     private Colour colour;
-
-    [SerializeField]
-    private float flashTime = 0.2f;
 
     public event Action<Colour> OnPressed;
 
