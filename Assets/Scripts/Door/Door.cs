@@ -44,13 +44,8 @@ public class Door : DoorBase
     [SerializeField]
     private SfxBank rejectBeep = new SfxBank { pitchMin = 1f, pitchMax = 1f };
 
-    private const float OpenOffset = -1.45f;
-
     private const float OpenDuration = 2f;
 
-    private float initialDelay = 10f;
-
-    
     public override void Interact()
     {
         Debug.Log("Interacting with door");
@@ -120,13 +115,8 @@ public class Door : DoorBase
         base.OnDoorOpened(); 
     }
 
-    private void Update()
+    private void Start()
     {
-        initialTimer -= Time.deltaTime;
-
-        if (initialTimer <= 0 && isClosed)
-        {
-            meshRenderer.material = greenMaterial;
-        }
+        meshRenderer.material = greenMaterial;
     }
 }

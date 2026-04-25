@@ -17,6 +17,8 @@ public class DoorBase : MonoBehaviour, IInteractable
     [SerializeField]
     protected Material redMaterial;
 
+    protected const float OpenOffset = -1.45f;
+
     public virtual void Interact()
     {
         throw new System.NotImplementedException();

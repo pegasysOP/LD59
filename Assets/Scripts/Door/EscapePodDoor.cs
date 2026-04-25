@@ -32,8 +32,6 @@ public class EscapePodDoor : DoorBase
     [SerializeField, Min(0f)]
     private float musicFadeOutDuration = 2.5f;
 
-    private const float OpenOffset = -1.45f;
-
     // Matches Door.cs so the escape pod opens at the same pace as the starting room door.
     private const float OpenDuration = 2f;
 
