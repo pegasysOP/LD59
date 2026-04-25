@@ -20,32 +20,6 @@ public class Door : DoorBase
     [SerializeField, Min(0f)]
     private float powerDownStartDelay = 0.5f;
 
-    [Header("Door SFX")]
-    [Tooltip("Played instantly when the player interacts with the door (button-thunk). " +
-             "Phase 1 of the power-down arc, but owned by the door itself so it fires even " +
-             "if no PowerDownSequence is wired up.")]
-    [SerializeField]
-    private SfxBank buttonPress = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
-
-    [Tooltip("Single baked door-opening clip (motor + slide + thunk all in one, ~2 seconds). " +
-             "Fires once after doorOpenSoundDelay seconds. Phase 2 of the power-down arc, " +
-             "owned by the door so each door can have its own clip.")]
-    [SerializeField]
-    private SfxBank doorOpen = new SfxBank { pitchMin = 1f, pitchMax = 1f };
-
-    [Tooltip("Seconds between the interact and the door-opening SFX firing. Lets the button-press " +
-             "breathe before the motor/slide/thunk kicks in.")]
-    [SerializeField, Min(0f)]
-    private float doorOpenSoundDelay = 0.5f;
-
-    [Tooltip("Rejection beep played when the player interacts with the door before it's ready " +
-             "(i.e. while it's still showing the red 'not interactable' state). Distinct from " +
-             "buttonPress so the locked state reads unambiguously.")]
-    [SerializeField]
-    private SfxBank rejectBeep = new SfxBank { pitchMin = 1f, pitchMax = 1f };
-
-    private const float OpenDuration = 2f;
-
     public override void Interact()
     {
         Debug.Log("Interacting with door");
@@ -74,20 +48,6 @@ public class Door : DoorBase
         // Always interactable while closed so the reject beep can fire during the red window.
         // The actual "can it open?" gate is evaluated inside Interact().
         return isClosed;
-    }
-
-    private IEnumerator PlayDoorOpenAfterDelay(float delay)
-    {
-        if (delay > 0f) yield return new WaitForSeconds(delay);
-        PlayAtDoor(doorOpen);
-    }
-
-    // Door sounds are diegetic world events; route them through the positional path
-    // so they pan/attenuate relative to the player and pick up the room's reverb zone.
-    private void PlayAtDoor(SfxBank bank)
-    {
-        if (bank == null || !bank.HasAnyClip) return;
-        bank.PlayAt(transform.position);
     }
 
     private IEnumerator TriggerPowerDownAfterDelay(float delay)

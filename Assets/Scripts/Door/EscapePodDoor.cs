@@ -4,36 +4,12 @@ using UnityEngine.InputSystem;
 
 public class EscapePodDoor : DoorBase
 {
-    [Header("Door SFX")]
-    [Tooltip("Played instantly when the player interacts with the door (button-thunk). " +
-             "Matches the main Door's button-press layer so the two doors feel like siblings.")]
-    [SerializeField]
-    private SfxBank buttonPress = new SfxBank { pitchMin = 0.97f, pitchMax = 1.03f };
-
-    [Tooltip("Single baked door-opening clip (motor + slide + thunk all in one, ~2 seconds). " +
-             "Fires once after doorOpenSoundDelay seconds.")]
-    [SerializeField]
-    private SfxBank doorOpen = new SfxBank { pitchMin = 1f, pitchMax = 1f };
-
-    [Tooltip("Seconds between the interact and the door-opening SFX firing. Lets the button-press " +
-             "breathe before the motor/slide/thunk kicks in.")]
-    [SerializeField, Min(0f)]
-    private float doorOpenSoundDelay = 0.5f;
-
-    [Tooltip("Rejection beep played when the player tries to open the escape pod before every task " +
-             "is complete. Different from buttonPress so the locked state reads unambiguously.")]
-    [SerializeField]
-    private SfxBank rejectBeep = new SfxBank { pitchMin = 1f, pitchMax = 1f };
-
     [Header("Music")]
     [Tooltip("When the escape pod door successfully opens, fade all game music out over this many " +
              "seconds and latch the suspension flag so nothing restarts music until the scene ends. " +
              "Gives the end-of-run beat a clean audio bed for door SFX / cutscene.")]
     [SerializeField, Min(0f)]
     private float musicFadeOutDuration = 2.5f;
-
-    // Matches Door.cs so the escape pod opens at the same pace as the starting room door.
-    private const float OpenDuration = 2f;
 
     public override void Interact()
     {
@@ -68,20 +44,6 @@ public class EscapePodDoor : DoorBase
         // Always interactable while closed so the reject beep can fire on early clicks.
         // The actual "can the door open?" gate is evaluated inside Interact().
         return isClosed;
-    }
-
-    private IEnumerator PlayDoorOpenAfterDelay(float delay)
-    {
-        if (delay > 0f) yield return new WaitForSeconds(delay);
-        PlayAtDoor(doorOpen);
-    }
-
-    // Door sounds are diegetic world events; route them through the positional path
-    // so they pan/attenuate relative to the player and pick up the room's reverb zone.
-    private void PlayAtDoor(SfxBank bank)
-    {
-        if (bank == null || !bank.HasAnyClip) return;
-        bank.PlayAt(transform.position);
     }
 
     protected override void OnDoorOpened()
